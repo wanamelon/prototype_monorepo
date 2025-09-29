@@ -1,97 +1,89 @@
-[gd_scene load_steps=29 format=3 uid="uid://fq2wf31mlkgd"]
+[gd_scene load_steps=25 format=3 uid="uid://krrt8hen5rvw"]
 
-[ext_resource type="Script" uid="uid://dof1i5lj4rqro" path="res://source/main.gd" id="1_caq8k"]
-[ext_resource type="Texture2D" uid="uid://cx32aht20w0h8" path="res://assets/fish_sprites/fish_sheet_sm.png" id="1_kaxhg"]
-[ext_resource type="Texture2D" uid="uid://dajowfq81se4c" path="res://assets/Day_Plants.PNG" id="2_62cc7"]
-[ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="2_m4r8s"]
-[ext_resource type="PackedScene" uid="uid://b1y3h6jtlrt62" path="res://source/game_board_grid.tscn" id="5_s8x7u"]
-[ext_resource type="PackedScene" uid="uid://krrt8hen5rvw" path="res://source/fish.tscn" id="6_4naa1"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c1q7g"]
-shader = ExtResource("2_m4r8s")
-shader_parameter/saturation = 0.30000001425
+[ext_resource type="Script" uid="uid://cxywbdtinia40" path="res://source/fish.gd" id="1_f73he"]
+[ext_resource type="Texture2D" uid="uid://cx32aht20w0h8" path="res://assets/fish_sprites/fish_sheet_sm.png" id="1_su2bn"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kaxhg"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(0, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_caq8k"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(128, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m4r8s"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(256, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c1q7g"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(384, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s8x7u"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(512, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4naa1"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(640, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1elff"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(768, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2uit2"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(896, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rewae"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(1024, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d5d55"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(1152, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5aqvd"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(0, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lnbay"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(128, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r5lv5"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(256, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7rnte"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(384, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nfm2e"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(512, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ks00e"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(640, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k04uo"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(768, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d4qgt"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(896, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sm8so"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(1024, 128, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vjn7t"]
-atlas = ExtResource("1_kaxhg")
+atlas = ExtResource("1_su2bn")
 region = Rect2(1152, 128, 128, 128)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_73f7r"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_f73he"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -159,34 +151,37 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Main" type="Node2D"]
-script = ExtResource("1_caq8k")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f73he"]
+size = Vector2(120, 120)
 
-[node name="TextureRect" type="TextureRect" parent="."]
-material = SubResource("ShaderMaterial_c1q7g")
-clip_contents = true
-offset_right = 1920.0
-offset_bottom = 1080.0
-texture = ExtResource("2_62cc7")
-expand_mode = 1
-stretch_mode = 2
+[node name="Fish" type="Node2D"]
+script = ExtResource("1_f73he")
 
 [node name="FishSprite" type="AnimatedSprite2D" parent="."]
-visible = false
-position = Vector2(196, 193)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_73f7r")
-frame = 9
+position = Vector2(128, 64)
+scale = Vector2(2, 1)
+sprite_frames = SubResource("SpriteFrames_f73he")
+frame = 5
 
-[node name="AllFish2" type="AnimatedSprite2D" parent="."]
-visible = false
-position = Vector2(736, 312)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_73f7r")
-frame = 15
+[node name="GridCollider" type="Area2D" parent="."]
 
-[node name="GameBoardGrid" parent="." instance=ExtResource("5_s8x7u")]
-position = Vector2(432, 24)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GridCollider"]
+position = Vector2(64, 64)
+shape = SubResource("RectangleShape2D_f73he")
 
-[node name="Fish" parent="." instance=ExtResource("6_4naa1")]
-position = Vector2(432, 24)
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="GridCollider"]
+position = Vector2(192, 64)
+shape = SubResource("RectangleShape2D_f73he")
+disabled = true
+
+[node name="GridCollider2" type="Area2D" parent="."]
+position = Vector2(128, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GridCollider2"]
+position = Vector2(64, 64)
+shape = SubResource("RectangleShape2D_f73he")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="GridCollider2"]
+position = Vector2(192, 64)
+shape = SubResource("RectangleShape2D_f73he")
+disabled = true
