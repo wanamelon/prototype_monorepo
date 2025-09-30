@@ -186,7 +186,7 @@ sprite_frames = SubResource("SpriteFrames_73f7r")
 frame = 15
 
 [node name="GameBoardGrid" parent="." instance=ExtResource("5_s8x7u")]
-position = Vector2(432, 24)
+position = Vector2(448, 64)
 
 [node name="Fish" parent="." instance=ExtResource("6_4naa1")]
-position = Vector2(432, 24)
+position = Vector2(448, 64)

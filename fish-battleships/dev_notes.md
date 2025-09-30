@@ -55,6 +55,14 @@ Maybe let's even do the most uncomfortable option as an exercise?
 
 Hmm ok, I'm trying 3. Started out with a tilemap, but there's a challenge
 The player needs to have separate area2ds! in order to detect that each one overlaps the tilemap
+this works mostly ok
+
+but eh...given some thought, we'll want an accessible grid representation as data
+because later we may need some more complex calcs - search, expanding circle, etc.
+
+
+Also I think it's better to have a bunch of independent tiles, not a tilemap
+Easier to do things like animations etc. Tilemap isn't super extensible
 
 # The opponent's grid 
 

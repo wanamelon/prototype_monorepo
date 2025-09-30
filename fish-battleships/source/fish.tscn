@@ -158,12 +158,14 @@ size = Vector2(120, 120)
 script = ExtResource("1_f73he")
 
 [node name="FishSprite" type="AnimatedSprite2D" parent="."]
-position = Vector2(128, 64)
+position = Vector2(64, 0)
 scale = Vector2(2, 1)
 sprite_frames = SubResource("SpriteFrames_f73he")
 frame = 5
 
 [node name="GridCollider" type="Area2D" parent="."]
+visible = false
+position = Vector2(-64, -64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GridCollider"]
 position = Vector2(64, 64)
@@ -175,7 +177,8 @@ shape = SubResource("RectangleShape2D_f73he")
 disabled = true
 
 [node name="GridCollider2" type="Area2D" parent="."]
-position = Vector2(128, 0)
+visible = false
+position = Vector2(64, -64)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GridCollider2"]
 position = Vector2(64, 64)
