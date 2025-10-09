@@ -1,11 +1,6 @@
 class_name TestPreview extends Control
 
 var quarter_turns: int = 0
-var shape_offsets: Array[Vector2] = []
-
-func _ready():
-	for child: Node2D in $Points.get_children():
-		shape_offsets.append(child.position)
 
 func _input(event):
 	if event.is_action_pressed("RotateClockwise"):
