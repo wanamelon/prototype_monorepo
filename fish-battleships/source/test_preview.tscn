@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpmmfpwfcixi8"]
+
+[ext_resource type="Script" uid="uid://cmve1nx6o6mk4" path="res://source/test_preview.gd" id="1_dyar3"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_twq8m"]
+load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c560287f5b.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dyar3"]
+atlas = SubResource("CompressedTexture2D_twq8m")
+region = Rect2(640, 0, 128, 128)
+
+[node name="TestPreview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dyar3")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -128.0
+offset_top = -64.0
+offset_bottom = 64.0
+scale = Vector2(2, 1)
+texture = SubResource("AtlasTexture_dyar3")
+
+[node name="Points" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="Points"]
+position = Vector2(-64, 0)
+
+[node name="Node2D2" type="Node2D" parent="Points"]
+position = Vector2(64, 0)

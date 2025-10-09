@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://fq2wf31mlkgd"]
+[gd_scene load_steps=37 format=3 uid="uid://fq2wf31mlkgd"]
 
 [ext_resource type="Script" uid="uid://dof1i5lj4rqro" path="res://source/main.gd" id="1_caq8k"]
 [ext_resource type="Texture2D" uid="uid://cx32aht20w0h8" path="res://assets/fish_sprites/fish_sheet_sm.png" id="1_kaxhg"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="2_m4r8s"]
 [ext_resource type="PackedScene" uid="uid://b1y3h6jtlrt62" path="res://source/game_board_grid.tscn" id="5_s8x7u"]
 [ext_resource type="PackedScene" uid="uid://krrt8hen5rvw" path="res://source/fish.tscn" id="6_4naa1"]
+[ext_resource type="Script" uid="uid://ba5b7bbhdvm85" path="res://source/fish_item.gd" id="7_4naa1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c1q7g"]
 shader = ExtResource("2_m4r8s")
@@ -159,6 +160,31 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_73f7r"]
+atlas = ExtResource("1_kaxhg")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s8x7u"]
+load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c560287f5b.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ly4gw"]
+atlas = SubResource("CompressedTexture2D_s8x7u")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_771tj"]
+load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c560287f5b.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cv3e8"]
+atlas = SubResource("CompressedTexture2D_771tj")
+region = Rect2(256, 128, 128, 128)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4naa1"]
+load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c560287f5b.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_771tj"]
+atlas = SubResource("CompressedTexture2D_4naa1")
+region = Rect2(640, 0, 128, 128)
+
 [node name="Main" type="Node2D"]
 script = ExtResource("1_caq8k")
 
@@ -186,7 +212,36 @@ sprite_frames = SubResource("SpriteFrames_73f7r")
 frame = 15
 
 [node name="GameBoardGrid" parent="." instance=ExtResource("5_s8x7u")]
-position = Vector2(448, 64)
+position = Vector2(64, 256)
 
 [node name="Fish" parent="." instance=ExtResource("6_4naa1")]
-position = Vector2(448, 64)
+visible = false
+position = Vector2(1216, 320)
+
+[node name="ItemList" type="ItemList" parent="."]
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 468.0
+offset_bottom = 204.0
+auto_width = true
+auto_height = true
+item_count = 3
+max_columns = 3
+item_0/icon = SubResource("AtlasTexture_73f7r")
+item_1/icon = SubResource("AtlasTexture_ly4gw")
+item_2/icon = SubResource("AtlasTexture_cv3e8")
+
+[node name="FishItem" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1024.0
+offset_top = 128.0
+offset_right = 1064.0
+offset_bottom = 168.0
+script = ExtResource("7_4naa1")
+
+[node name="TextureRect" type="TextureRect" parent="FishItem"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_771tj")
