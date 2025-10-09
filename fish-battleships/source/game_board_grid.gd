@@ -10,6 +10,11 @@ func _ready():
 	$DragTargetBox.set_drag_forwarding(Callable(), self._can_drop_data, self._drop_data)
 	$DragTargetBox.mouse_exited.connect(self._reset_tile_states)
 
+func _notification(what):
+	match what:
+		NOTIFICATION_DRAG_END:
+			_reset_tile_states()
+
 var last_time_validated_item_position := Time.get_ticks_msec()
 
 func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
