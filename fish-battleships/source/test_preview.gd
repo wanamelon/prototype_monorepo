@@ -19,5 +19,6 @@ func _input(event):
 func get_shape_as_offsets() -> Array[Vector2]:
 	var rotated: Array[Vector2] = []
 	for child: Node2D in $Points.get_children():
-		rotated.append(child.position.rotated(quarter_turns * PI / 2.0))
+		var raw_position = child.position.rotated(quarter_turns * PI / 2.0)
+		rotated.append(raw_position.snapped(Vector2.ONE))
 	return rotated
