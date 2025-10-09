@@ -7,6 +7,9 @@ var grid: Array[Vector2i] = $TileMapLayer.get_used_cells()
 
 func _ready():
 	$DragTargetBox.set_drag_forwarding(Callable(), self._can_drop_data, self._drop_data)
+	$DragTargetBox.mouse_exited.connect(self._reset_tile_states)
+
+var last_time_validated_item_position := Time.get_ticks_msec()
 
 func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
 	if dragged_item_data is not TestPreview: return false
@@ -21,11 +24,8 @@ func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
 		var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
 		if is_legal_tile(tile_for_item_segment):
 			$TileMapLayer.set_cell(tile_for_item_segment, 0, Vector2i.ZERO, 2 if is_legal_position else 1)
+	last_time_validated_item_position = Time.get_ticks_msec()
 	return is_legal_position
-
-func _reset_tile_states():
-	for cell_coord: Vector2i in $TileMapLayer.get_used_cells():
-		$TileMapLayer.set_cell(cell_coord, 0, Vector2i.ZERO, 0)
 
 func _drop_data(local_position: Vector2, dragged_item_data: Variant):
 	print("Dropped ", dragged_item_data, " at ", local_position)
@@ -33,3 +33,7 @@ func _drop_data(local_position: Vector2, dragged_item_data: Variant):
 
 func is_legal_tile(tile_coord: Vector2i) -> bool:
 	return tile_coord in grid
+
+func _reset_tile_states():
+	for cell_coord: Vector2i in $TileMapLayer.get_used_cells():
+		$TileMapLayer.set_cell(cell_coord, 0, Vector2i.ZERO, 0)
