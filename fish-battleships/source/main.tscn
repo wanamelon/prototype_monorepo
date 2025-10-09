@@ -231,8 +231,13 @@ item_0/icon = SubResource("AtlasTexture_73f7r")
 item_1/icon = SubResource("AtlasTexture_ly4gw")
 item_2/icon = SubResource("AtlasTexture_cv3e8")
 
-[node name="FishItem" type="Control" parent="."]
+[node name="ParentToAllowDrag" type="Control" parent="."]
 layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="FishItem" type="Control" parent="ParentToAllowDrag"]
 anchors_preset = 0
 offset_left = 1024.0
 offset_top = 128.0
@@ -240,7 +245,7 @@ offset_right = 1064.0
 offset_bottom = 168.0
 script = ExtResource("7_4naa1")
 
-[node name="TextureRect" type="TextureRect" parent="FishItem"]
+[node name="TextureRect" type="TextureRect" parent="ParentToAllowDrag/FishItem"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
