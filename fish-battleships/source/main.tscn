@@ -63,5 +63,7 @@ item_1/icon = SubResource("AtlasTexture_ly4gw")
 item_2/icon = SubResource("AtlasTexture_cv3e8")
 
 [node name="PlacedItem" parent="." instance=ExtResource("8_1elff")]
+position = Vector2(1152, 192)
 
 [node name="PlacedItem2" parent="." instance=ExtResource("8_1elff")]
+position = Vector2(1152, 512)

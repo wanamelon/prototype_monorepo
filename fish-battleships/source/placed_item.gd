@@ -17,6 +17,7 @@ func _handle_drag_end(success):
 
 func _get_drag_data(at_position: Vector2) -> Control:
 	var new_preview: Control = PREVIEW_SCENE.instantiate()
+	new_preview.rotation = rotation
 	$DragActivateArea.set_drag_preview(new_preview)
 	is_dragging = true
 	hide()
