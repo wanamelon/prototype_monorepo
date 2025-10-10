@@ -113,6 +113,7 @@ We can probably make another preview object, with that rotation right?
 
 [X] Want to fix bug where if my mouse is on
 [X] Drag item around board again
+[X] Fix some bugs with rotation of preview
 [ ] Multiple items, check overlap
 [ ] Dragging placed item back to an item area
 [ ] Singleton signal for drag end (success vs fail)? Cleaner that way

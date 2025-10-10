@@ -1,6 +1,6 @@
 class_name PlacedItem extends Node2D
 
-var PREVIEW_SCENE: PackedScene = preload("res://source/test_preview.tscn")
+const PREVIEW_SCENE: PackedScene = preload("res://source/test_preview.tscn")
 
 var is_dragging: bool = false
 
@@ -22,3 +22,7 @@ func _get_drag_data(at_position: Vector2) -> Control:
 	is_dragging = true
 	hide()
 	return new_preview
+
+func get_shape_as_offsets() -> Array[Vector2]:
+	var empty_array: Array[Vector2] = []
+	return empty_array if is_dragging else $ItemWithPoints.get_shape_as_offsets()

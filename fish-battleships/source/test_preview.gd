@@ -13,9 +13,4 @@ func _input(event):
 		get_viewport().update_mouse_cursor_state()
 
 func get_shape_as_offsets() -> Array[Vector2]:
-	var rotated: Array[Vector2] = []
-	for child: Node2D in $Points.get_children():
-		var raw_position = child.position.rotated(rotation)
-		rotated.append(raw_position.snapped(Vector2.ONE))
-	return rotated
-
+	return $ItemWithPoints.get_shape_as_offsets()

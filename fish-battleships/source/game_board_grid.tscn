@@ -94,3 +94,5 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 768.0
 offset_bottom = 768.0
+
+[node name="PlacedItems" type="Node2D" parent="."]
