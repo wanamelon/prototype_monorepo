@@ -1,165 +1,15 @@
-[gd_scene load_steps=38 format=3 uid="uid://fq2wf31mlkgd"]
+[gd_scene load_steps=13 format=3 uid="uid://fq2wf31mlkgd"]
 
 [ext_resource type="Script" uid="uid://dof1i5lj4rqro" path="res://source/main.gd" id="1_caq8k"]
 [ext_resource type="Texture2D" uid="uid://cx32aht20w0h8" path="res://assets/fish_sprites/fish_sheet_sm.png" id="1_kaxhg"]
 [ext_resource type="Texture2D" uid="uid://dajowfq81se4c" path="res://assets/Day_Plants.PNG" id="2_62cc7"]
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="2_m4r8s"]
 [ext_resource type="PackedScene" uid="uid://b1y3h6jtlrt62" path="res://source/game_board_grid.tscn" id="5_s8x7u"]
-[ext_resource type="PackedScene" uid="uid://krrt8hen5rvw" path="res://source/fish.tscn" id="6_4naa1"]
-[ext_resource type="Script" uid="uid://ba5b7bbhdvm85" path="res://source/fish_item.gd" id="7_4naa1"]
 [ext_resource type="PackedScene" uid="uid://cdpvadmqfktb2" path="res://source/placed_item.tscn" id="8_1elff"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c1q7g"]
 shader = ExtResource("2_m4r8s")
 shader_parameter/saturation = 0.30000001425
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kaxhg"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(0, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_caq8k"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(128, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m4r8s"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(256, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c1q7g"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(384, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s8x7u"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(512, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4naa1"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(640, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1elff"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(768, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2uit2"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(896, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rewae"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(1024, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d5d55"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(1152, 0, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5aqvd"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(0, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lnbay"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(128, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_r5lv5"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(256, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7rnte"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(384, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nfm2e"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(512, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ks00e"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(640, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k04uo"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(768, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d4qgt"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(896, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sm8so"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(1024, 128, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vjn7t"]
-atlas = ExtResource("1_kaxhg")
-region = Rect2(1152, 128, 128, 128)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_73f7r"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kaxhg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_caq8k")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m4r8s")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c1q7g")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s8x7u")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4naa1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1elff")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2uit2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rewae")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d5d55")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5aqvd")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lnbay")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r5lv5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7rnte")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nfm2e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ks00e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k04uo")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d4qgt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sm8so")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vjn7t")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_73f7r"]
 atlas = ExtResource("1_kaxhg")
@@ -179,13 +29,6 @@ load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c5602
 atlas = SubResource("CompressedTexture2D_771tj")
 region = Rect2(256, 128, 128, 128)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4naa1"]
-load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c560287f5b.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_771tj"]
-atlas = SubResource("CompressedTexture2D_4naa1")
-region = Rect2(640, 0, 128, 128)
-
 [node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 0
@@ -201,28 +44,11 @@ texture = ExtResource("2_62cc7")
 expand_mode = 1
 stretch_mode = 2
 
-[node name="FishSprite" type="AnimatedSprite2D" parent="."]
-visible = false
-position = Vector2(196, 193)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_73f7r")
-frame = 9
-
-[node name="AllFish2" type="AnimatedSprite2D" parent="."]
-visible = false
-position = Vector2(736, 312)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_73f7r")
-frame = 15
-
 [node name="GameBoardGrid" parent="." instance=ExtResource("5_s8x7u")]
 position = Vector2(64, 256)
 
-[node name="Fish" parent="." instance=ExtResource("6_4naa1")]
-visible = false
-position = Vector2(1216, 320)
-
 [node name="ItemList" type="ItemList" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 64.0
 offset_top = 64.0
@@ -236,25 +62,6 @@ item_0/icon = SubResource("AtlasTexture_73f7r")
 item_1/icon = SubResource("AtlasTexture_ly4gw")
 item_2/icon = SubResource("AtlasTexture_cv3e8")
 
-[node name="ParentToAllowDrag" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PlacedItem" parent="." instance=ExtResource("8_1elff")]
 
-[node name="FishItem" type="Control" parent="ParentToAllowDrag"]
-visible = false
-anchors_preset = 0
-offset_left = 1024.0
-offset_top = 128.0
-offset_right = 1064.0
-offset_bottom = 168.0
-script = ExtResource("7_4naa1")
-
-[node name="TextureRect" type="TextureRect" parent="ParentToAllowDrag/FishItem"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = SubResource("AtlasTexture_771tj")
-
-[node name="PlacedItem" parent="ParentToAllowDrag" instance=ExtResource("8_1elff")]
-position = Vector2(1152, 704)
+[node name="PlacedItem2" parent="." instance=ExtResource("8_1elff")]
