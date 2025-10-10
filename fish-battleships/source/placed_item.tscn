@@ -1,6 +1,7 @@
-[gd_scene load_steps=23 format=3 uid="uid://cdpvadmqfktb2"]
+[gd_scene load_steps=24 format=3 uid="uid://cdpvadmqfktb2"]
 
 [ext_resource type="Texture2D" uid="uid://cx32aht20w0h8" path="res://assets/fish_sprites/fish_sheet_sm.png" id="1_75vrg"]
+[ext_resource type="Script" uid="uid://ukff7naaahbe" path="res://source/placed_item.gd" id="1_627op"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kaxhg"]
 atlas = ExtResource("1_75vrg")
@@ -151,8 +152,17 @@ animations = [{
 }]
 
 [node name="PlacedItem" type="Node2D"]
+script = ExtResource("1_627op")
 
 [node name="FishSprite" type="AnimatedSprite2D" parent="."]
 scale = Vector2(2, 1)
 sprite_frames = SubResource("SpriteFrames_627op")
 frame = 5
+
+[node name="DragActivateArea" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -128.0
+offset_top = -64.0
+offset_right = 128.0
+offset_bottom = 64.0
