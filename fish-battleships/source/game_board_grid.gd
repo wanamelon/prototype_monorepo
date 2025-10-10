@@ -24,7 +24,7 @@ func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
 			is_legal_position = false
 	for fish_shape_offset in item_data.get_shape_as_offsets():
 		var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
-		if is_legal_tile(tile_for_item_segment):
+		if tile_is_in_bounds(tile_for_item_segment):
 			var tile_to_display := LEGAL_TILE if is_legal_position else ILLEGAL_TILE
 			$TileMapLayer.set_cell(tile_for_item_segment, 0, Vector2i.ZERO, tile_to_display)
 	return is_legal_position
@@ -46,6 +46,9 @@ func is_legal_tile(tile_coord: Vector2i) -> bool:
 			var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(item_segment_local_position)
 			if tile_coord == tile_for_item_segment:
 				return false
+	return tile_is_in_bounds(tile_coord)
+
+func tile_is_in_bounds(tile_coord: Vector2i) -> bool:
 	return tile_coord in valid_tile_positions
 
 func _reset_tile_states():
