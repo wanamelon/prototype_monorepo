@@ -208,7 +208,10 @@ We have 3 days! Let's break down the problem:
     - Current status (maybe - we can also use color or visuals to convey)
   - Dashboard-type UI
     - Top level stats: Stamina, HP
-    - 
+
+Realistic cutoff is here!
+---
+
 - Store economy mechanism
   - Compute how much COINS to get at end of match
   - Adding the store UI component
@@ -216,6 +219,10 @@ We have 3 days! Let's break down the problem:
   - Do we need an algo to sort varied shapes in a good way?
     - nah, just a few big squares, make pretty later. Or even just icons
   - Checkout mechanism - ensure we stop if overweight!
+
+^^ cut above for scope
+---
+
 - The art!
   - TBD
 - Enemy AI (optimization algo)
@@ -223,7 +230,6 @@ We have 3 days! Let's break down the problem:
   - The fitness function
   - Balance: how good an enemy to pit the player against
 - Minimal content: add cards!
-  - 
 - Gluing the game together
 
 Today, I'll focus on wrapping up select menu and building the core logical systems for cards and battles
@@ -253,7 +259,7 @@ Each item also has its (rotated) positions, item id, and type
 
 The grid defines the systems which process these rules. Grid has knowledge of graph relations and all item pos
 
-[ ] Define/code up the basic API
+[X] Define/code up the basic API
 [ ] Implement overlap system
 [ ] Implement adjacency system
 [ ] Test it out!
