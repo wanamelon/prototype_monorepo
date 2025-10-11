@@ -63,6 +63,76 @@ because later we may need some more complex calcs - search, expanding circle, et
 Also I think it's better to have a bunch of independent tiles, not a tilemap
 Easier to do things like animations etc. Tilemap isn't super extensible
 
+# Theme!
+
+Had a fever dream of an idea session last night. Here's my vision:
+
+You start at a low-level field engineer at a military contractor corp working for the US dept. of war
+You are building a fish bioweapon with the express goal of obliterating the Chinese
+Specifically, by unleashing the fish to do ecological terrorism, which crashes China's fish markets and derivatives,
+which the all-seeing USA military analysts have predicted will lead to the downfall of the CCP
+
+According to the infallible principles of efficient markets and competition, employees put their organisms
+to the test through competition. The company founders in their infinite wisdom have decided that employees must
+purchase their own materials from the company (in a bid to recoup costs). Due to supply chain issues, there are no
+guarantees on what supplies will be available - make do with what you have, dummy! 
+
+The characters:
+- Debbie Ding ("the chump") - the protagonist
+- Dudley Doorknob ("the supe") - her boss
+- Deonte Doofus ("") - lab store manager
+- DengXiaoPingRequiem - Chinese espion (known only by username)
+
+This is going to be a deeply silly, slightly dystopian game
+
+I'm inspired by the real-life issue of engineers who work on missiles for shady companies which just end up bombing
+a Yemeni hospital or something. Not going to go too far with the allegory as it's a heavier subject
+
+I'll call it: "Morally Bankrupt Weaponized Fish Engineer" 
+
+The corporation will be called STRIKE FIRST Defense - a reference to the concept of a "first strike" in military policy
+
+Setting will be early 2000's / late 90's tech - computers are just starting to get ubiquitous, but aren't good
+
+---
+
+Polish/feel ideas:
+- The main menu buttons have dramatic and overly long flavor text
+- Wallpapers for main menu:
+  - A graph plotting "How close we are to defeating China" vs "Your DEDICATION and SACRIFICE via UNPAID overtime" 
+  - A long list of alarmingly worded emails about how China is only 2 months behind (going back to 2001...) 
+  - A performance review with ridiculous 1984-style criteria
+  - A scenic image of Debbie, Dudley, and Deonte standing in front of a US flag, very patriotic
+  - An employee of the week award for each, with flavor text
+- Every time China, chinese, Beijing mentioned, the text is juiced as fuck and the screen shakes (menacing music)
+- Talk to the boss via a "live Tucker reaction" - style monitor in a corner
+  - The chinese espion can appear here
+  - You can cover up the screen/audio using an organ (it counts as part of your inventory, so no need to do checks)
+- When spinning an organ by press and hold, it eventually speeds up an does a dust cloud
+- Organs have very squishy noises and kind of balloon outwards in a bouncy way when dropped
+- Organ personalities! Don't think they will have faces, but maybe some kind of name / flavor text.
+- A button to "give up" - if you press it, the screen goes black
+
+Ok, now that's out of the way we need to focus on mechanics
+
+# Art direction
+
+Mood board: https://mood.site/Q3BnFyGk?edit=1nVZ1ZUc
+
+Think: Pizza Tower but bad
+Pizza tower art takes a ton of skill actually. Unlikely we will fully replicate it (yet)
+Maybe we can find a good artist. Or 70% will be good enough?
+
+Hesitant to use AI. Part of this is stubborn-ness. I WANT to be good enough to crank that
+I think with a month of consistent practice, I can make bad but passable pizza tower style art
+
+# Keyboard-shortcut-friendly UI
+
+Nice to navigate IDE's, vim and the such with just keypresses
+Imagine I can place organs just by typing a number, then I can move it with arrow keys!
+I'd love to add something like that, maybe Debbie can type on a small keyboard to make it diegetic??
+And a robot surgeon arm can do the actual moving? Eh maybe too far
+
 # Implement drag and drop of a fish
 
 We can use the built-in API, or use our own.
@@ -109,13 +179,69 @@ Later we can represent item data as a resource - not needed right now maybe.
 
 We can probably make another preview object, with that rotation right?
 
+# Prio-ing OCT 11
+
+The goal - the core framework, in a playable PoC.
+Looks ugly, UI jank, but the mechanical systems are in place
+We don't need much content or even for the game to be fun at this stage
+We have 3 days! Let's break down the problem:
+
+- Selection menu
+  - Placing base layers + organs, legal placements and such
+  - Add an inventory area and a weight limit
+  - Dragging items -> Inventory
+  - Save/load config and inventory state
+  - Transition between selection -> battle
+- Card system
+  - Foundation of item stats, ability types, etc. : start with just damage
+  - Proximity effect system
+- The auto-battler loop
+  - What's the main loop? Implement time-based progression
+  - Stamina system
+  - Health and damage
+  - Win condition
+- Auto battler UI
+  - Self and enemy display grids (can be identical component)
+  - Showing cooldowns for items if applicable
+  - Per-item hover UI
+    - Item description and stats
+    - Current status (maybe - we can also use color or visuals to convey)
+  - Dashboard-type UI
+    - Top level stats: Stamina, HP
+    - 
+- Store economy mechanism
+  - Compute how much COINS to get at end of match
+  - Adding the store UI component
+  - Figure out which items to display in that UI
+  - Do we need an algo to sort varied shapes in a good way?
+    - nah, just a few big squares, make pretty later. Or even just icons
+  - Checkout mechanism - ensure we stop if overweight!
+- The art!
+  - TBD
+- Enemy AI (optimization algo)
+  - Simulating battles
+  - The fitness function
+  - Balance: how good an enemy to pit the player against
+- Minimal content: add cards!
+  - 
+- Gluing the game together
+
+Today, I'll focus on wrapping up select menu and building the core logical systems for cards and battles
+
+Hopefully, Sunday we can build out most of a UI for the auto battler, and some work on the store
+
+Monday will be art, enemy AI, and glue
+
+Man, we're gonna have to cut scope!
+
 # Tiny todo list
 
 [X] Want to fix bug where if my mouse is on
 [X] Drag item around board again
 [X] Fix some bugs with rotation of preview
-[ ] Multiple items, check overlap
+[X] Multiple items, check overlap
 [ ] Dragging placed item back to an item area
+[ ] Dragging atop existing item should highlight that item
 [ ] Singleton signal for drag end (success vs fail)? Cleaner that way
 
 # Selection menu
