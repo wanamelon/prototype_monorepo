@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm3lsrshin7oo"]
+
+[ext_resource type="Script" uid="uid://kw72o74tcp88" path="res://source/item_area.gd" id="1_4mjg7"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1elff"]
+load_path = "res://.godot/imported/Day_Plants.PNG-a4c8b7f0b6bbf87d2f2819070747ce86.ctex"
+
+[node name="ItemArea" type="TextureRect"]
+offset_right = 640.0
+offset_bottom = 384.0
+texture = SubResource("CompressedTexture2D_1elff")
+expand_mode = 2
+script = ExtResource("1_4mjg7")
