@@ -6,7 +6,7 @@ func _can_drop_data(at_position, data):
 	if not data is TestPreview:
 		return false
 	var item_data := data as TestPreview
-	return get_global_rect().encloses(item_data.get_visual_bounding_box())
+	return get_global_rect().encloses(item_data.get_item_data().get_visual_bounding_box())
 
 func _drop_data(at_position, data):
 	var placed_item = PLACED_ITEM_SCENE.instantiate()

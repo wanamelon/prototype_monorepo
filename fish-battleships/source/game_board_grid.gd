@@ -18,11 +18,11 @@ func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
 	var item_data := dragged_item_data as TestPreview
 	_reset_tile_states()
 	var is_legal_position := true
-	for fish_shape_offset in item_data.get_shape_as_offsets():
+	for fish_shape_offset in item_data.get_item_data().get_shape_as_offsets():
 		var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
 		if not is_legal_tile(tile_for_item_segment):
 			is_legal_position = false
-	for fish_shape_offset in item_data.get_shape_as_offsets():
+	for fish_shape_offset in item_data.get_item_data().get_shape_as_offsets():
 		var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
 		if tile_is_in_bounds(tile_for_item_segment):
 			var tile_to_display := LEGAL_TILE if is_legal_position else ILLEGAL_TILE
@@ -32,7 +32,7 @@ func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
 func _drop_data(local_position: Vector2, dragged_item_data: Variant):
 	var item_data := dragged_item_data as TestPreview
 	var placed_item: PlacedItem = PLACED_ITEM_SCENE.instantiate()
-	var fish_shape_offset = item_data.get_shape_as_offsets()[0]
+	var fish_shape_offset = item_data.get_item_data().get_shape_as_offsets()[0]
 	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
 	var local_position_for_tile: Vector2 = $TileMapLayer.map_to_local(tile_for_item_segment)
 	placed_item.scene_init(
@@ -42,6 +42,10 @@ func _drop_data(local_position: Vector2, dragged_item_data: Variant):
 		self._can_drop_data, 
 		self._drop_data)
 	$PlacedItems.add_child(placed_item)
+
+func do_items_satisfy_rules() -> bool:
+	for placed_item: PlacedItem in $PlacedItems.get_children():
+		var item_rules := placed_item.
 
 func is_legal_tile(tile_coord: Vector2i) -> bool:
 	for placed_item: PlacedItem in $PlacedItems.get_children():

@@ -234,15 +234,48 @@ Monday will be art, enemy AI, and glue
 
 Man, we're gonna have to cut scope!
 
-# Tiny todo list
+# Legality checks
+
+Items define rules - config telling us what to enforce
+- types not allowed to overlap. generally, should not overlap own type
+  - maybe we even make this a bool "can overlap own type"
+  - types will be a tag system for flexibility
+  - Tag has a TagClass (layer-level, item-level, other?) and a value
+- disallowed_neighbor_types: horizontally same as above. what can't be in adjacent cell?
+- types must overlap: organ MUST be atop a substrate
+  - note: there isn't really an "above/below", just care which items exist in one cell
+- required_neighbor_types: horizontal equivalent to above
+  - Substrate must be next to other
+- For protrusions, required_normal, to enforce it's perpendicular to outside of fish
+  - Not MVP!
+
+Each item also has its (rotated) positions, item id, and type
+
+The grid defines the systems which process these rules. Grid has knowledge of graph relations and all item pos
+
+[ ] Define/code up the basic API
+[ ] Implement overlap system
+[ ] Implement adjacency system
+[ ] Test it out!
+
+# Tiny todo list - placement UI
 
 [X] Want to fix bug where if my mouse is on
 [X] Drag item around board again
 [X] Fix some bugs with rotation of preview
 [X] Multiple items, check overlap
-[ ] Dragging placed item back to an item area
-[ ] Dragging atop existing item should highlight that item
+[X] Dragging placed item back to an item area
+[X] Dragging atop existing item should delegate to grid
+[ ] Implement legality checking system
+[ ] Item drag drop on item area feels really clunky (feedback + more lenience + reasonable default?)
 [ ] Singleton signal for drag end (success vs fail)? Cleaner that way
+
+
+
+
+# Auto battle logic system
+
+
 
 # Selection menu
 

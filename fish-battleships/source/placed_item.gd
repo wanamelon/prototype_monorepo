@@ -37,6 +37,9 @@ func _get_drag_data(at_position: Vector2) -> Control:
 	hide()
 	return new_preview
 
+func get_item_data() -> ItemWithPoints:
+	return $ItemWithPoints
+
 func get_shape_as_offsets() -> Array[Vector2]:
 	var empty_array: Array[Vector2] = []
 	return empty_array if is_dragging else $ItemWithPoints.get_shape_as_offsets()

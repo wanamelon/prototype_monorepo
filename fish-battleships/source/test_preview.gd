@@ -20,8 +20,5 @@ func _input(event):
 		get_viewport().set_input_as_handled()
 		get_viewport().update_mouse_cursor_state()
 
-func get_visual_bounding_box() -> Rect2:
-	return $ItemWithPoints.get_visual_bounding_box()
-
-func get_shape_as_offsets() -> Array[Vector2]:
-	return $ItemWithPoints.get_shape_as_offsets()
+func get_item_data() -> ItemWithPoints:
+	return $ItemWithPoints

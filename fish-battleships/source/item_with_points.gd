@@ -1,5 +1,6 @@
 class_name ItemWithPoints extends Node2D
 
+@export var placement_rules: PlacementRules
 @onready var sprite: Sprite2D = $FishSprite
 
 func get_shape_as_offsets() -> Array[Vector2]:
