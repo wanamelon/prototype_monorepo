@@ -1,4 +1,4 @@
-class_name TestPreview extends Control
+class_name ItemDragPreview extends Control
 
 const QUARTER_TURN: float = PI / 2
 

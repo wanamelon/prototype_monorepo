@@ -20,7 +20,7 @@ func _can_drop_data(_at_position, _data):
 	return true
 
 func _drop_data(__, data):
-	var item_data := data as TestPreview
+	var item_data := data as ItemDragPreview
 	var placed_item: PlacedItem = PlacedItem.new(item_data.get_item_data().item_type, self._can_drop_data, self._drop_data)
 	placed_item.rotation = item_data.get_item_data().global_rotation
 	placed_item.position = get_global_mouse_position() - global_position

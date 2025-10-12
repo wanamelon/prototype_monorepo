@@ -13,9 +13,9 @@ func _ready():
 	DragSignals.drag_ended.connect(func (__): _reset_tile_states())
 
 func _can_drop_data(__: Vector2, dragged_item_data: Variant):
-	if dragged_item_data is not TestPreview:
+	if dragged_item_data is not ItemDragPreview:
 		return false
-	var item_data := dragged_item_data as TestPreview
+	var item_data := dragged_item_data as ItemDragPreview
 	_reset_tile_states()
 	var local_drop_position := to_local(get_global_mouse_position())
 	var current_placed_items := __extract_current_placed_item_data()
@@ -29,7 +29,7 @@ func _can_drop_data(__: Vector2, dragged_item_data: Variant):
 	return is_legal_position
 
 func _drop_data(__: Vector2, dragged_item_data: Variant):
-	var item_data := dragged_item_data as TestPreview
+	var item_data := dragged_item_data as ItemDragPreview
 	var item_shape_offset := item_data.get_item_data().get_shape_as_offsets()[0]
 	var local_drop_position := to_local(get_global_mouse_position())
 	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_drop_position + item_shape_offset)
@@ -54,12 +54,16 @@ func __extract_current_placed_item_data() -> Array[PlacedItemData]:
 			result.append(PlacedItemData.new(placed_item.get_item_data(), tiles_covered_by_item))
 	return result
 
-static func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bool:
+func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bool:
 	var items_per_tile := {}
 	for placed_item in placed_items:
 		for tile in placed_item.covered_tiles:
 			var typed_empty_arr: Array[ItemWithPoints] = []
 			Utils.default_if_absent(items_per_tile, tile, typed_empty_arr).append(placed_item.item_data)
+	# Check all in bounds
+	for tile_index in items_per_tile:
+		if not __tile_is_in_bounds(tile_index):
+			return false
 	# Check disallowed overlaps
 	for tile_index in items_per_tile:
 		var item_datas_on_tile: Array[ItemWithPoints] = items_per_tile[tile_index]

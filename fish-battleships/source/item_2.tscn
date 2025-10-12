@@ -26,13 +26,7 @@ position = Vector2(0, 64.00001)
 scale = Vector2(4, 2.0000002)
 texture = SubResource("AtlasTexture_8l7w1")
 
-[node name="PlacementBoundingBox" parent="." index="1"]
-offset_left = -64.0
-offset_top = 0.0
-offset_right = 64.0
-offset_bottom = 64.0
-
-[node name="DragActivateArea" parent="." index="2"]
+[node name="DragActivateArea" parent="." index="1"]
 offset_left = -192.0
 offset_right = 192.0
 offset_bottom = 192.0

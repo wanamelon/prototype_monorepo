@@ -306,8 +306,8 @@ PlacedItem
 
 [X] Add item 2 (inherited)
 [X] change PlacedItem to use itemdata's dragged thing
-[ ] Item enum and factory registrar thing
-[ ] Pull out item 1 to another inherited scene
+[X] Item enum and factory registrar thing
+[X] Pull out item 1 to another inherited scene
 [ ] rename silly named classes
 
 # Tiny todo list - placement UI

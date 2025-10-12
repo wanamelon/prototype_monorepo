@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://bpmmfpwfcixi8"]
 
-[ext_resource type="Script" uid="uid://cmve1nx6o6mk4" path="res://source/test_preview.gd" id="1_dyar3"]
+[ext_resource type="Script" uid="uid://cmve1nx6o6mk4" path="res://source/item_drag_preview.gd" id="1_dyar3"]
 
-[node name="TestPreview" type="Control"]
+[node name="ItemDragPreview" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

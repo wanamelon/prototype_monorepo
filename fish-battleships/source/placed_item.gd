@@ -1,6 +1,6 @@
 class_name PlacedItem extends Node2D
 
-const PREVIEW_SCENE: PackedScene = preload("res://source/test_preview.tscn")
+const PREVIEW_SCENE: PackedScene = preload("res://source/item_drag_preview.tscn")
 
 var is_dragging: bool = false
 
