@@ -1,14 +1,13 @@
 ﻿Need to add fish
 
-
 what's the core prototype slice?
 
 - round start: I have a fixed roster of fish (2x1, 2x2, 1x3, T shape)
 - I place these on the map (rotation allowed), then start match
 - each turn, decide which ability to use and where
-  - select which of my fish to use
-  - select where on enemy map to activate (also need rotation, so we want a cursor too)
-- abilities have cooldowns 
+    - select which of my fish to use
+    - select where on enemy map to activate (also need rotation, so we want a cursor too)
+- abilities have cooldowns
 - goal is to destroy all the enemy's fish
 
 Next phase:
@@ -75,9 +74,10 @@ which the all-seeing USA military analysts have predicted will lead to the downf
 According to the infallible principles of efficient markets and competition, employees put their organisms
 to the test through competition. The company founders in their infinite wisdom have decided that employees must
 purchase their own materials from the company (in a bid to recoup costs). Due to supply chain issues, there are no
-guarantees on what supplies will be available - make do with what you have, dummy! 
+guarantees on what supplies will be available - make do with what you have, dummy!
 
 The characters:
+
 - Debbie Ding ("the chump") - the protagonist
 - Dudley Doorknob ("the supe") - her boss
 - Deonte Doofus ("") - lab store manager
@@ -88,7 +88,8 @@ This is going to be a deeply silly, slightly dystopian game
 I'm inspired by the real-life issue of engineers who work on missiles for shady companies which just end up bombing
 a Yemeni hospital or something. Not going to go too far with the allegory as it's a heavier subject
 
-I'll call it: "Morally Bankrupt Weaponized Fish Engineer" 
+I'll call it: "Morally Bankrupt Weaponized Fish Engineer"
+or "Perfectly Adequate Weaponized Fish Engineer"
 
 The corporation will be called STRIKE FIRST Defense - a reference to the concept of a "first strike" in military policy
 
@@ -97,17 +98,18 @@ Setting will be early 2000's / late 90's tech - computers are just starting to g
 ---
 
 Polish/feel ideas:
+
 - The main menu buttons have dramatic and overly long flavor text
 - Wallpapers for main menu:
-  - A graph plotting "How close we are to defeating China" vs "Your DEDICATION and SACRIFICE via UNPAID overtime" 
-  - A long list of alarmingly worded emails about how China is only 2 months behind (going back to 2001...) 
-  - A performance review with ridiculous 1984-style criteria
-  - A scenic image of Debbie, Dudley, and Deonte standing in front of a US flag, very patriotic
-  - An employee of the week award for each, with flavor text
+    - A graph plotting "How close we are to defeating China" vs "Your DEDICATION and SACRIFICE via UNPAID overtime"
+    - A long list of alarmingly worded emails about how China is only 2 months behind (going back to 2001...)
+    - A performance review with ridiculous 1984-style criteria
+    - A scenic image of Debbie, Dudley, and Deonte standing in front of a US flag, very patriotic
+    - An employee of the week award for each, with flavor text
 - Every time China, chinese, Beijing mentioned, the text is juiced as fuck and the screen shakes (menacing music)
 - Talk to the boss via a "live Tucker reaction" - style monitor in a corner
-  - The chinese espion can appear here
-  - You can cover up the screen/audio using an organ (it counts as part of your inventory, so no need to do checks)
+    - The chinese espion can appear here
+    - You can cover up the screen/audio using an organ (it counts as part of your inventory, so no need to do checks)
 - When spinning an organ by press and hold, it eventually speeds up an does a dust cloud
 - Organs have very squishy noises and kind of balloon outwards in a bouncy way when dropped
 - Organ personalities! Don't think they will have faces, but maybe some kind of name / flavor text.
@@ -146,16 +148,18 @@ Separately, not great if we allow purchase when there's no space, but can fix th
 Just go with this don't think too much.
 
 The components we need:
+
 - The ice box. This is our "inventory" where organs are stored
-- 
+-
 
 The preview object:
+
 - rotate when we press
 - ideally, points/rotation are here too so we don't need to duplicate data
 - later, maybe we can highlight it if we're hovering over good
-  - means we need some way to talk from the drag target -> the preview
-  - the cleanest way is usually signals
-  - ok so the drag data object can be a signal router type affair
+    - means we need some way to talk from the drag target -> the preview
+    - the cleanest way is usually signals
+    - ok so the drag data object can be a signal router type affair
 
 What happens when I click?
 
@@ -163,12 +167,14 @@ FishItem -> get_drag_data()
 and add preview
 
 DragData:
+
 - Points
 - Rotation
 
 Need to change rotation when mouse is clicked. hmm...
 
 For the check:
+
 - Given mouse position (local) and the DragData
 - Figure out where the organ tiles are
 
@@ -187,48 +193,48 @@ We don't need much content or even for the game to be fun at this stage
 We have 3 days! Let's break down the problem:
 
 - Selection menu
-  - Placing base layers + organs, legal placements and such
-  - Add an inventory area and a weight limit
-  - Dragging items -> Inventory
-  - Save/load config and inventory state
-  - Transition between selection -> battle
+    - Placing base layers + organs, legal placements and such
+    - Add an inventory area and a weight limit
+    - Dragging items -> Inventory
+    - Save/load config and inventory state
+    - Transition between selection -> battle
 - Card system
-  - Foundation of item stats, ability types, etc. : start with just damage
-  - Proximity effect system
+    - Foundation of item stats, ability types, etc. : start with just damage
+    - Proximity effect system
 - The auto-battler loop
-  - What's the main loop? Implement time-based progression
-  - Stamina system
-  - Health and damage
-  - Win condition
+    - What's the main loop? Implement time-based progression
+    - Stamina system
+    - Health and damage
+    - Win condition
 - Auto battler UI
-  - Self and enemy display grids (can be identical component)
-  - Showing cooldowns for items if applicable
-  - Per-item hover UI
-    - Item description and stats
-    - Current status (maybe - we can also use color or visuals to convey)
-  - Dashboard-type UI
-    - Top level stats: Stamina, HP
+    - Self and enemy display grids (can be identical component)
+    - Showing cooldowns for items if applicable
+    - Per-item hover UI
+        - Item description and stats
+        - Current status (maybe - we can also use color or visuals to convey)
+    - Dashboard-type UI
+        - Top level stats: Stamina, HP
 
 Realistic cutoff is here!
 ---
 
 - Store economy mechanism
-  - Compute how much COINS to get at end of match
-  - Adding the store UI component
-  - Figure out which items to display in that UI
-  - Do we need an algo to sort varied shapes in a good way?
-    - nah, just a few big squares, make pretty later. Or even just icons
-  - Checkout mechanism - ensure we stop if overweight!
+    - Compute how much COINS to get at end of match
+    - Adding the store UI component
+    - Figure out which items to display in that UI
+    - Do we need an algo to sort varied shapes in a good way?
+        - nah, just a few big squares, make pretty later. Or even just icons
+    - Checkout mechanism - ensure we stop if overweight!
 
 ^^ cut above for scope
 ---
 
 - The art!
-  - TBD
+    - TBD
 - Enemy AI (optimization algo)
-  - Simulating battles
-  - The fitness function
-  - Balance: how good an enemy to pit the player against
+    - Simulating battles
+    - The fitness function
+    - Balance: how good an enemy to pit the player against
 - Minimal content: add cards!
 - Gluing the game together
 
@@ -243,51 +249,99 @@ Man, we're gonna have to cut scope!
 # Legality checks
 
 Items define rules - config telling us what to enforce
+
 - types not allowed to overlap. generally, should not overlap own type
-  - maybe we even make this a bool "can overlap own type"
-  - types will be a tag system for flexibility
-  - Tag has a TagClass (layer-level, item-level, other?) and a value
+    - maybe we even make this a bool "can overlap own type"
+    - types will be a tag system for flexibility
+    - Tag has a TagClass (layer-level, item-level, other?) and a value
 - disallowed_neighbor_types: horizontally same as above. what can't be in adjacent cell?
 - types must overlap: organ MUST be atop a substrate
-  - note: there isn't really an "above/below", just care which items exist in one cell
+    - note: there isn't really an "above/below", just care which items exist in one cell
 - required_neighbor_types: horizontal equivalent to above
-  - Substrate must be next to other
+    - Substrate must be next to other
 - For protrusions, required_normal, to enforce it's perpendicular to outside of fish
-  - Not MVP!
+    - Not MVP!
 
 Each item also has its (rotated) positions, item id, and type
 
 The grid defines the systems which process these rules. Grid has knowledge of graph relations and all item pos
 
-[X] Define/code up the basic API
-[ ] Implement overlap system
-[ ] Implement adjacency system
-[ ] Test it out!
+# Adding another item!
+
+Preview should be decoupled from ItemData
+Should we separate out the pure data (offsets, type, placement rule, stats, etc) from the node?
+Yes definitely. Pure data easy to pass around. The parts of the node which matter are:
+
+- The bounding box area. Is this needed? Nice to define such a thing from UI in node (visual)
+- The points. Also nice to see represented visually. Can be worked around but should we?
+
+So it's just a matter of using the node for ease of configuration eh?
+Then we can do: Use the scene as a config tool -> static item data. Load that somehow at runtime
+Register it in a central map. PACKED.instantiate().get_static_item_data() ->
+
+We can still have that scene be an actual node in game - placed item and preview use it!
+Because it's also nice to share the visuals and any animation or whatnot
+
+Should we make it an abstract class? Uhh whatever bro uh uh @pbashsho @ekoopman your opinion???
+FUCK ABSTRACTION
+
+Really we're planning for a future problem of: what if we need to change something for all items
+Ex: Adding a UI element (hover text perhaps?). Nice to define that in one place
+Rather than PlacedItem, Preview, and battle item.
+
+I'm in a thinking trap. Should decide soon and just do it, maybe it's bad whatever
+
+Item's interface:
+
+- Interactable area for drag drop - it's item-specific data
+- Defined area for allow to drop -> Inventory area
+- The points, basically we only care the data
+- Placement rule
+- Item type enums - layer, which item, etc.
+- A shared UUID eventually
+- Static data - one day we shall use I swear hngggg!!!
+- The sprite
+
+PlacedItem
+
+[X] Add item 2 (inherited)
+[X] change PlacedItem to use itemdata's dragged thing
+[ ] Item enum and factory registrar thing
+[ ] Pull out item 1 to another inherited scene
+[ ] rename silly named classes
 
 # Tiny todo list - placement UI
 
+[ ] Make placement rule API correct (don't do contiguous check if is first of kind? but protrusion...)
+[ ] Implement adjacency system
+[ ] Item area items delegate drag drop operations upwards
+[ ] Item drag drop on item area feels really clunky (feedback + more lenience + reasonable default?)
+[ ] Singleton signal for drag end (success vs fail)? Cleaner that way
 [X] Want to fix bug where if my mouse is on
 [X] Drag item around board again
 [X] Fix some bugs with rotation of preview
 [X] Multiple items, check overlap
 [X] Dragging placed item back to an item area
 [X] Dragging atop existing item should delegate to grid
-[ ] Implement legality checking system
-[ ] Item drag drop on item area feels really clunky (feedback + more lenience + reasonable default?)
-[ ] Singleton signal for drag end (success vs fail)? Cleaner that way
+[X] Define/code up the basic API for legality
+[X] Implement overlap system
+[X] Improve overlap system
 
+I've really been feeling the limitations of the drag and drop system!
 
+- We can't decide when/which control will be called - forced to do delegation
+- How do we integrate with other input schemes, like keyboard, or single click to pick up and drop?
 
+When we revisit UI later, can try to make our own, will reveal the tradeoffs, what are we losing?
 
 # Auto battle logic system
-
-
 
 # Selection menu
 
 Simple way - use an ItemList for our menu
 Once selected, a fish preview will appear
 if we click and it's a valid position, then:
+
 - fish is registered to grid
 - fish appears there
 - we remove / grey out from itemlist -> prevent placing again
@@ -299,7 +353,7 @@ At start of round, we have some representation of our "deck" - pretty much pure 
 good use of a "resource"?
 We can bind each one to an item in that list programatically
 
-# The opponent's grid 
+# The opponent's grid
 
 Squares need to be hidden at first
 Once attacked, they should reveal if the square is empty or not
@@ -309,6 +363,7 @@ Once attacked, they should reveal if the square is empty or not
 Just start with one!
 
 A fish is really the emergent phenomenon of:
+
 - A sprite
 - A "shape" for the grid
 - An ability
@@ -369,7 +424,7 @@ go to health recovery / fins / avoidance and navigation.
 
 That is more manageable - perhaps we swap out damage modules for something else
 
-Maybe the conditions can even be meta-level like: What is the enemy config like?  
+Maybe the conditions can even be meta-level like: What is the enemy config like?
 
 Ok yeah this is scope creep. And makes sense to explore after we're finished, or as a separate game
 It's hard to have the maturity to fully do that of course, but that's part of the challenge too!

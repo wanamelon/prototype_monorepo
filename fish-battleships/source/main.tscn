@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://fq2wf31mlkgd"]
+[gd_scene load_steps=14 format=3 uid="uid://fq2wf31mlkgd"]
 
 [ext_resource type="Script" uid="uid://dof1i5lj4rqro" path="res://source/main.gd" id="1_caq8k"]
 [ext_resource type="Texture2D" uid="uid://cx32aht20w0h8" path="res://assets/fish_sprites/fish_sheet_sm.png" id="1_kaxhg"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://b1y3h6jtlrt62" path="res://source/game_board_grid.tscn" id="5_s8x7u"]
 [ext_resource type="Texture2D" uid="uid://bnx2ne6eifys8" path="res://icon.svg" id="6_4naa1"]
 [ext_resource type="PackedScene" uid="uid://bm3lsrshin7oo" path="res://source/item_area.tscn" id="7_1elff"]
-[ext_resource type="PackedScene" uid="uid://cdpvadmqfktb2" path="res://source/placed_item.tscn" id="8_1elff"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c1q7g"]
 shader = ExtResource("2_m4r8s")
@@ -47,7 +46,7 @@ expand_mode = 1
 stretch_mode = 2
 
 [node name="GameBoardGrid" parent="." instance=ExtResource("5_s8x7u")]
-position = Vector2(128, 128)
+position = Vector2(960, 192)
 
 [node name="ItemList" type="ItemList" parent="."]
 visible = false
@@ -64,23 +63,14 @@ item_0/icon = SubResource("AtlasTexture_73f7r")
 item_1/icon = SubResource("AtlasTexture_ly4gw")
 item_2/icon = SubResource("AtlasTexture_cv3e8")
 
-[node name="ItemArea" type="TextureRect" parent="."]
+[node name="ItemArea" parent="." instance=ExtResource("7_1elff")]
+layout_mode = 0
+
+[node name="ItemAreaBg" type="TextureRect" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 1024.0
 offset_top = 128.0
 offset_right = 1792.0
 offset_bottom = 640.0
 texture = ExtResource("6_4naa1")
-
-[node name="ItemArea" parent="ItemArea" instance=ExtResource("7_1elff")]
-layout_mode = 0
-offset_left = 64.0
-offset_top = 64.0
-offset_right = 704.0
-offset_bottom = 448.0
-
-[node name="PlacedItem" parent="." instance=ExtResource("8_1elff")]
-position = Vector2(1216, 256)
-
-[node name="PlacedItem2" parent="." instance=ExtResource("8_1elff")]
-position = Vector2(1344, 448)

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca52ihpa2vy23"]
+
+[ext_resource type="PackedScene" uid="uid://blnvcjylpac36" path="res://source/item_with_points.tscn" id="1_iq6cx"]
+[ext_resource type="Script" uid="uid://bv4bskkhap4d1" path="res://source/placement_rules.gd" id="2_8hlsq"]
+
+[sub_resource type="Resource" id="Resource_sw6cc"]
+script = ExtResource("2_8hlsq")
+disallowed_overlapping_item_types = Array[int]([0])
+required_neighboring_item_types = Array[int]([0])
+metadata/_custom_type_script = "uid://bv4bskkhap4d1"
+
+[node name="ItemWithPoints" instance=ExtResource("1_iq6cx")]
+placement_rules = SubResource("Resource_sw6cc")
+
+[node name="Node2D" type="Node2D" parent="Points" index="0"]
+position = Vector2(-64, 0)
+
+[node name="Node2D2" type="Node2D" parent="Points" index="1"]
+position = Vector2(64, 0)

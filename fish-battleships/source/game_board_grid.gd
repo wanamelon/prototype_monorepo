@@ -12,29 +12,32 @@ func _ready():
 	$DragTargetBox.mouse_exited.connect(self._reset_tile_states)
 	DragSignals.drag_ended.connect(func (__): _reset_tile_states())
 
-func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
+func _can_drop_data(__: Vector2, dragged_item_data: Variant):
 	if dragged_item_data is not TestPreview:
 		return false
 	var item_data := dragged_item_data as TestPreview
 	_reset_tile_states()
+	var local_drop_position := to_local(get_global_mouse_position())
 	var current_placed_items := __extract_current_placed_item_data()
 	current_placed_items.append(
-		PlacedItemData.new(item_data.get_item_data(), _compute_tiles_covered_by_item(local_position, item_data.get_item_data())))
+		PlacedItemData.new(item_data.get_item_data(), _compute_tiles_covered_by_item(local_drop_position, item_data.get_item_data())))
 	var is_legal_position := __validate_board_legality(current_placed_items)
-	for tile_covered_by_item in _compute_tiles_covered_by_item(local_position, item_data.get_item_data()):
+	for tile_covered_by_item in _compute_tiles_covered_by_item(local_drop_position, item_data.get_item_data()):
 		if __tile_is_in_bounds(tile_covered_by_item):
 			var tile_to_display := LEGAL_TILE if is_legal_position else ILLEGAL_TILE
 			$TileMapLayer.set_cell(tile_covered_by_item, 0, Vector2i.ZERO, tile_to_display)
 	return is_legal_position
 
-func _drop_data(local_position: Vector2, dragged_item_data: Variant):
+func _drop_data(__: Vector2, dragged_item_data: Variant):
 	var item_data := dragged_item_data as TestPreview
 	var item_shape_offset := item_data.get_item_data().get_shape_as_offsets()[0]
-	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + item_shape_offset)
+	var local_drop_position := to_local(get_global_mouse_position())
+	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_drop_position + item_shape_offset)
 	var local_position_for_item_segment: Vector2 = $TileMapLayer.map_to_local(tile_for_item_segment)
 	var local_pos_to_place_item := (local_position_for_item_segment - item_shape_offset).snapped(Vector2.ONE)
-	var placed_item: PlacedItem = PLACED_ITEM_SCENE.instantiate().scene_init(
-		local_pos_to_place_item, item_data.rotation, $DragTargetBox, self._can_drop_data, self._drop_data)
+	var placed_item: PlacedItem = PlacedItem.new(item_data.get_item_data().item_type, $DragTargetBox, self._can_drop_data, self._drop_data)
+	placed_item.position = local_pos_to_place_item
+	placed_item.rotation = item_data.rotation
 	$PlacedItems.add_child(placed_item)
 
 func _compute_tiles_covered_by_item(item_local_position: Vector2, item: ItemWithPoints) -> Array[Vector2i]:
@@ -46,8 +49,9 @@ func _compute_tiles_covered_by_item(item_local_position: Vector2, item: ItemWith
 func __extract_current_placed_item_data() -> Array[PlacedItemData]:
 	var result: Array[PlacedItemData] = []
 	for placed_item: PlacedItem in $PlacedItems.get_children():
-		var tiles_covered_by_item := _compute_tiles_covered_by_item(placed_item.position, placed_item.get_item_data())
-		result.append(PlacedItemData.new(placed_item.get_item_data(), tiles_covered_by_item))
+		if not placed_item.is_dragging:
+			var tiles_covered_by_item := _compute_tiles_covered_by_item(placed_item.position, placed_item.get_item_data())
+			result.append(PlacedItemData.new(placed_item.get_item_data(), tiles_covered_by_item))
 	return result
 
 static func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bool:
@@ -62,7 +66,7 @@ static func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bo
 		for item_data in item_datas_on_tile:
 			for disallowed_overlap_type in item_data.placement_rules.disallowed_overlapping_item_types:
 				for other_item in item_datas_on_tile:
-					if item_data != other_item and other_item.item_type == disallowed_overlap_type:
+					if item_data != other_item and other_item.layer_type == disallowed_overlap_type:
 						return false
 	# Check required overlaps
 	for tile_index in items_per_tile:
@@ -71,7 +75,7 @@ static func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bo
 			for required_overlap_type in item_data.placement_rules.required_overlapping_item_types:
 				var has_required_overlap = false
 				for other_item in item_datas_on_tile:
-					if item_data != other_item and other_item.item_type == required_overlap_type:
+					if item_data != other_item and other_item.layer_type == required_overlap_type:
 						has_required_overlap = true
 				if not has_required_overlap:
 					return false

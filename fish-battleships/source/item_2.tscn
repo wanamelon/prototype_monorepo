@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://dgx5p6pvmk7w6"]
+
+[ext_resource type="PackedScene" uid="uid://blnvcjylpac36" path="res://source/item_with_points.tscn" id="1_madjw"]
+[ext_resource type="Script" uid="uid://bv4bskkhap4d1" path="res://source/placement_rules.gd" id="2_j31xq"]
+
+[sub_resource type="Resource" id="Resource_8l7w1"]
+script = ExtResource("2_j31xq")
+required_overlapping_item_types = Array[int]([0])
+disallowed_overlapping_item_types = Array[int]([1])
+metadata/_custom_type_script = "uid://bv4bskkhap4d1"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_j31xq"]
+load_path = "res://.godot/imported/fish_sheet_sm.png-040124cd7c82d7188cf325c560287f5b.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8l7w1"]
+atlas = SubResource("CompressedTexture2D_j31xq")
+region = Rect2(384, 0, 128, 128)
+
+[node name="Item2" instance=ExtResource("1_madjw")]
+placement_rules = SubResource("Resource_8l7w1")
+layer_type = 1
+item_type = 1
+
+[node name="FishSprite" parent="." index="0"]
+position = Vector2(0, 64.00001)
+scale = Vector2(4, 2.0000002)
+texture = SubResource("AtlasTexture_8l7w1")
+
+[node name="PlacementBoundingBox" parent="." index="1"]
+offset_left = -64.0
+offset_top = 0.0
+offset_right = 64.0
+offset_bottom = 64.0
+
+[node name="DragActivateArea" parent="." index="2"]
+offset_left = -192.0
+offset_right = 192.0
+offset_bottom = 192.0
+
+[node name="Node2D" type="Node2D" parent="Points" index="0"]
+position = Vector2(-128, 0)
+
+[node name="Node2D2" type="Node2D" parent="Points" index="1"]
+position = Vector2(128, 0)
+
+[node name="Node2D3" type="Node2D" parent="Points" index="2"]
+position = Vector2(0, 128)
+
+[node name="Node2D4" type="Node2D" parent="Points" index="3"]
