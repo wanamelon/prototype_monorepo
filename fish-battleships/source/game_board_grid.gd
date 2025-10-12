@@ -35,7 +35,7 @@ func _drop_data(__: Vector2, dragged_item_data: Variant):
 	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_drop_position + item_shape_offset)
 	var local_position_for_item_segment: Vector2 = $TileMapLayer.map_to_local(tile_for_item_segment)
 	var local_pos_to_place_item := (local_position_for_item_segment - item_shape_offset).snapped(Vector2.ONE)
-	var placed_item: PlacedItem = PlacedItem.new(item_data.get_item_data().item_type, $DragTargetBox, self._can_drop_data, self._drop_data)
+	var placed_item: PlacedItem = PlacedItem.new(item_data.get_item_data().item_type, self._can_drop_data, self._drop_data)
 	placed_item.position = local_pos_to_place_item
 	placed_item.rotation = item_data.rotation
 	$PlacedItems.add_child(placed_item)

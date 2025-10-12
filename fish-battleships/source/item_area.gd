@@ -11,17 +11,17 @@ const initial_placements: Array[Variant] = [
 
 func _ready():
 	for placement in initial_placements:
-		var placed_item = PlacedItem.new(placement[0], self, self._can_drop_data, self._drop_data)
+		var placed_item = PlacedItem.new(placement[0], self._can_drop_data, self._drop_data)
 		placed_item.position = placement[1]
 		placed_item.rotation = placement[2]
 		add_child(placed_item)
 
-func _can_drop_data(at_position, data):
+func _can_drop_data(_at_position, _data):
 	return true
 
-func _drop_data(at_position, data):
+func _drop_data(__, data):
 	var item_data := data as TestPreview
-	var placed_item: PlacedItem = PlacedItem.new(item_data.get_item_data().item_type, self, self._can_drop_data, self._drop_data)
-	placed_item.rotation = data.rotation
-	placed_item.position = at_position
+	var placed_item: PlacedItem = PlacedItem.new(item_data.get_item_data().item_type, self._can_drop_data, self._drop_data)
+	placed_item.rotation = item_data.get_item_data().global_rotation
+	placed_item.position = get_global_mouse_position() - global_position
 	add_child(placed_item)
