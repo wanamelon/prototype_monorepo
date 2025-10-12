@@ -3,7 +3,6 @@ class_name GameBoardGrid extends Node2D
 const NEUTRAL_TILE: int = 0
 const ILLEGAL_TILE: int = 1
 const LEGAL_TILE: int = 2
-const GRID_SIZE := Vector2(128, 128)
 const PLACED_ITEM_SCENE: PackedScene = preload("res://source/placed_item.tscn")
 
 @onready var valid_tile_positions: Array[Vector2i] = $TileMapLayer.get_used_cells()
@@ -14,84 +13,81 @@ func _ready():
 	DragSignals.drag_ended.connect(func (__): _reset_tile_states())
 
 func _can_drop_data(local_position: Vector2, dragged_item_data: Variant):
-	if dragged_item_data is not TestPreview: return false
+	if dragged_item_data is not TestPreview:
+		return false
 	var item_data := dragged_item_data as TestPreview
 	_reset_tile_states()
-	var is_legal_position = do_items_satisfy_rules(item_data)
-	for fish_shape_offset in item_data.get_item_data().get_shape_as_offsets():
-		var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
-		if tile_is_in_bounds(tile_for_item_segment):
+	var current_placed_items := __extract_current_placed_item_data()
+	current_placed_items.append(
+		PlacedItemData.new(item_data.get_item_data(), _compute_tiles_covered_by_item(local_position, item_data.get_item_data())))
+	var is_legal_position := __validate_board_legality(current_placed_items)
+	for tile_covered_by_item in _compute_tiles_covered_by_item(local_position, item_data.get_item_data()):
+		if __tile_is_in_bounds(tile_covered_by_item):
 			var tile_to_display := LEGAL_TILE if is_legal_position else ILLEGAL_TILE
-			$TileMapLayer.set_cell(tile_for_item_segment, 0, Vector2i.ZERO, tile_to_display)
+			$TileMapLayer.set_cell(tile_covered_by_item, 0, Vector2i.ZERO, tile_to_display)
 	return is_legal_position
 
 func _drop_data(local_position: Vector2, dragged_item_data: Variant):
 	var item_data := dragged_item_data as TestPreview
-	var placed_item: PlacedItem = PLACED_ITEM_SCENE.instantiate()
-	var fish_shape_offset = item_data.get_item_data().get_shape_as_offsets()[0]
-	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + fish_shape_offset)
-	var local_position_for_tile: Vector2 = $TileMapLayer.map_to_local(tile_for_item_segment)
-	placed_item.scene_init(
-		(local_position_for_tile - fish_shape_offset).snapped(Vector2.ONE), 
-		item_data.rotation,
-		$DragTargetBox,
-		self._can_drop_data, 
-		self._drop_data)
+	var item_shape_offset := item_data.get_item_data().get_shape_as_offsets()[0]
+	var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(local_position + item_shape_offset)
+	var local_position_for_item_segment: Vector2 = $TileMapLayer.map_to_local(tile_for_item_segment)
+	var local_pos_to_place_item := (local_position_for_item_segment - item_shape_offset).snapped(Vector2.ONE)
+	var placed_item: PlacedItem = PLACED_ITEM_SCENE.instantiate().scene_init(
+		local_pos_to_place_item, item_data.rotation, $DragTargetBox, self._can_drop_data, self._drop_data)
 	$PlacedItems.add_child(placed_item)
 
-func do_items_satisfy_rules(candidate_item_data: TestPreview) -> bool:
-	var tile_index_to_item_datas := {}
-	for placed_item: PlacedItem in $PlacedItems.get_children():
-		for item_segment_offset: Vector2 in placed_item.get_shape_as_offsets():
-			var item_segment_local_position = placed_item.position + item_segment_offset
-			var tile_index_for_item_segment: Vector2i = $TileMapLayer.local_to_map(item_segment_local_position)
-			if not tile_index_for_item_segment in tile_index_to_item_datas:
-				tile_index_to_item_datas[tile_index_for_item_segment] = [] as Array[ItemWithPoints]
-			tile_index_to_item_datas[tile_index_for_item_segment].append(placed_item.get_item_data())
-			
-	for item_segment_offset: Vector2 in candidate_item_data.get_item_data().get_shape_as_offsets():
-		var item_segment_local_position = to_local(candidate_item_data.global_position) + item_segment_offset
-		var tile_index_for_item_segment: Vector2i = $TileMapLayer.local_to_map(item_segment_local_position)
-		if not tile_index_for_item_segment in tile_index_to_item_datas:
-			tile_index_to_item_datas[tile_index_for_item_segment] = [] as Array[ItemWithPoints]
-		tile_index_to_item_datas[tile_index_for_item_segment].append(candidate_item_data.get_item_data())
+func _compute_tiles_covered_by_item(item_local_position: Vector2, item: ItemWithPoints) -> Array[Vector2i]:
+	var tile_indices: Array[Vector2i] = []
+	for item_segment_offset in item.get_shape_as_offsets():
+		tile_indices.append($TileMapLayer.local_to_map(item_local_position + item_segment_offset))
+	return tile_indices
 
-	for tile_index in tile_index_to_item_datas:
-		var item_datas_on_tile: Array[ItemWithPoints] = tile_index_to_item_datas[tile_index]
-		for item in item_datas_on_tile:
-			for disallowed_overlap_type in item.placement_rules.disallowed_overlapping_item_types:
+func __extract_current_placed_item_data() -> Array[PlacedItemData]:
+	var result: Array[PlacedItemData] = []
+	for placed_item: PlacedItem in $PlacedItems.get_children():
+		var tiles_covered_by_item := _compute_tiles_covered_by_item(placed_item.position, placed_item.get_item_data())
+		result.append(PlacedItemData.new(placed_item.get_item_data(), tiles_covered_by_item))
+	return result
+
+static func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bool:
+	var items_per_tile := {}
+	for placed_item in placed_items:
+		for tile in placed_item.covered_tiles:
+			var typed_empty_arr: Array[ItemWithPoints] = []
+			Utils.default_if_absent(items_per_tile, tile, typed_empty_arr).append(placed_item.item_data)
+	# Check disallowed overlaps
+	for tile_index in items_per_tile:
+		var item_datas_on_tile: Array[ItemWithPoints] = items_per_tile[tile_index]
+		for item_data in item_datas_on_tile:
+			for disallowed_overlap_type in item_data.placement_rules.disallowed_overlapping_item_types:
 				for other_item in item_datas_on_tile:
-					if item != other_item and other_item.item_type == disallowed_overlap_type:
+					if item_data != other_item and other_item.item_type == disallowed_overlap_type:
 						return false
-			for required_overlap_type in item.placement_rules.required_overlapping_item_types:
+	# Check required overlaps
+	for tile_index in items_per_tile:
+		var item_datas_on_tile: Array[ItemWithPoints] = items_per_tile[tile_index]
+		for item_data in item_datas_on_tile:
+			for required_overlap_type in item_data.placement_rules.required_overlapping_item_types:
 				var has_required_overlap = false
 				for other_item in item_datas_on_tile:
-					if item != other_item and other_item.item_type == required_overlap_type:
+					if item_data != other_item and other_item.item_type == required_overlap_type:
 						has_required_overlap = true
 				if not has_required_overlap:
-					return false 
+					return false
 	return true
 
-#class ItemDataAndPositions extends RefCounted:
-	#var item_data: ItemWithPoints
-	#var tile_indexes: Array[Vector2i]
-	#
-	#func _init(item_data: ItemWithPoints, tile_indexes: Array[Vector2i]):
-		#self.item_data = item_data
-		#self.tile_indexes = tile_indexes
-
-func is_legal_tile(tile_coord: Vector2i) -> bool:
-	for placed_item: PlacedItem in $PlacedItems.get_children():
-		for item_segment_offset: Vector2 in placed_item.get_shape_as_offsets():
-			var item_segment_local_position = placed_item.position + item_segment_offset
-			var tile_for_item_segment: Vector2i = $TileMapLayer.local_to_map(item_segment_local_position)
-			if tile_coord == tile_for_item_segment:
-				return false
-	return tile_is_in_bounds(tile_coord)
-
-func tile_is_in_bounds(tile_coord: Vector2i) -> bool:
+func __tile_is_in_bounds(tile_coord: Vector2i) -> bool:
 	return tile_coord in valid_tile_positions
 
 func _reset_tile_states():
 	for cell_coord: Vector2i in $TileMapLayer.get_used_cells():
 		$TileMapLayer.set_cell(cell_coord, 0, Vector2i.ZERO, NEUTRAL_TILE)
+
+class PlacedItemData extends RefCounted:
+	var item_data: ItemWithPoints
+	var covered_tiles: Array[Vector2i]
+
+	func _init(item_data: ItemWithPoints, covered_tiles: Array[Vector2i]):
+		self.item_data = item_data
+		self.covered_tiles = covered_tiles

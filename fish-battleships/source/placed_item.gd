@@ -7,11 +7,12 @@ var is_dragging: bool = false
 var _can_drop_data: Callable = Callable()
 var _drop_data: Callable = Callable()
 
-func scene_init(position, rotation, delegate_target: Control, can_drop_data: Callable, drop_data: Callable):
+func scene_init(position, rotation, delegate_target: Control, can_drop_data: Callable, drop_data: Callable) -> PlacedItem:
 	self.position = position
 	self.rotation = rotation
 	_can_drop_data = _delegate_drop_data_calls_in_local_position(can_drop_data, delegate_target)
 	_drop_data = _delegate_drop_data_calls_in_local_position(drop_data, delegate_target)
+	return self
 
 func _delegate_drop_data_calls_in_local_position(delegate: Callable, delegate_target: Control):
 	return func (at_position, data):
