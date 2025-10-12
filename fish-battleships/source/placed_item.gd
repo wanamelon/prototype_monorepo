@@ -4,7 +4,6 @@ const PREVIEW_SCENE: PackedScene = preload("res://source/item_drag_preview.tscn"
 
 var is_dragging: bool = false
 
-const SELF_SCENE: PackedScene = preload("res://source/placed_item.tscn")
 const ITEM_1_SCENE: PackedScene = preload("res://source/item_1.tscn")
 const ITEM_2_SCENE: PackedScene = preload("res://source/item_2.tscn")
 const ITEM_TYPE_TO_SCENE: Dictionary = {

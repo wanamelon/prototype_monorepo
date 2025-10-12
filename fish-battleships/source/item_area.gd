@@ -1,7 +1,5 @@
 extends Control
 
-const PLACED_ITEM_SCENE: PackedScene = preload("res://source/placed_item.tscn")
-
 const initial_placements: Array[Variant] = [
 	[ENUM.Items.ITEM_1, Vector2(64, 64 * 2), PI / 2],
 	[ENUM.Items.ITEM_1, Vector2(64 * 8, 64), PI],

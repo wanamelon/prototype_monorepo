@@ -3,7 +3,6 @@ class_name GameBoardGrid extends Node2D
 const NEUTRAL_TILE: int = 0
 const ILLEGAL_TILE: int = 1
 const LEGAL_TILE: int = 2
-const PLACED_ITEM_SCENE: PackedScene = preload("res://source/placed_item.tscn")
 
 @onready var valid_tile_positions: Array[Vector2i] = $TileMapLayer.get_used_cells()
 

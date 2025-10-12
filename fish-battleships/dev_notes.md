@@ -308,15 +308,15 @@ PlacedItem
 [X] change PlacedItem to use itemdata's dragged thing
 [X] Item enum and factory registrar thing
 [X] Pull out item 1 to another inherited scene
-[ ] rename silly named classes
+[X] rename silly named classes
 
 # Tiny todo list - placement UI
 
 [ ] Make placement rule API correct (don't do contiguous check if is first of kind? but protrusion...)
 [ ] Implement adjacency system
-[ ] Item area items delegate drag drop operations upwards
-[ ] Item drag drop on item area feels really clunky (feedback + more lenience + reasonable default?)
-[ ] Singleton signal for drag end (success vs fail)? Cleaner that way
+[X] Item area items delegate drag drop operations upwards
+[X] Item drag drop on item area feels really clunky (feedback + more lenience + reasonable default?)
+[X] Singleton signal for drag end (success vs fail)? Cleaner that way
 [X] Want to fix bug where if my mouse is on
 [X] Drag item around board again
 [X] Fix some bugs with rotation of preview

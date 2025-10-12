@@ -9,7 +9,7 @@ disallowed_overlapping_item_types = Array[int]([0])
 required_neighboring_item_types = Array[int]([0])
 metadata/_custom_type_script = "uid://bv4bskkhap4d1"
 
-[node name="ItemWithPoints" instance=ExtResource("1_iq6cx")]
+[node name="Item1" instance=ExtResource("1_iq6cx")]
 placement_rules = SubResource("Resource_sw6cc")
 
 [node name="Node2D" type="Node2D" parent="Points" index="0"]

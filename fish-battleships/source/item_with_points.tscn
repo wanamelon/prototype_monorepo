@@ -16,7 +16,7 @@ region = Rect2(640, 0, 128, 128)
 script = ExtResource("1_s7847")
 placement_rules = SubResource("Resource_wk3au")
 
-[node name="FishSprite" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 scale = Vector2(2, 1)
 texture = SubResource("AtlasTexture_s7847")
 
