@@ -310,10 +310,32 @@ PlacedItem
 [X] Pull out item 1 to another inherited scene
 [X] rename silly named classes
 
+# Improving placement rules system
+
+Broadly, both things would be nice, but we only absolutely need one:
+
+- Verify total state legality
+    - If we introduce "WIP" mode in future - allowing partial illegal
+- Verify that one change is legal
+    - Probably nicer for genetic algo?
+
+Can we do both in one way? Maybe, verifying individual piece can be generalized
+to verifying the full board? What about constraints like max count or required on board?
+
+I guess what we can do is compute the intermediate structures required for validating constraints
+Like board-wide item <-> count dicts, per-tile stuff, etc.
+Then it's quite fast to check
+
+Also, why do we need to be fast? No reason to believe it's a requirement...
+
+- let's ditch the config for now, just hardcode assumptions b/c it's easy
+- instead of separate for loops - one loop, eval each item
+- then the per-item check is its own thing?
+
 # Tiny todo list - placement UI
 
-[ ] Make placement rule API correct (don't do contiguous check if is first of kind? but protrusion...)
-[ ] Implement adjacency system
+[X] Placement rule system - fix bugs
+[X] Implement adjacency system
 [X] Item area items delegate drag drop operations upwards
 [X] Item drag drop on item area feels really clunky (feedback + more lenience + reasonable default?)
 [X] Singleton signal for drag end (success vs fail)? Cleaner that way
@@ -335,6 +357,71 @@ I've really been feeling the limitations of the drag and drop system!
 When we revisit UI later, can try to make our own, will reveal the tradeoffs, what are we losing?
 
 # Auto battle logic system
+
+What should the items do (mvp)?
+- Damage/consume stamina, Stamina regen rate
+- For now, POC, not trying to design the real cards. Just enough to strain the brain!
+- For the substrates, armor value vs. stam drain
+- 1-2 position effect: adipose block for stam, muscle for +str
+  - These will be a "modifier" system
+  - Also impl a way to check for nearby squares
+- Weapon stat variation: default, light fast, heavy and slow
+- Weapon with bleed, and something which stops bleed effects (coagulator)
+- Health regen: Heart 
+- Most items limit base speed
+
+State and win condition
+- Health and stamina
+- Static attributes, or fully buff debuff based?
+  - I.e. does a tail give you a temp speed buff per trigger, or permanent?
+  - Why not both? base speed + temp buffs
+  - Temp is good b/c higher fire rate or more strong -> more speed, or disabling opponent's tail
+
+Defining item configuration
+```
+ItemConfig:
+    triggers[]:
+        trigger (oneof):
+            interval:
+                wait_times[]: usually just one (period), but can define a cycle
+            round_start: for passive effects
+            on_status_effect: # if I have more than 10 bleed stacks, etc.
+            on_state: # hp < 25% of max
+    effects { id <-> effect }:
+        modify_stamina (for stam drain):
+        deal_damage ():
+        apply_status_effect: # ex: bleed, temp speed boost
+            target
+            status_effect
+            amount (can be negative!)
+        apply_item_modifier: # ex: reduce stam cost of nearby items
+            targeting_config:
+                distance
+            item_modifier:
+                
+        apply_passive_effect: # ex: item ups max hp
+            target
+            passive_effect
+
+ItemModifierConfig:
+    
+ 
+PassiveEffectConfig:
+    set_passive_stat:
+        stat_type: base HP, max stam?
+        modify_amt: # +10, -20
+
+# Bleed damage
+StatusEffectConfig:
+    duration
+```
+
+Save/load data between creation -> battle
+
+Overall flow:
+- Match start, compute static passive bonuses (stat modifiers, and overall)
+
+
 
 # Selection menu
 
