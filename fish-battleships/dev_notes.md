@@ -358,6 +358,8 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 
 # Auto battle logic system
 
+[ ] Definitions for item config (keep it basic!)
+
 What should the items do (mvp)?
 
 - Damage/consume stamina, Stamina regen rate
@@ -419,6 +421,12 @@ PassiveEffectConfig:
 StatusEffectConfig:
     duration
 ```
+
+Overall, we will have a pipeline wherein:
+- The ItemConfig is immutable. Everything is an effect atop the base
+- Each turn, 
+- Instanced item 
+- Generate events
 
 ---
 
