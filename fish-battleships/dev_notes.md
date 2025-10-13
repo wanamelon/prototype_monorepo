@@ -359,25 +359,29 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 # Auto battle logic system
 
 What should the items do (mvp)?
+
 - Damage/consume stamina, Stamina regen rate
 - For now, POC, not trying to design the real cards. Just enough to strain the brain!
 - For the substrates, armor value vs. stam drain
 - 1-2 position effect: adipose block for stam, muscle for +str
-  - These will be a "modifier" system
-  - Also impl a way to check for nearby squares
+    - These will be a "modifier" system
+    - Also impl a way to check for nearby squares
 - Weapon stat variation: default, light fast, heavy and slow
 - Weapon with bleed, and something which stops bleed effects (coagulator)
-- Health regen: Heart 
+- Health regen: Heart
 - Most items limit base speed
+- Shield / shell effect - absorb some amount of damage then self destruct
 
 State and win condition
+
 - Health and stamina
 - Static attributes, or fully buff debuff based?
-  - I.e. does a tail give you a temp speed buff per trigger, or permanent?
-  - Why not both? base speed + temp buffs
-  - Temp is good b/c higher fire rate or more strong -> more speed, or disabling opponent's tail
+    - I.e. does a tail give you a temp speed buff per trigger, or permanent?
+    - Why not both? base speed + temp buffs
+    - Temp is good b/c higher fire rate or more strong -> more speed, or disabling opponent's tail
 
 Defining item configuration
+
 ```
 ItemConfig:
     triggers[]:
@@ -416,12 +420,257 @@ StatusEffectConfig:
     duration
 ```
 
+---
+
+Good ideas post feedback from Gemini:
+
+> > Map from trigger <-> action forces a 1-to-1 constraint
+
+- Instead, make another object which can have n triggers, n actions (call it a behavior?)
+
+```
+  behaviors:
+    - trigger:
+        type: "interval"
+        period: 2.0 # seconds
+      actions:
+        - type: "StaminaCost" # First, pay the cost
+          amount: "@param.stamina_cost" # Reference this item's own state
+        - type: "Damage"
+          target: "Enemy"
+          amount: 15
+          damage_type: "slashing"
+```
+
+> > How do we define cost constraints?
+
+- Not allowed to trigger this unless current stamina > 10
+- One idea: add a "conditions"
+
+```
+behaviors:
+- trigger:
+    type: "interval"
+    period: 2.0 # seconds
+  conditions:
+    type: "Stamina"
+    threshold: "@param.stamina_cost" 
+  actions:
+    - type: "StaminaCost" # First, pay the cost
+      amount: "@param.stamina_cost" # Reference this item's own state
+```
+
+- A little inconvenient! Would be nicer to do this implicitly
+- Perhaps actions can be configured as a cost or not
+- When evaluating an action, it first returns whether it can happen?
+- So we do that for every action, and finally
+
+Yeah this is C# territory probably. I'm kind of scared but let's do?
+
+> > For item modifiers:
+
+- Complex (and not easily reversible) to make something that walks the tree and directly modifies the definition
+- Flip the problem around: take the fields you want to modify and make them centrally defined per item instance
+
+```
+ItemDefinition:
+  id: "whetstone"
+  name: "Whetstone"
+  tags: ["utility", "enhancer"]
+  behaviors:
+    - trigger:
+        type: "RoundStart"
+      actions:
+        - type: "ModifyItemComponent"
+          target: "AdjacentItemsWithTag(weapon)" # Target adjacent items which = weapon
+          component_to_modify: "@damage.amount" # Reference the central var
+          operation: "+10%" # we do an expression lang here! quite powerful
+```
+
+> > Expression language
+
+Powerful - we can modify central parameters
+
+```
+ItemDefinition:
+  # We'll have an enum with possible values
+  parameters:
+    cooldown_duration: 5
+    current_cooldown: 0
+  behaviors:
+    - trigger:
+        type: "interval"
+        period: "@cooldown_duration"
+```
+
+Godot has an `Expression` class
+
+```
+var expression = Expression.new()
+expression.parse("20 + 10*2 - 5/2.0")
+var result = expression.execute()
+print(result)  # 37.5
+```
+
+We can imagine composing this with modifiers and relative things like 'percent of base stat'
+
+`((@parameters.base_damage + 10%) * 3) + 15`
+
+Hmm maybe too complex? haha, we maybe don't need this yet?
+
+>> Targeting config can be made first class
+
+```
+"SelfPlayer", "EnemyPlayer", "SelfItem", "AdjacentItems(distance)", "ItemsWithTag(healing)",
+```
+
+Idea from backpack battles - rather than distance, specify particular relative item positions.
+Each relative position can also have a "type" (star vs diamond) - say, we apply a different effect per
+
+> > Open Close principle - ensure adding new action != change too many if branches
+
+- Enums for actions and triggers
+- Specialized handler class / method system
+    - ApplyStatusEffect handler - knows it == ENUM.ACTIONS.APPLY_STATUS_EFFECT
+- The config for an action will be an enum + a bunch of sections, each one for one enum value
+    - Similar to Dripper config with constrainingStrategy
+- Runtime registration, look up by enum
+    - In game, we instance items and pass them through an ItemProcessor
+    - This processor only knows how to generically handle triggers and actions
+    - It delegates any specifics to the handler classes, looked up by enum
+
+```
+ProcessAction(ActionConfig action, ItemInstance source) {
+    actionHandler = ACTION_HANDLER_MAP.get(ActionConfig.action_type)
+    result = actionHandler.execute(source, action.parameters);
+    storeStateFromResult()
+}
+```
+
+> > Status effects ARE items??
+
+- Saves us needing to reinvent a trigger system and all that
+- It's also super generic!
+
+> > Consuming buffs
+
+- Ex: shell buff. After taking a hit (and reducing hit damage), they go away
+- How do we define this in ItemConfig?
+```
+ShellItem:
+    triggers:
+        - take damage
+    actions:
+        - add one hp
+        - destroy self
+```
+Hmm, but that's not quiiiite enough...
+Because in that case, all shells will be consumed every time we take damage
+
+1. Special system just for shells. Simple, but is it scalable for more types?
+2. Expose damage state variable which is mutable?
+3. Status effects as a separate thing, not items (maybe fine?)
+4. Damage is an event, an editable object available to trigger/action API
+
+This last one, I like. We probably want that anyways because event log good
+Ok, but how do we evaluate this kind of thing correctly?
+Like, let's say one of our items generates self damage events, and we also have shields
+We can't just go through all triggers, what if we eval shields first?
+
+I feel like we need one stage to generate all events, then another where we only eval event triggers
+We can use some prioritization order to ensure reasonable evaluation within each stage
+We'll need to make the assumption that those event triggers don't produce more events, hnnnggg
+Hmm, or perhaps we can just check for new events and run again? eh seems bad.
+
+Also this level of granularity isn't what the user would care to see in the event log I feel
+
+They'd just want to know:
+- "I took X damage, here are the sources"
+- "X damage from Y blocked by Z"
+
+We can make configurable LOD and other nice search goodies (for later!)
+
+What status effects do we need? Do they really HAVE to be items?
+- Shield (turtle shell?)
+- Metabolism
+- Momentum
+- Stun
+- Poison
+
+Status effect *can* add another effect, like a poison crit could cause a stun
+
+```
+StatusEffect:
+    hit_points:
+    
+```
+
+Beware of monolithitis!
+At the same time, a generic event system could prove useful!
+Maybe a regular organ could be a damage absorber or whatever, and have item HP, and we'd want to display that...
+
+```
+DamageEvent:
+    type: blunt
+    amt: 30
+    source: crab_claw
+
+DamageAbsorberItem:
+    item_hp: 20
+    trigger:
+        damage_event:
+            types: [] # means any
+        action:
+            take_item_damage:
+                amount: '@event.damage'
+                actions_on_zero:
+                    remove_item?
+            modify_damage_event:
+                '@take_item_damage'
+
+ItemRepresentation:
+    on_item_health_changed(old, new) -> some animation/visuals
+    on_removal -> etc.
+```
+
+```
+for each item:
+    
+
+```
+
+> > Dodge chance from speed?
+
+
+> > Criticals
+
+---
+
 Save/load data between creation -> battle
 
 Overall flow:
+
 - Match start, compute static passive bonuses (stat modifiers, and overall)
 
+# Pep talk
 
+oh my god the existing games in this genre are good!
+If I think about competing with those in the marketplace, it's super daunting, and emotionally exhausting!
+
+I'd invite you to ask: what's important now?
+
+By far the most important: This is a hobby, and we do it because it's fun (with learning being a welcome bonus)
+I can't control what those people are doing, or how good they are. Only how quickly I improve
+Moreover, it isn't a competition at all! And we can see this proven by the fact that far "worse" games in terms of
+execution can still have a community and people who enjoy it.
+
+The fact that good things exist doesn't change the baseline of what "fun" is
+And ultimately, if you have a concrete goal, let it be that I want to make a fun game for a niche audience!
+
+Consider that even the full monetary returns of a pretty wild success are still like maybe 300k ish?
+And spread between multiple people, over multiple years...like in terms of finances, is that really so much?
+
+Also - you are an indie, solo dev without that much experience!
 
 # Selection menu
 
