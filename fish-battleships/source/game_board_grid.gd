@@ -82,6 +82,26 @@ func __validate_board_legality(placed_items: Array[PlacedItemData]) -> bool:
 						has_required_overlap = true
 				if not has_required_overlap:
 					return false
+	# Validate adjacency constraint
+	var substrate_item_count: int = 0
+	var substrate_items: Array[PlacedItemData] = []
+	for placed_item in placed_items:
+		if placed_item.item_data.layer_type == ENUM.Layer.SUBSTRATE:
+			substrate_item_count += 1
+			substrate_items.append(placed_item)
+	if substrate_item_count > 1:
+		for substrate_item in substrate_items:
+			var has_adjacent_tile_with_other_substrate := false
+			for tile in substrate_item.covered_tiles:
+				for adjacent_tile in $TileMapLayer.get_surrounding_cells(tile):
+					var other_items_on_tile = items_per_tile.get(adjacent_tile)
+					if not other_items_on_tile:
+						continue
+					for other_item: ItemWithPoints in other_items_on_tile:
+						if substrate_item.item_data != other_item and other_item.layer_type == ENUM.Layer.SUBSTRATE:
+							has_adjacent_tile_with_other_substrate = true
+			if not has_adjacent_tile_with_other_substrate:
+				return false
 	return true
 
 func __tile_is_in_bounds(tile_coord: Vector2i) -> bool:
