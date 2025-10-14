@@ -360,8 +360,7 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 
 [X] Definitions for item config (keep it basic!)
 [X] Design high level API for round / turns (no Godot yet!)
-[ ] Add item instance
-[ ] Add player class
+[X] Add player class
 [ ] Do just enough to add a tooth item
 [ ] Impl timer as expression language
 

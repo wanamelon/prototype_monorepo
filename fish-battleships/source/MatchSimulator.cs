@@ -37,7 +37,31 @@ internal class MatchSimulator
 
     private (Events events, MatchState matchState) ActivateItems(MatchState matchState)
     {
+        var items = matchState.OwnPlayerState.Items;
+        foreach (var item in items)
+        foreach (var behavior in item.Behaviors)
+        {
+            // evaluate triggers (an "and")
+            var shouldDoAction = true;
+            foreach (var trigger in behavior.Triggers)
+                // construct Trigger expression lang context
+                // delegate to TriggerEvaluator
+                if (!EvaluateTrigger(trigger))
+                    shouldDoAction = false;
+
+            if (shouldDoAction)
+                foreach (var action in behavior.Actions)
+                {
+                    // delegate to ActionHandler
+                }
+        }
+
         return (null, null);
+    }
+
+    private bool EvaluateTrigger(ItemTrigger trigger)
+    {
+        return false;
     }
 
     private MatchState ProcessEvents(Events events, MatchState matchState)
