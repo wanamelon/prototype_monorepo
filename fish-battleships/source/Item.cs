@@ -13,13 +13,11 @@ public partial class Item : Resource
 
 public enum ItemId
 {
-    BaseBone,
-    BaseScale,
-    BaseJelly,
-    Tooth,
-    Claw,
-    Spike,
-    Heart,
-    Fat,
-    Stomach
+    Tooth,  // faster, low damage
+    Claw,   // big damage
+    Spike,  // Apply bleed
+    Heart,  // Nearby items trigger faster 
+    Fat,    // Nearby have lower stam cost, and boost max stamina
+    Shell,  // apply shield effects sometimes
+    Stomach // Stamina regen?
 }

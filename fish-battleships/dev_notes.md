@@ -358,7 +358,98 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 
 # Auto battle logic system
 
-[ ] Definitions for item config (keep it basic!)
+[X] Definitions for item config (keep it basic!)
+[X] Design high level API for round / turns (no Godot yet!)
+[ ] Add item instance
+[ ] Add player class
+[ ] Do just enough to add a tooth item
+[ ] Impl timer as expression language
+
+### Implementing just the periodic trigger weapon
+
+Timer is just a shortcut for the condition where `if (match.tick - trigger.last_tick) > PERIOD`
+And then an action resetting trigger.last_tick = match.tick
+    ^^ Important because: what if another required trigger is not met? action doesn't happen, should we reset?
+    ^^ I guess we can make that configurable. Makes sense to still count as a "try" if reason is out of stamina
+I think we'll have a "compile" stage where we expand our a periodic trigger into basically the above
+But for now, we can build a more specialized one just 2b a happy bee
+
+We DO need some concept of a trigger accessing its own last state
+
+Probably trigger evaluation will happen in some kind of context
+Maybe the trigger itself can even modify the context? Not needed right now
+```
+interface TriggerHandler<TriggerT>:
+    bool EvaluateTriggerCondition(TriggerContext)
+
+TriggerContext
+    // hnngg we can even have tiger pricing lookback style expression vars. Prolly just "prev tick" haha
+    // All these States are immutable!
+    // Do we need this strict structure, or just a string map/enum map is fine?
+    MatchState { CurrentTick }
+    PlayerState { Health }
+    ItemState {  }
+    BehaviorState { LastTriggerTick }
+    TriggerState { }
+    // a temp area for holding short-lived vars!
+    // or maybe we should have one per each above scope?
+    TempState { }
+
+class ModifyStateVariableActionHandler
+    // This will just generate events - maybe doesn't even need to be 
+    // It's nice if all changes to state happen in events
+    // Despite the indirection, it's consistent and simple
+
+class ModifyStateVariableEvent
+    Path: str or maybe an enum? // 'behavior.last_trigger_tick'
+    Operation: enum { ADD, SET, SUBTRACT }
+    Value: '10%' '5' '18'
+```
+
+### Item modifiers
+
+Say we have an adrenaline gland, meant to speed up fire rate as long as health is below some amount
+How would we implement this? Well, the triggering part is trivial, but for the action...
+We can't just say "Reduce cooldown by 0.1s" - what happens when health goes above threshold then down again?
+Sure, we could add some framework for "reversing" an action, but do we want to have to define this for every action?
+And what about actions which aren't straightforward to reverse? ex:
+- Let's assume cooldown for X right now is 0.5s
+- Item Z applies a modifier, changes x cooldown to 1.0s
+- But another one brought it down to 0.1
+- Now Z is deactivated. Should we subtract 0.5 from the cooldown? we'd be capped at 0
+- And later, we add back the 0.9, now we're at a higher baseline? hmm
+
+This one example can be worked around, but fundamental problem is state mods are maybe lossy
+
+So a better solution is to keep a separate object, the ItemModifier (or Item Status Effect)
+And an item with passive adjacency effect is just adding a modifier (1 tick duration) at start of each turn
+And it's triggering onEveryTick
+
+---
+
+### Overall pipeline structure
+
+```
+Tick Start (input MatchState)
+
+Book-keeping: Increment tick
+
+Iterate items, evaluate triggers, apply actions
+    First, break up behaviors into groups based on priority rules
+        Ex: Behaviors with item modifier actions must go first
+        So that we can apply those modifiers before other stuff happens
+    In each group, evaluate triggers and spit out the events/action results
+    Apply some actions now (item mods etc), or defer to later
+
+Iterate status effects, generate events
+
+Process events
+    Apply any event modifiers (status effects, or in the future any special bonuses)
+
+Evaluate win loss
+```
+
+### Initial thoughts
 
 What should the items do (mvp)?
 
