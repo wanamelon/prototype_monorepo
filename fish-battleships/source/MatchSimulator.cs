@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Godot;
 
 namespace FishBattleships.source;
@@ -39,34 +40,50 @@ internal class MatchSimulator
     {
         var items = matchState.OwnPlayerState.Items;
         foreach (var item in items)
-        foreach (var behavior in item.Behaviors)
+        foreach (var behavior in item.Item.Behaviors)
         {
-            // evaluate triggers (an "and")
             var shouldDoAction = true;
             foreach (var trigger in behavior.Triggers)
                 // construct Trigger expression lang context
                 // delegate to TriggerEvaluator
-                if (!EvaluateTrigger(trigger))
-                    shouldDoAction = false;
+                switch (trigger.TriggerType)
+                {
+                    case TriggerType.Interval:
+                        // TODO: is this off by one?
+                        if (matchState.Tick - item.LastActivatedTick <
+                            secondsToTicks(trigger.IntervalTrigger.IntervalSeconds))
+                            shouldDoAction = false;
+                        break;
+                }
 
             if (shouldDoAction)
+            {
+                item.LastActivatedTick = matchState.Tick;
                 foreach (var action in behavior.Actions)
-                {
-                    // delegate to ActionHandler
-                }
+                    switch (action.ActionType)
+                    {
+                        case ActionType.Damage:
+                            // TODO: Stop hardocding it dumbass!
+                            // TODO: should be a damageEvent hnnggg!
+                            matchState.OwnPlayerState.Health = Math.Max(0, matchState.OwnPlayerState.Health - 5);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+            }
         }
 
         return (null, null);
     }
 
-    private bool EvaluateTrigger(ItemTrigger trigger)
+    private static int secondsToTicks(double seconds)
     {
-        return false;
+        return (int)(seconds * 60.0);
     }
 
     private MatchState ProcessEvents(Events events, MatchState matchState)
     {
-        return null;
+        return matchState;
     }
 
     private bool EvaluateWinCondition(MatchState matchState)
@@ -83,13 +100,32 @@ internal record ModifyStateEvent(string Path, string Operation, string Value);
 
 internal record DamageEvent(int Damage);
 
-internal record PlayerState(
-    int Health,
-    int MaxHealth,
-    int Stamina,
-    int MaxStamina,
-    List<Item> Items
-);
+internal class PlayerState(int health, int maxHealth, int stamina, int maxStamina, List<ItemState> items)
+{
+    public int Health { get; set; } = health;
+    public int MaxHealth { get; } = maxHealth;
+    public int Stamina { get; } = stamina;
+    public int MaxStamina { get; } = maxStamina;
+    public List<ItemState> Items { get; } = items;
+
+    private PlayerState DeepCopy()
+    {
+        return new PlayerState(
+            Health,
+            MaxHealth,
+            Stamina,
+            MaxStamina,
+            [..Items]);
+    }
+}
+
+internal class ItemState
+{
+    public Item Item { get; }
+
+    // TODO: should be per behavior eventually
+    public int LastActivatedTick { get; set; }
+}
 
 internal record StatusEffect;
 
@@ -101,21 +137,3 @@ internal record StatusEffect;
  * For all intents, the compiledItem has the stats we care about!
  */
 internal record ItemInstance(Item Item, List<Vector2I> CoveredTiles);
-
-internal record BehaviorState(int LastActivatedTick);
-
-/**
- * How to solve this?
- * issue is, every interval trigger needs its own state
- * we'd have to identify each trigger uniquely, perhaps via its path: behavior_0/trigger_0/interval
- * and how to do that in a type safe way? maybe we mirror the structure, have one TriggerState with subsections
- * 
- * But is this needed? Why would we even want >1 interval trigger?
- * Or for that matter, more than 1 type of trigger?
- * I guess that last one maybe makes sense - trigger on interval or if health under some amount
- * An item just needs one behavior probably, right?
- * Well, what about items with a passive benefit and an active one?
- * 
- * It's honestly not that hard to do paths, and probably we'll need those later on. Maybe just do it?
- */
-internal record TriggerState(int LastTriggerTick);

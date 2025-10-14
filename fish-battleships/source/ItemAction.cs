@@ -10,6 +10,7 @@ public partial class ItemAction : Resource
 
 public enum ActionType
 {
+    Damage,
     ModifyPlayerState,
     ApplyStatusEffect
 }
