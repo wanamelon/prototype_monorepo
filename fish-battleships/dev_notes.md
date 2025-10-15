@@ -750,6 +750,24 @@ Overall flow:
 
 - Match start, compute static passive bonuses (stat modifiers, and overall)
 
+# Differentiating from other roguelike autobattlers
+
+A few concepts to explore:
+- Does it have to be unique to be worth it?
+- Organ health and positional targeting - position on board matters more
+  - There isn't just one player - you are fully the composition of your elements
+  - There is then a natural way to place shields, weapons, propellers, eyes, etc.
+  - Redundancies are necessary - and theorycrafting is deep because you account for round progress
+- The setting and concept are themselves quite unique!
+  - You are building a biopunk abomination out of organs and cannons
+  - The art can and should be kind of gross!
+- A stronger programmatic element
+  - Actions are collectible, but conditions are user-customized
+  - Actions need to be powerful tradeoffs, desirable only in niche situations
+  - Autocannibalism, shutting an organ off, growing an organ
+- Creatures can generate more creatures
+  - My design might be good as a whole, but if we make a modular part which is itself strong, is that good?
+
 # Pep talk
 
 oh my god the existing games in this genre are good!

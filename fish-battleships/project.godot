@@ -12,7 +12,7 @@ config_version=5
 
 config/name="FishBattleships"
 run/main_scene="uid://fq2wf31mlkgd"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.5", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -24,6 +24,7 @@ DragSignals="*res://source/drag_signals.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=2
+window/size/initial_position_type=3
 window/stretch/mode="canvas_items"
 
 [dotnet]

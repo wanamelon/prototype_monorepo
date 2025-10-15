@@ -1,6 +1,48 @@
-[gd_scene load_steps=2 format=3 uid="uid://m72wnks2okhk"]
+[gd_scene load_steps=14 format=3 uid="uid://m72wnks2okhk"]
 
 [ext_resource type="Script" uid="uid://bef364lkcrvpr" path="res://source/TestCSharp.cs" id="1_urnqe"]
+[ext_resource type="Script" uid="uid://cvhns1jayhpps" path="res://source/Item.cs" id="2_3jkv1"]
+[ext_resource type="Script" uid="uid://nmm3c4yag1ln" path="res://source/ItemAction.cs" id="3_utd2t"]
+[ext_resource type="Script" uid="uid://b0c2asie0tv0v" path="res://source/IntervalTrigger.cs" id="4_my4w5"]
+[ext_resource type="Script" uid="uid://bu5xaceiijxv" path="res://source/ItemTrigger.cs" id="5_1n6ag"]
+[ext_resource type="Script" uid="uid://cpxooppr7285e" path="res://source/ItemBehavior.cs" id="6_vu873"]
+
+[sub_resource type="Resource" id="Resource_kmhv1"]
+script = ExtResource("3_utd2t")
+metadata/_custom_type_script = "uid://nmm3c4yag1ln"
+
+[sub_resource type="Resource" id="Resource_5ji1a"]
+script = ExtResource("4_my4w5")
+IntervalSeconds = 1.0
+metadata/_custom_type_script = "uid://b0c2asie0tv0v"
+
+[sub_resource type="Resource" id="Resource_iop2p"]
+script = ExtResource("5_1n6ag")
+IntervalTrigger = SubResource("Resource_5ji1a")
+metadata/_custom_type_script = "uid://bu5xaceiijxv"
+
+[sub_resource type="Resource" id="Resource_2iaam"]
+script = ExtResource("6_vu873")
+Actions = Array[Object]([SubResource("Resource_kmhv1")])
+Triggers = Array[Object]([SubResource("Resource_iop2p")])
+metadata/_custom_type_script = "uid://cpxooppr7285e"
+
+[sub_resource type="Resource" id="Resource_lixoi"]
+script = ExtResource("2_3jkv1")
+Behaviors = Array[Object]([SubResource("Resource_2iaam")])
+metadata/_custom_type_script = "uid://cvhns1jayhpps"
+
+[sub_resource type="Resource" id="Resource_wrbo3"]
+script = ExtResource("2_3jkv1")
+Behaviors = Array[Object]([SubResource("Resource_2iaam")])
+metadata/_custom_type_script = "uid://cvhns1jayhpps"
+
+[sub_resource type="Resource" id="Resource_hntfv"]
+script = ExtResource("2_3jkv1")
+Behaviors = Array[Object]([SubResource("Resource_2iaam")])
+metadata/_custom_type_script = "uid://cvhns1jayhpps"
 
 [node name="TestCSharp" type="Node2D"]
 script = ExtResource("1_urnqe")
+OtherPlayerItems = Array[ExtResource("2_3jkv1")]([SubResource("Resource_lixoi"), SubResource("Resource_wrbo3")])
+OwnPlayerItems = Array[ExtResource("2_3jkv1")]([SubResource("Resource_hntfv")])
