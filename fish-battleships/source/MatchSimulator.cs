@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Godot;
 
 namespace FishBattleships.source;
@@ -119,6 +120,31 @@ public class MatchSimulator
     }
 }
 
+internal class BehaviorActivationContext
+{
+    private ItemState _itemState;
+
+    // @item.
+    public object resolveReference(string reference)
+    {
+        // parse and validate
+
+        var referenceRegex = new Regex(@"\@(?<target>[a-zA-Z_])\.(?<key>[a-zA-Z_])");
+        var match = referenceRegex.Match(reference);
+
+        if (!match.Success) throw new ArgumentException("Invalid reference. Format must be like @match.tick");
+
+        var sanitizedTarget = match.Groups["namespace"].Value.Replace("_", "").ToLower();
+        var sanitizedKey = match.Groups["key"].Value.Replace("_", "").ToLower();
+        // identify namespace
+        return sanitizedTarget switch
+        {
+            "item" => _itemState.resolveReference(sanitizedKey),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+}
+
 internal class MatchState(int tick, PlayerState ownPlayerState, PlayerState otherPlayerState)
 {
     public int Tick { get; set; } = tick;
@@ -165,12 +191,36 @@ internal class PlayerState(string name, int health, int maxHealth, int stamina, 
     }
 }
 
-internal class ItemState(Item item, int lastActivatedTick)
+internal interface IGetterSetter
 {
-    public Item Item { get; } = item;
+    void Set(object value);
+
+    object Get();
+}
+
+internal class ItemState
+{
+    public ItemState(Item item, int lastActivatedTick)
+    {
+        Item = item;
+        LastActivatedTick = lastActivatedTick;
+        // _lastActivatedTickGetterSetter = 
+    }
+
+    public Item Item { get; }
 
     // TODO: should be per behavior eventually
-    public int LastActivatedTick { get; set; } = lastActivatedTick;
+    public int LastActivatedTick { get; set; }
+    private IGetterSetter _lastActivatedTickGetterSetter;
+
+    public string resolveReference(string key)
+    {
+        return key switch
+        {
+            "lastactivatedtick" => LastActivatedTick.ToString(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 
     public override string ToString()
     {
