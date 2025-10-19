@@ -356,6 +356,83 @@ I've really been feeling the limitations of the drag and drop system!
 
 When we revisit UI later, can try to make our own, will reveal the tradeoffs, what are we losing?
 
+# Looking at some competitors in this genre
+
+Loosely defined as roguelike deckbuilding auto-battler
+Distinct from games like slay the spire - you don't choose the moves per round, only the layout of your deck
+
+https://www.kaggle.com/datasets/fronkongames/steam-games-dataset/data
+https://howtomarketagame.com/2019/12/11/how-i-do-competitive-analysis-for-my-game/
+
+### Top level insights/takeaways
+
+### Big one is backpack battles
+
+### 9 kings my beloved
+
+### SuperTaxCity
+
+# The pivot aeugh
+
+I think I've overscoped a bit.
+But we can step back! We can do better!
+
+I am deeply inspired by the Nubby number factory
+I think this is the direction I can take my pig ball chumibuletmas game from last year
+Give it a deckbuilding element!
+
+Item system should be largely identical/reusable
+
+How do we differentiate?
+Hmm do we have to? The goal is to make something fun and deliver it widely
+I think freshness is good!
+
+A few thematic ideas:
+- Suppressing peasants to ensure taxes collected
+  - Thematically pretty fresh and there's room to be funny / tongue-in-cheek.
+  - I definitely think more of a gritty / gore filled theme will appeal to rogue audiences
+  - Question is: Can we really go crazy with synergies this way?
+- Harvesting crops by rolling over them
+  - More logically consistent but maybe less funny. Easier to justify "new plant grew" vs "new person popped up?"
+  - Futures/options on the crops? Haha jkjk unless
+  - Aeugh organ farmer yeess
+  - Nah crops good. I can think of a lot of nice stuff that fits, it's coherent in a nice way, but chaotic enough!
+- Fishing
+- Something other, and highly absurd
+- Accounting/Data Entry/ some menial desk job (retain Debby and the CHINESE motivation?)
+
+Cute, but also kind of ugly and lopsided
+The great power of chitch my queen
+The taxation element: we must MEET the tithe, not collect it
+How much can we attain hmm
+
+### Crops ideas
+
+As always we have a grid (my beloved shape!)
+The pigball rolls OVER crops by default, doesn't bounce
+Crops have levels like in nubby - they grow some % value each level, but rolling over knocks down the level
+There's limited stamina, so it's a challenge to fill the quota within that time (or we can upgrade stamina)
+We equip items / relics.
+We start with only a very basic crop, but cards can add more
+
+The experience we aim for is similar to the weaponized fish game, the main difference is lower scope:
+- Items don't do inventory tetris -> placement UI can be much simpler to start
+- Don't need to balance for competitive human v human play
+- Don't need to implement multiplayer at all, or the genetic algo (though the latter maybe can be fun/balance tool!)
+
+hoho I'm the ideas ~~guy~~ (NOT) I have the BEST ideas - can I pay you 5 bucks to create? 
+AI, AI ML, the entrepreneur - non technical founder building quick quciker than ever before
+
+Need to be self aware of limiting the scope. APPLY the lessons we earned hard from last time
+
+What's the bare minimum we need to be fun?
+
+- 
+- 
+- Bounce system
+  - It's super rewarding to bounce between a bunch of close-together items. Quick payoff
+  - But it might also destroy the crops faster
+
 # Auto battle logic system
 
 [X] Definitions for item config (keep it basic!)
