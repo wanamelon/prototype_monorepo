@@ -362,7 +362,7 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 [ ] Ball: damage numbers
 [ ] Items: Chance to spawn a new crop
 [ ] Items: Speed on kill a crop
-[ ] Items: Increase stamina
+[X] Items: Increase stamina
 [X] Level: Basic multi-level + permadeath
 [X] Board: crop glow up
 [X] Board: crop growth
@@ -410,16 +410,17 @@ Hmm do we have to? The goal is to make something fun and deliver it widely
 I think freshness is good!
 
 A few thematic ideas:
+
 - Suppressing peasants to ensure taxes collected
-  - Thematically pretty fresh and there's room to be funny / tongue-in-cheek.
-  - I definitely think more of a gritty / gore filled theme will appeal to rogue audiences
-  - Question is: Can we really go crazy with synergies this way?
+    - Thematically pretty fresh and there's room to be funny / tongue-in-cheek.
+    - I definitely think more of a gritty / gore filled theme will appeal to rogue audiences
+    - Question is: Can we really go crazy with synergies this way?
 - Harvesting crops by rolling over them
-  - More logically consistent but maybe less funny. Easier to justify "new plant grew" vs "new person popped up?"
-  - Futures/options on the crops? Haha jkjk unless
-  - Aeugh organ farmer yeess
-  - Nah crops good. I can think of a lot of nice stuff that fits, it's coherent in a nice way, but chaotic enough!
-  - Oh ho ho wait...we're an enforcer punishing condemned souls in some kind of afterlife, embodied as organ plants
+    - More logically consistent but maybe less funny. Easier to justify "new plant grew" vs "new person popped up?"
+    - Futures/options on the crops? Haha jkjk unless
+    - Aeugh organ farmer yeess
+    - Nah crops good. I can think of a lot of nice stuff that fits, it's coherent in a nice way, but chaotic enough!
+    - Oh ho ho wait...we're an enforcer punishing condemned souls in some kind of afterlife, embodied as organ plants
 - Fishing
 - Something other, and highly absurd
 - Accounting/Data Entry/ some menial desk job (retain Debby and the CHINESE motivation?)
@@ -439,11 +440,12 @@ We equip items / relics.
 We start with only a very basic crop, but cards can add more
 
 The experience we aim for is similar to the weaponized fish game, the main difference is lower scope:
+
 - Items don't do inventory tetris -> placement UI can be much simpler to start
 - Don't need to balance for competitive human v human play
 - Don't need to implement multiplayer at all, or the genetic algo (though the latter maybe can be fun/balance tool!)
 
-hoho I'm the ideas ~~guy~~ (NOT) I have the BEST ideas - can I pay you 5 bucks to create? 
+hoho I'm the ideas ~~guy~~ (NOT) I have the BEST ideas - can I pay you 5 bucks to create?
 AI, AI ML, the entrepreneur - non technical founder building quick quciker than ever before
 
 Need to be self aware of limiting the scope. APPLY the lessons we earned hard from last time
@@ -451,8 +453,8 @@ Need to be self aware of limiting the scope. APPLY the lessons we earned hard fr
 What's the bare minimum we need to be fun?
 
 - Bounce system
-  - It's super rewarding to bounce between a bunch of close-together items. Quick payoff
-  - But it might also destroy the crops faster
+    - It's super rewarding to bounce between a bunch of close-together items. Quick payoff
+    - But it might also destroy the crops faster
 
 # Auto battle logic system
 
@@ -466,8 +468,8 @@ What's the bare minimum we need to be fun?
 
 Timer is just a shortcut for the condition where `if (match.tick - trigger.last_tick) > PERIOD`
 And then an action resetting trigger.last_tick = match.tick
-    ^^ Important because: what if another required trigger is not met? action doesn't happen, should we reset?
-    ^^ I guess we can make that configurable. Makes sense to still count as a "try" if reason is out of stamina
+^^ Important because: what if another required trigger is not met? action doesn't happen, should we reset?
+^^ I guess we can make that configurable. Makes sense to still count as a "try" if reason is out of stamina
 I think we'll have a "compile" stage where we expand our a periodic trigger into basically the above
 But for now, we can build a more specialized one just 2b a happy bee
 
@@ -475,6 +477,7 @@ We DO need some concept of a trigger accessing its own last state
 
 Probably trigger evaluation will happen in some kind of context
 Maybe the trigger itself can even modify the context? Not needed right now
+
 ```
 interface TriggerHandler<TriggerT>:
     bool EvaluateTriggerCondition(TriggerContext)
@@ -510,6 +513,7 @@ How would we implement this? Well, the triggering part is trivial, but for the a
 We can't just say "Reduce cooldown by 0.1s" - what happens when health goes above threshold then down again?
 Sure, we could add some framework for "reversing" an action, but do we want to have to define this for every action?
 And what about actions which aren't straightforward to reverse? ex:
+
 - Let's assume cooldown for X right now is 0.5s
 - Item Z applies a modifier, changes x cooldown to 1.0s
 - But another one brought it down to 0.1
@@ -611,9 +615,10 @@ StatusEffectConfig:
 ```
 
 Overall, we will have a pipeline wherein:
+
 - The ItemConfig is immutable. Everything is an effect atop the base
-- Each turn, 
-- Instanced item 
+- Each turn,
+- Instanced item
 - Generate events
 
 ---
@@ -714,7 +719,7 @@ We can imagine composing this with modifiers and relative things like 'percent o
 
 Hmm maybe too complex? haha, we maybe don't need this yet?
 
->> Targeting config can be made first class
+> > Targeting config can be made first class
 
 ```
 "SelfPlayer", "EnemyPlayer", "SelfItem", "AdjacentItems(distance)", "ItemsWithTag(healing)",
@@ -752,6 +757,7 @@ ProcessAction(ActionConfig action, ItemInstance source) {
 
 - Ex: shell buff. After taking a hit (and reducing hit damage), they go away
 - How do we define this in ItemConfig?
+
 ```
 ShellItem:
     triggers:
@@ -760,6 +766,7 @@ ShellItem:
         - add one hp
         - destroy self
 ```
+
 Hmm, but that's not quiiiite enough...
 Because in that case, all shells will be consumed every time we take damage
 
@@ -781,12 +788,14 @@ Hmm, or perhaps we can just check for new events and run again? eh seems bad.
 Also this level of granularity isn't what the user would care to see in the event log I feel
 
 They'd just want to know:
+
 - "I took X damage, here are the sources"
 - "X damage from Y blocked by Z"
 
 We can make configurable LOD and other nice search goodies (for later!)
 
 What status effects do we need? Do they really HAVE to be items?
+
 - Shield (turtle shell?)
 - Metabolism
 - Momentum
@@ -851,20 +860,21 @@ Overall flow:
 # Differentiating from other roguelike autobattlers
 
 A few concepts to explore:
+
 - Does it have to be unique to be worth it?
 - Organ health and positional targeting - position on board matters more
-  - There isn't just one player - you are fully the composition of your elements
-  - There is then a natural way to place shields, weapons, propellers, eyes, etc.
-  - Redundancies are necessary - and theorycrafting is deep because you account for round progress
+    - There isn't just one player - you are fully the composition of your elements
+    - There is then a natural way to place shields, weapons, propellers, eyes, etc.
+    - Redundancies are necessary - and theorycrafting is deep because you account for round progress
 - The setting and concept are themselves quite unique!
-  - You are building a biopunk abomination out of organs and cannons
-  - The art can and should be kind of gross!
+    - You are building a biopunk abomination out of organs and cannons
+    - The art can and should be kind of gross!
 - A stronger programmatic element
-  - Actions are collectible, but conditions are user-customized
-  - Actions need to be powerful tradeoffs, desirable only in niche situations
-  - Autocannibalism, shutting an organ off, growing an organ
+    - Actions are collectible, but conditions are user-customized
+    - Actions need to be powerful tradeoffs, desirable only in niche situations
+    - Autocannibalism, shutting an organ off, growing an organ
 - Creatures can generate more creatures
-  - My design might be good as a whole, but if we make a modular part which is itself strong, is that good?
+    - My design might be good as a whole, but if we make a modular part which is itself strong, is that good?
 
 # Pep talk
 

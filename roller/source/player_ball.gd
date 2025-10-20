@@ -8,15 +8,16 @@ var _speed: float = 400.0
 var _points: int = 0
 var _stamina_seconds: float = 8
 var _max_stamina := _stamina_seconds
-var _random_curve_deg: float = 0
+var _items: Array[ItemDef] = []
 
 func scene_init(items: Array[ItemDef]):
+	_items = items
 	for item in items:
 		match item.item_id:
 			E.ItemId.ADD_STAMINA:
-				print("up stamina")
 				_max_stamina += 1
 				_stamina_seconds += 1
+			_: pass
 	return self
 
 func _ready():
@@ -28,19 +29,37 @@ func _physics_process(delta):
 	var collision_result := move_and_collide(velocity * delta)
 	if collision_result:
 		velocity = velocity.bounce(collision_result.get_normal())
-		_random_curve_deg = _random.randf_range(-10, 10)
-	velocity = velocity.rotated(deg_to_rad(_random_curve_deg) * delta)
-	_stamina_seconds = max(0, _stamina_seconds - delta)
+		velocity = velocity.rotated(deg_to_rad(_random.randf_range(-5, 5)))
 	if _stamina_seconds <= 0:
 		var damping_factor: float = 4 * velocity.length() * delta
 		velocity -= velocity.normalized() * damping_factor
+	else:
+		var speed_with_buffs := _speed
+		var new_speed_buff_durations: Array[float] = []
+		for duration in _speed_buff_durations:
+			speed_with_buffs += 200 * duration
+			var decremented = duration - delta
+			if decremented > 0:
+				new_speed_buff_durations.append(decremented)
+		_stamina_seconds = max(0, _stamina_seconds - delta)
+		_speed_buff_durations = new_speed_buff_durations
+		velocity = velocity.normalized() * speed_with_buffs
+	
 	if velocity.length() < 5:
-		print("I have reached the ENDE")
 		finished.emit(_points)
 		queue_free()
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
+
+var _speed_buff_durations: Array[float] = []
+
+func on_tile_destroyed():
+	for item in _items:
+		match item.item_id:
+			E.ItemId.SPEED_BUFF_ON_DESTROY:
+				_speed_buff_durations.append(2.5)
+			_: pass
 
 func give_points(points: int):
 	points_changed.emit(_points, _points + points)

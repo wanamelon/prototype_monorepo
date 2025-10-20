@@ -13,7 +13,7 @@ func generate_grid_items(round: int):
 	for cell in available_cells.slice(0, 10 + round * 2):
 		var grid_item: TileObject = TILE_OBJECT_SCENE.instantiate()
 		grid_item.position = $TileMapLayer.map_to_local(cell)
-		grid_item.level = _random.randi_range(1, min(round + 2, 5))
+		grid_item.level = _random.randi_range(1, 3)
 		$TileObjects.add_child(grid_item)
 
 func spawn_ball(items: Array[ItemDef]):

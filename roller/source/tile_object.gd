@@ -22,7 +22,7 @@ func _process(delta):
 	$LevelLabel.set("theme_override_colors/font_color", LEVEL_COLORS[min(len(LEVEL_COLORS)- 1, level)])
 
 func _physics_process(delta):
-	var expected_seconds_until_growth: float = 2.0 + 10 * log(level)
+	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
 	var growth_probability_per_second := 1.0 / expected_seconds_until_growth
 	if rng.randf() < (delta * growth_probability_per_second):
 		level += 1
@@ -34,4 +34,5 @@ func _on_body_entered(body: Node2D):
 			player_ball.give_points(2 ** (level - 1))
 			level -= 1
 		if level == 0:
+			player_ball.on_tile_destroyed()
 			queue_free()
