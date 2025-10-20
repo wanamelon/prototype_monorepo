@@ -11,6 +11,7 @@ func _on_player_finish(points: int):
 	print("Ended with points: ", points)
 	if points >= points_quota:
 		print("Round won. WE'RE DOING IT AGAIN!")
+		round += 1
 		round_setup()
 	else:
 		print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
@@ -19,7 +20,6 @@ func _on_player_finish(points: int):
 func round_setup():
 	if round != 0:
 		points_quota *= 1.5
-		round += 1
 	$ProgressDisplay/ProgressBar.value = 0
 	$GameBoard.generate_grid_items(round)
 	var player_ball: PlayerBall = $GameBoard.spawn_ball()

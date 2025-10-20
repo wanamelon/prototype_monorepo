@@ -358,8 +358,9 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 
 # Crop idea
 
-[ ] Minor polish: SFX for feedback
+[ ] UX: SFX for feedback
 [ ] Ball: damage numbers
+[ ] Items: Chance to spawn a new crop
 [ ] Items: Speed on kill a crop
 [ ] Items: Increase stamina
 [X] Level: Basic multi-level + permadeath

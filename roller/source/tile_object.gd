@@ -1,4 +1,4 @@
-class_name GridItem extends Node2D
+class_name TileObject extends Node2D
 
 const LEVEL_COLORS := [
 	Color.BLACK, 
