@@ -16,8 +16,8 @@ func generate_grid_items(round: int):
 		grid_item.level = _random.randi_range(1, min(round + 2, 5))
 		$TileObjects.add_child(grid_item)
 
-func spawn_ball():
-	_player_ball = PLAYER_BALL_SCENE.instantiate()
+func spawn_ball(items: Array[ItemDef]):
+	_player_ball = PLAYER_BALL_SCENE.instantiate().scene_init(items)
 	_player_ball.position = $TileMapLayer.map_to_local($TileMapLayer.get_used_cells().pick_random())
 	add_child(_player_ball)
 	return _player_ball

@@ -34,5 +34,4 @@ func _on_body_entered(body: Node2D):
 			player_ball.give_points(2 ** (level - 1))
 			level -= 1
 		if level == 0:
-			print("i'm cooked")
 			queue_free()

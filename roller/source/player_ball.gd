@@ -6,9 +6,18 @@ signal points_changed(old: int, new: int)
 var _random := RandomNumberGenerator.new()
 var _speed: float = 400.0
 var _points: int = 0
-var _stamina: int = 60 * 8
-var _max_stamina := _stamina
+var _stamina_seconds: float = 8
+var _max_stamina := _stamina_seconds
 var _random_curve_deg: float = 0
+
+func scene_init(items: Array[ItemDef]):
+	for item in items:
+		match item.item_id:
+			E.ItemId.ADD_STAMINA:
+				print("up stamina")
+				_max_stamina += 1
+				_stamina_seconds += 1
+	return self
 
 func _ready():
 	var near_diagonal_launch_angle = 45 + (90 * _random.randi_range(0, 4)) + _random.randf_range(-20, 20)
@@ -21,8 +30,8 @@ func _physics_process(delta):
 		velocity = velocity.bounce(collision_result.get_normal())
 		_random_curve_deg = _random.randf_range(-10, 10)
 	velocity = velocity.rotated(deg_to_rad(_random_curve_deg) * delta)
-	_stamina = max(0, _stamina - 1)
-	if _stamina == 0:
+	_stamina_seconds = max(0, _stamina_seconds - delta)
+	if _stamina_seconds <= 0:
 		var damping_factor: float = 4 * velocity.length() * delta
 		velocity -= velocity.normalized() * damping_factor
 	if velocity.length() < 5:
@@ -31,7 +40,7 @@ func _physics_process(delta):
 		queue_free()
 
 func _process(delta):
-	$TextureProgressBar.value = 100.0 * _stamina / float(_max_stamina)
+	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
 
 func give_points(points: int):
 	points_changed.emit(_points, _points + points)

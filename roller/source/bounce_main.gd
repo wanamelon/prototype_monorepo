@@ -3,6 +3,8 @@ extends Node2D
 var round: int = 0
 var points_quota: int = 20
 var point_progress_bar_tween: Tween
+var _player_ball: PlayerBall
+@export var items: Array[ItemDef]
 
 func _ready():
 	round_setup()
@@ -22,9 +24,9 @@ func round_setup():
 		points_quota *= 1.5
 	$ProgressDisplay/ProgressBar.value = 0
 	$GameBoard.generate_grid_items(round)
-	var player_ball: PlayerBall = $GameBoard.spawn_ball()
-	player_ball.finished.connect(_on_player_finish)
-	player_ball.points_changed.connect(_on_player_points_changed)
+	_player_ball = $GameBoard.spawn_ball(items)
+	_player_ball.finished.connect(_on_player_finish)
+	_player_ball.points_changed.connect(_on_player_points_changed)
 
 func _on_player_points_changed(old, new):
 	if point_progress_bar_tween:
