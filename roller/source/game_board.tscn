@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=4 uid="uid://cy54rx8phsksw"]
+
+[ext_resource type="Script" uid="uid://ci17nfahybs17" path="res://source/game_board.gd" id="1_n8mxk"]
+[ext_resource type="Texture2D" uid="uid://dn0v0p4iw3yfb" path="res://assets/rolling_ball/block_square_128.png" id="2_kt6qa"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_chlw6"]
+texture = ExtResource("2_kt6qa")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_q2ks2"]
+tile_size = Vector2i(128, 128)
+sources/3 = SubResource("TileSetAtlasSource_chlw6")
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0panw"]
+
+[node name="GameBoard" type="Node2D"]
+script = ExtResource("1_n8mxk")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAAAAAAAAwAAAAAAAAAAAAEAAwAAAAAAAAABAAEAAwAAAAAAAAABAAAAAwAAAAAAAAACAAAAAwAAAAAAAAACAAEAAwAAAAAAAAADAAAAAwAAAAAAAAADAAEAAwAAAAAAAAAAAAIAAwAAAAAAAAABAAIAAwAAAAAAAAACAAIAAwAAAAAAAAADAAIAAwAAAAAAAAADAAMAAwAAAAAAAAACAAMAAwAAAAAAAAABAAMAAwAAAAAAAAAAAAMAAwAAAAAAAAAEAAAAAwAAAAAAAAAFAAAAAwAAAAAAAAAFAAEAAwAAAAAAAAAEAAEAAwAAAAAAAAAEAAIAAwAAAAAAAAAEAAMAAwAAAAAAAAAFAAMAAwAAAAAAAAAFAAIAAwAAAAAAAAAFAAQAAwAAAAAAAAAEAAQAAwAAAAAAAAADAAQAAwAAAAAAAAACAAQAAwAAAAAAAAABAAQAAwAAAAAAAAAAAAQAAwAAAAAAAAAAAAUAAwAAAAAAAAABAAUAAwAAAAAAAAACAAUAAwAAAAAAAAADAAUAAwAAAAAAAAAEAAUAAwAAAAAAAAAFAAUAAwAAAAAAAAA=")
+tile_set = SubResource("TileSet_q2ks2")
+
+[node name="GridItems" type="Node2D" parent="."]
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="Wall" type="StaticBody2D" parent="Walls"]
+position = Vector2(384, 768)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall"]
+shape = SubResource("WorldBoundaryShape2D_0panw")
+
+[node name="Wall2" type="StaticBody2D" parent="Walls"]
+position = Vector2(0, 256)
+rotation = 1.5707964
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall2"]
+shape = SubResource("WorldBoundaryShape2D_0panw")
+
+[node name="Wall3" type="StaticBody2D" parent="Walls"]
+position = Vector2(768, 256)
+rotation = -1.5707964
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall3"]
+shape = SubResource("WorldBoundaryShape2D_0panw")
+
+[node name="Wall4" type="StaticBody2D" parent="Walls"]
+position = Vector2(256, 0)
+rotation = 3.1415925
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall4"]
+shape = SubResource("WorldBoundaryShape2D_0panw")
