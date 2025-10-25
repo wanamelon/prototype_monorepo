@@ -9,4 +9,5 @@ func _on_body_entered(body):
 	if body is PlayerBall:
 		hit_points -= 1
 	if hit_points <= 0:
+		body.on_tile_destroyed()
 		queue_free()

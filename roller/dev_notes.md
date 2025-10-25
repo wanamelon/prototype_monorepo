@@ -359,6 +359,7 @@ When we revisit UI later, can try to make our own, will reveal the tradeoffs, wh
 # More nice tempting juicy not core scope scope creep ideas
 
 Explicit and emergent synergies
+
 - Explicit: Item X gives +10% if item Y also owned
 - Emergent: Hitting some combo within 1 second -> + coins. Anything making ball faster or combo more common
 
@@ -378,8 +379,8 @@ Generally, something making restrictive but powerful triggers not so restrictive
 > Transform common item -> super rare one
 
 > Changing the probability distribution
- 
-> Dud item, added as a challenge on later levels, or as a negative effect 
+
+> Dud item, added as a challenge on later levels, or as a negative effect
 
 # Roller 2025-10-25 Planning
 
@@ -402,9 +403,12 @@ Then the rest of the items
 [ ] Items: Status effects last longer
 [ ] Items: Trail of fertilizer
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
+[ ] UX: Display full item value (formatted), not exponent
+[ ] Round: Multiple "spins" to hit quota (3 tries?)
 [ ] Items: Ball bouncy off crops for a moment
 [ ] Items: We deal more "damage" (downlevel coin more)
-[ ] Items: Increase our hitbox size
+[ ] Items: don't spawn collider in same square as ball! (check would overlap?)
+[X] Items: Increase our hitbox size status effect
 [X] Items: Spawn a bounce pillar
 [X] Items: Chance grow the crop you roll over
 [X] Items: Chance to spawn a new crop when ball bounce
@@ -504,6 +508,7 @@ What's the bare minimum we need to be fun?
     - But it might also destroy the crops faster
 
 More on differentiation
+
 - Lean into the mechanics we can achieve by having cards generate the board, not "be" the board
 - Offer some degree of control over positioning? Ex: we can have card slots correspond to board segments
 - We want to pick a thematic and art style which stands out. It need not be "beautiful" so much as eye catching

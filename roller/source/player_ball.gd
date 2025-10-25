@@ -11,6 +11,11 @@ var _points: int = 0
 var _stamina_seconds: float = 8
 var _max_stamina := _stamina_seconds
 var _items: Array[ItemDef] = []
+var _speed_buff_durations: Array[float] = []
+var _size_buff_durations: Array[float] = []
+var _items_destroyed: int = 0
+@onready var _original_size: float = ($CollisionShape2D.shape as CircleShape2D).radius
+@onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
 
 func scene_init(items: Array[ItemDef]):
 	_items = items
@@ -62,25 +67,39 @@ func _physics_process(delta):
 	if velocity.length() < 5:
 		finished.emit(_points)
 		queue_free()
+	
+	var size_buff: float = 0
+	var new_size_buff_durations: Array[float] = []
+	for duration in _speed_buff_durations:
+		size_buff += min(4, 4 * duration)
+		var decremented = duration - delta
+		if decremented > 0:
+			new_size_buff_durations.append(decremented)
+	var capped_size_buff: float = min(4, size_buff)
+	var size_with_buffs: float = _original_size + capped_size_buff
+	_size_buff_durations = new_size_buff_durations
+	$CollisionShape2D.shape.radius = size_with_buffs
+	var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
+	var desired_sprite_radius_px: float = og_sprite_radius_px + capped_size_buff
+	$Sprite2D.scale = (desired_sprite_radius_px / og_sprite_radius_px) * _original_sprite_scale
+	
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
 
-var _speed_buff_durations: Array[float] = []
-
 func on_tile_destroyed():
+	_items_destroyed += 1
 	for item in _items:
 		match item.item_id:
 			ItemDef.ItemId.SPEED_BUFF_ON_DESTROY:
 				_speed_buff_durations.append(2.5)
 			ItemDef.ItemId.SPAWN_BOUNCE_PILLAR:
 				spawn_bounce_pillar.emit(1.0)
+			ItemDef.ItemId.INCREASE_SIZE:
+				if _items_destroyed % 10 == 0 and _size_buff_durations.size() < 4:
+					_size_buff_durations.append(1.5)
 			_: pass
 
 func give_points(points: int):
 	points_changed.emit(_points, _points + points)
 	_points += points
-
-#func is_near_horizontal(angle_deg: float, horizontal_threshold_deg: float):
-	#var deg_from_nearest_horizontal = abs(angle_deg - snapped(angle_deg, 90.0))
-	#return deg_from_nearest_horizontal > 5.0
