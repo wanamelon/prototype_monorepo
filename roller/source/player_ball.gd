@@ -3,6 +3,7 @@ class_name PlayerBall extends CharacterBody2D
 signal finished(points: int)
 signal points_changed(old: int, new: int)
 signal spawn_item(chance: float)
+signal spawn_bounce_pillar(chance: float)
 
 var _random := RandomNumberGenerator.new()
 var _speed: float = 400.0
@@ -72,6 +73,8 @@ func on_tile_destroyed():
 		match item.item_id:
 			ItemDef.ItemId.SPEED_BUFF_ON_DESTROY:
 				_speed_buff_durations.append(2.5)
+			ItemDef.ItemId.SPAWN_BOUNCE_PILLAR:
+				spawn_bounce_pillar.emit(1.0)
 			_: pass
 
 func give_points(points: int):

@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bej1km1vqhxtr"]
+
+[ext_resource type="Script" uid="uid://cam7syiypokk8" path="res://source/bounce_pillar.gd" id="1_kf50q"]
+[ext_resource type="Texture2D" uid="uid://ccdy67xn8m374" path="res://assets/rolling_ball/block_locked_square.png" id="1_no7k7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kf50q"]
+size = Vector2(120, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wdnx5"]
+size = Vector2(124, 124)
+
+[node name="BouncePillar" type="Node2D"]
+script = ExtResource("1_kf50q")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("1_no7k7")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("RectangleShape2D_kf50q")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_wdnx5")

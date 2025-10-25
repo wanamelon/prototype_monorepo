@@ -392,15 +392,21 @@ Let's first make a couple items
 Then add a store
 Then the rest of the items
 
-# Crop idea
+# Crop idea (bankrolled bazillionaire)
 
-[ ] UX: SFX for feedback
+[ ] SFX: Roll, bounce, crop hit (+coins), crop grow, crop spawn
 [ ] Ball: damage numbers
+[ ] Items: Future: Mark price equal to adjacent items on spawn. Make 10x Delta value on expire
+[ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
+[ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
+[ ] Items: Status effects last longer
+[ ] Items: Trail of fertilizer
+[ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Items: Ball bouncy off crops for a moment
 [ ] Items: We deal more "damage" (downlevel coin more)
 [ ] Items: Increase our hitbox size
-[ ] Items: Spawn a bounce pillar
-[ ] Items: Chance grow the crop you roll over
+[X] Items: Spawn a bounce pillar
+[X] Items: Chance grow the crop you roll over
 [X] Items: Chance to spawn a new crop when ball bounce
 [X] Items: Speed on kill a crop
 [X] Items: Increase stamina
