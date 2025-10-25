@@ -6,9 +6,12 @@ const BOUNCE_PILLAR_SCENE: PackedScene = preload("res://source/bounce_pillar.tsc
 var _random := RandomNumberGenerator.new()
 var _player_ball: PlayerBall
 
-func generate_grid_items(round: int):
+func clear():
 	for existing_item in $TileObjects.get_children():
 		existing_item.queue_free()
+
+func generate_grid_items(round: int):
+	clear()
 	var available_cells: Array[Vector2i] = $TileMapLayer.get_used_cells().duplicate()
 	available_cells.shuffle()
 	for cell in available_cells.slice(0, 10 + round * 2):
@@ -37,6 +40,10 @@ func _create_coin_random_level():
 func _spawn_item(item: Node2D, cell: Vector2i):
 	item.position = $TileMapLayer.map_to_local(cell)
 	$TileObjects.call_deferred("add_child", item)
+	if item is BouncePillar:
+		$PlacementAudioPlayer.play()
+	elif item is TileObject:
+		$SpawnCoinAudioPlayer.play()
 
 func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):
 	if _random.randf() > spawn_chance:

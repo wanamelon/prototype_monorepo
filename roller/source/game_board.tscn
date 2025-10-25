@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=4 uid="uid://cy54rx8phsksw"]
+[gd_scene load_steps=8 format=4 uid="uid://cy54rx8phsksw"]
 
 [ext_resource type="Script" uid="uid://ci17nfahybs17" path="res://source/game_board.gd" id="1_n8mxk"]
 [ext_resource type="Texture2D" uid="uid://dn0v0p4iw3yfb" path="res://assets/rolling_ball/block_square_128.png" id="2_kt6qa"]
+[ext_resource type="AudioStream" uid="uid://dg2vyeme7usj8" path="res://assets/audio/put_item.ogg" id="3_n8mxk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_chlw6"]
 texture = ExtResource("2_kt6qa")
@@ -13,6 +14,11 @@ tile_size = Vector2i(128, 128)
 sources/3 = SubResource("TileSetAtlasSource_chlw6")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0panw"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_kt6qa"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("3_n8mxk")
 
 [node name="GameBoard" type="Node2D"]
 script = ExtResource("1_n8mxk")
@@ -51,3 +57,11 @@ rotation = 3.1415925
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall4"]
 shape = SubResource("WorldBoundaryShape2D_0panw")
+
+[node name="PlacementAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_kt6qa")
+
+[node name="SpawnCoinAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_n8mxk")
+volume_db = -10.0
+pitch_scale = 1.5

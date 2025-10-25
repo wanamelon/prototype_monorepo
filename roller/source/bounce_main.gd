@@ -3,10 +3,10 @@ extends Node2D
 const GAME_BOARD_SCENE: PackedScene = preload("res://source/game_board.tscn")
 
 var round: int = 0
-var points_quota: int = 20
+var points_quota: int
 var point_progress_bar_tween: Tween
 var _player_ball: PlayerBall
-var _lives_remaining: int = 3
+var _lives_remaining: int = 2
 @export var items: Array[ItemDef]
 
 func _ready():
@@ -19,6 +19,7 @@ func _on_player_finish(points: int):
 		if _current_score >= points_quota:
 			print("Round won. WE'RE DOING IT AGAIN!")
 			round += 1
+			$GameBoard.clear()
 			generate_choices()
 		else:
 			print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
@@ -27,15 +28,16 @@ func _on_player_finish(points: int):
 		stage_setup()
 
 func stage_setup():
+	$ProgressDisplay/LivesLabel.text = str(_lives_remaining) + " Lives Left"
 	$GameBoard.generate_grid_items(round)
 	_player_ball = $GameBoard.spawn_ball(items)
 	_player_ball.finished.connect(_on_player_finish)
 	_player_ball.gained_points.connect(_on_gain_points)
 
 func round_setup():
-	_lives_remaining = 3
+	_lives_remaining = 2
 	_current_score = 0
-	points_quota = 20 * (2 ** round)
+	points_quota = 1 * (2 ** round)
 	$ProgressDisplay/ProgressBar.value = 0
 	stage_setup()
 

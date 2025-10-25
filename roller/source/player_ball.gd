@@ -10,7 +10,7 @@ const SNAIL_TRAIL_SCENE: PackedScene = preload("res://source/snail_trail.tscn")
 var _random := RandomNumberGenerator.new()
 var _speed: float = 400.0
 var _points: int = 0
-var _stamina_seconds: float = 5
+var _stamina_seconds: float = 1
 var _max_stamina := _stamina_seconds
 var _items: Array[ItemDef] = []
 var _speed_buff_durations: Array[float] = []
@@ -53,6 +53,7 @@ func _physics_process(delta):
 	if collision_result:
 		velocity = velocity.bounce(collision_result.get_normal())
 		velocity = velocity.rotated(deg_to_rad(_random.randf_range(-5, 5)))
+		$BounceAudioPlayer.play()
 		var spawn_chance := 0.0
 		for item in _items:
 			if item.item_id == ItemDef.ItemId.SPAWN_RANDOM_TILE_OBJECT:
@@ -145,5 +146,6 @@ func on_tile_destroyed():
 			_: pass
 
 func give_points(points: int):
+	$GainPointsAudioPlayer.play()
 	gained_points.emit(points)
 	_points += points

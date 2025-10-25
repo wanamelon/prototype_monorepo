@@ -1,12 +1,27 @@
-[gd_scene load_steps=6 format=3 uid="uid://cn1uouo8aq22t"]
+[gd_scene load_steps=12 format=3 uid="uid://cn1uouo8aq22t"]
 
 [ext_resource type="Script" uid="uid://b8e2sfg7ru250" path="res://source/player_ball.gd" id="1_1phkq"]
 [ext_resource type="Texture2D" uid="uid://crkxiobtsaim" path="res://assets/rolling_ball/hole_large_end.png" id="2_23a83"]
 [ext_resource type="Texture2D" uid="uid://cltr6605421w6" path="res://assets/rolling_ball/ball_red_large.png" id="3_uutk1"]
 [ext_resource type="Texture2D" uid="uid://cwbxgh1pydykp" path="res://assets/rolling_ball/particle_3.png" id="4_23a83"]
+[ext_resource type="AudioStream" uid="uid://css8sm1fubtar" path="res://assets/audio/impactSoft_heavy_000.ogg" id="5_mtu8u"]
+[ext_resource type="AudioStream" uid="uid://wwwnmvva1qka" path="res://assets/audio/impactSoft_heavy_001.ogg" id="6_ldloj"]
+[ext_resource type="AudioStream" uid="uid://bsvxnotkbfkop" path="res://assets/audio/impactSoft_heavy_002.ogg" id="7_go6as"]
+[ext_resource type="AudioStream" uid="uid://dqqyk4o7rd7bu" path="res://assets/audio/retro-coin-4-236671.mp3" id="8_ldloj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ovsfe"]
 radius = 48.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_55t47"]
+streams_count = 3
+stream_0/stream = ExtResource("5_mtu8u")
+stream_1/stream = ExtResource("6_ldloj")
+stream_2/stream = ExtResource("7_go6as")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_ldloj"]
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("8_ldloj")
 
 [node name="PlayerBall" type="CharacterBody2D"]
 script = ExtResource("1_1phkq")
@@ -35,3 +50,11 @@ texture = ExtResource("3_uutk1")
 [node name="BouncingModeSprite" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
 texture = ExtResource("4_23a83")
+
+[node name="BounceAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_55t47")
+volume_db = 10.0
+
+[node name="GainPointsAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_ldloj")
+volume_db = -10.0

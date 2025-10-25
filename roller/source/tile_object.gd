@@ -48,10 +48,12 @@ func _physics_process(delta):
 	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
 	var growth_probability_per_second := 1.0 / expected_seconds_until_growth
 	if rng.randf() < (delta * growth_probability_per_second):
+		$LevelUpAudioPlayer.play()
 		level += 1
 
 func try_level_up_from_snail_trail(chance: float):
 	if rng.randf() < chance:
+		$LevelUpAudioPlayer.play()
 		level += 1
 
 func _on_body_entered(body: Node2D):
@@ -65,6 +67,7 @@ func _on_body_entered(body: Node2D):
 			var expected_seconds_until_growth: float = expected_growth_sec_base + 8 * log(level)
 			var level_up_chance = player_ball.compute_level_up_on_hit_base_chance() * (expected_growth_sec_base / expected_seconds_until_growth)
 			if rng.randf() < level_up_chance:
+				$LevelUpAudioPlayer.play()
 				level += 1
 			else:
 				level -= 1

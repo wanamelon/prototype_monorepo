@@ -403,8 +403,8 @@ Then the rest of the items
 [ ] Items: Count overlap while bounce as hit also?
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Design: Item system design more generic
-[ ] SFX: Roll, bounce, crop hit (+coins), crop grow, crop spawn
-[ ] UX: Display full item value (formatted), not exponent
+[X] SFX: Roll, bounce, crop hit (+coins), crop grow, crop spawn
+[X] UX: Display full item value (formatted), not exponent
 [X] Round: Rogue choose item between
 [X] Round: Multiple "spins" to hit quota (3 tries?)
 [X] Items: We deal more "damage" (downlevel coin more)

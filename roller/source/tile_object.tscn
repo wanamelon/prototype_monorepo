@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://xmlcc5eo5opy"]
+[gd_scene load_steps=6 format=3 uid="uid://xmlcc5eo5opy"]
 
 [ext_resource type="Script" uid="uid://slh8w1pu44l0" path="res://source/tile_object.gd" id="1_abydu"]
 [ext_resource type="Texture2D" uid="uid://r3bfnria2cwq" path="res://assets/rolling_ball/hole_small_end_alt.png" id="2_e4inv"]
+[ext_resource type="AudioStream" uid="uid://lq1tdvpynlb3" path="res://assets/audio/level_up.mp3" id="3_e4inv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_abydu"]
 radius = 45.0
@@ -38,3 +39,8 @@ theme_override_font_sizes/font_size = 50
 text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="LevelUpAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_e4inv")
+volume_db = -20.0
+pitch_scale = 1.5
