@@ -1,64 +1,10 @@
-[gd_scene load_steps=18 format=3 uid="uid://cdewixren54n7"]
+[gd_scene load_steps=7 format=3 uid="uid://cdewixren54n7"]
 
 [ext_resource type="Script" uid="uid://ctlovqr0sahr0" path="res://source/bounce_main.gd" id="1_ovsfe"]
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="1_p5ard"]
-[ext_resource type="Script" uid="uid://ckw8rr21jqg1f" path="res://source/item_def.gd" id="2_vx23h"]
 [ext_resource type="Texture2D" uid="uid://df8r231n3c6yr" path="res://assets/rolling_ball/background_blue.png" id="3_vx23h"]
 [ext_resource type="PackedScene" uid="uid://cy54rx8phsksw" path="res://source/game_board.tscn" id="4_vx23h"]
-
-[sub_resource type="Resource" id="Resource_0panw"]
-script = ExtResource("2_vx23h")
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_k3n88"]
-script = ExtResource("2_vx23h")
-item_id = 2
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_ovsfe"]
-script = ExtResource("2_vx23h")
-item_id = 3
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_a5fj5"]
-script = ExtResource("2_vx23h")
-item_id = 4
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_3yruk"]
-script = ExtResource("2_vx23h")
-item_id = 5
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_q2ks2"]
-script = ExtResource("2_vx23h")
-item_id = 6
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_jngsf"]
-script = ExtResource("2_vx23h")
-item_id = 7
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_gh64m"]
-script = ExtResource("2_vx23h")
-item_id = 9
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_j4338"]
-script = ExtResource("2_vx23h")
-item_id = 1
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_vx23h"]
-script = ExtResource("2_vx23h")
-item_id = 8
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
-
-[sub_resource type="Resource" id="Resource_dxtcc"]
-script = ExtResource("2_vx23h")
-item_id = 2
-metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
+[ext_resource type="Texture2D" uid="uid://ccdy67xn8m374" path="res://assets/rolling_ball/block_locked_square.png" id="6_0panw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_to078"]
 shader = ExtResource("1_p5ard")
@@ -66,7 +12,6 @@ shader_parameter/saturation = 0.30000001425
 
 [node name="BounceMain" type="Node2D"]
 script = ExtResource("1_ovsfe")
-items = Array[ExtResource("2_vx23h")]([SubResource("Resource_0panw"), SubResource("Resource_0panw"), SubResource("Resource_k3n88"), SubResource("Resource_ovsfe"), SubResource("Resource_a5fj5"), SubResource("Resource_3yruk"), SubResource("Resource_q2ks2"), SubResource("Resource_jngsf"), SubResource("Resource_gh64m"), SubResource("Resource_j4338"), SubResource("Resource_vx23h"), SubResource("Resource_dxtcc")])
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_to078")
@@ -115,3 +60,42 @@ horizontal_alignment = 1
 
 [node name="GameBoard" parent="." instance=ExtResource("4_vx23h")]
 position = Vector2(576, 192)
+
+[node name="ItemSelect" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 576.0
+offset_top = 192.0
+offset_right = 1344.0
+offset_bottom = 960.0
+
+[node name="TextureRect" type="TextureRect" parent="ItemSelect"]
+layout_mode = 1
+offset_right = 192.0
+offset_bottom = 192.0
+scale = Vector2(4, 4)
+texture = ExtResource("3_vx23h")
+stretch_mode = 1
+
+[node name="NinePatchRect" type="NinePatchRect" parent="ItemSelect"]
+layout_mode = 0
+offset_right = 768.0
+offset_bottom = 768.0
+texture = ExtResource("6_0panw")
+draw_center = false
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+
+[node name="GridContainer" type="GridContainer" parent="ItemSelect"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 705.0
+offset_bottom = 704.0
+theme_override_constants/h_separation = 43
+theme_override_constants/v_separation = 43
+columns = 4

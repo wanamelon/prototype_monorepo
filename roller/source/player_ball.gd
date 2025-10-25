@@ -1,16 +1,16 @@
 class_name PlayerBall extends CharacterBody2D
 
 signal finished(points: int)
-signal points_changed(old: int, new: int)
+signal gained_points(points: int)
 signal spawn_item(chance: float)
 signal spawn_bounce_pillar(chance: float)
 
 const SNAIL_TRAIL_SCENE: PackedScene = preload("res://source/snail_trail.tscn")
 
 var _random := RandomNumberGenerator.new()
-var _speed: float = 1400.0
+var _speed: float = 400.0
 var _points: int = 0
-var _stamina_seconds: float = 8
+var _stamina_seconds: float = 5
 var _max_stamina := _stamina_seconds
 var _items: Array[ItemDef] = []
 var _speed_buff_durations: Array[float] = []
@@ -26,15 +26,14 @@ func scene_init(items: Array[ItemDef]):
 	for item in items:
 		match item.item_id:
 			ItemDef.ItemId.ADD_STAMINA:
-				_max_stamina += 1
-				_stamina_seconds += 1
+				_max_stamina += 2
+				_stamina_seconds += 2
 			_: pass
 	return self
 
 func _ready():
 	var near_diagonal_launch_angle = 45 + (90 * _random.randi_range(0, 4)) + _random.randf_range(-20, 20)
 	velocity = (Vector2(1, 0) * _speed).rotated(deg_to_rad(near_diagonal_launch_angle))
-	points_changed.emit(0, 0)
 
 func compute_level_up_on_hit_base_chance():
 	var level_up_chance := 0.0
@@ -146,5 +145,5 @@ func on_tile_destroyed():
 			_: pass
 
 func give_points(points: int):
-	points_changed.emit(_points, _points + points)
+	gained_points.emit(points)
 	_points += points

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://5cpk5k4600n7"]
+
+[node name="Button" type="Button"]
+custom_minimum_size = Vector2(128, 128)
+theme_override_font_sizes/font_size = 16
+text = "Item"
+autowrap_mode = 3

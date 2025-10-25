@@ -14,3 +14,6 @@ enum ItemId {
 }
 
 @export var item_id: ItemId
+
+func _init(item_id: ItemId = ItemId.ADD_STAMINA):
+	self.item_id = item_id
