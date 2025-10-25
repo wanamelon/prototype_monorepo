@@ -15,7 +15,7 @@ func scene_init(items: Array[ItemDef]):
 	_items = items
 	for item in items:
 		match item.item_id:
-			E.ItemId.ADD_STAMINA:
+			ItemDef.ItemId.ADD_STAMINA:
 				_max_stamina += 1
 				_stamina_seconds += 1
 			_: pass
@@ -33,7 +33,7 @@ func _physics_process(delta):
 		velocity = velocity.rotated(deg_to_rad(_random.randf_range(-5, 5)))
 		var spawn_chance := 0.0
 		for item in _items:
-			if item.item_id == E.ItemId.SPAWN_RANDOM_TILE_OBJECT:
+			if item.item_id == ItemDef.ItemId.SPAWN_RANDOM_TILE_OBJECT:
 				spawn_chance = min(1.0, spawn_chance + 0.2)
 		spawn_item.emit(spawn_chance)
 	if _stamina_seconds <= 0:
@@ -63,7 +63,7 @@ var _speed_buff_durations: Array[float] = []
 func on_tile_destroyed():
 	for item in _items:
 		match item.item_id:
-			E.ItemId.SPEED_BUFF_ON_DESTROY:
+			ItemDef.ItemId.SPEED_BUFF_ON_DESTROY:
 				_speed_buff_durations.append(2.5)
 			_: pass
 
