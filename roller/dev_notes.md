@@ -400,7 +400,7 @@ Then the rest of the items
 [ ] Items: We deal more "damage" (downlevel coin more)
 [ ] Items: Increase our hitbox size
 [ ] Items: Spawn a bounce pillar
-[ ] Items: Grow the crop you roll over
+[ ] Items: Chance grow the crop you roll over
 [X] Items: Chance to spawn a new crop when ball bounce
 [X] Items: Speed on kill a crop
 [X] Items: Increase stamina

@@ -26,6 +26,13 @@ func _ready():
 	velocity = (Vector2(1, 0) * _speed).rotated(deg_to_rad(near_diagonal_launch_angle))
 	points_changed.emit(0, 0)
 
+func compute_level_up_on_hit_base_chance():
+	var level_up_chance := 0.0
+	for item in _items:
+		if item.item_id == ItemDef.ItemId.LEVEL_UP_ITEM_ON_TOUCH:
+			level_up_chance = min(1.0, level_up_chance + 0.1)
+	return level_up_chance
+
 func _physics_process(delta):
 	var collision_result := move_and_collide(velocity * delta)
 	if collision_result:
