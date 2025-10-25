@@ -42,8 +42,13 @@ func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):
 	for possible_grid_cell: Vector2i in $TileMapLayer.get_used_cells():
 		if not possible_grid_cell in occupied_cells:
 			available_cells.append(possible_grid_cell)
-	if not available_cells.is_empty():
-		_spawn_item(item, available_cells.pick_random())
+	available_cells.shuffle()
+	for spawn_cell in available_cells:
+		var loc = to_global($TileMapLayer.map_to_local(spawn_cell))
+		if item.has_method("can_place") and not item.can_place(loc, get_world_2d()):
+			continue
+		_spawn_item(item, spawn_cell)
+		break
 
 func _spawn_bounce_pillar(spawn_chance: float):
 	var bounce_pillar_count: int = 0

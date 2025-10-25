@@ -6,7 +6,7 @@ signal spawn_item(chance: float)
 signal spawn_bounce_pillar(chance: float)
 
 var _random := RandomNumberGenerator.new()
-var _speed: float = 400.0
+var _speed: float = 1400.0
 var _points: int = 0
 var _stamina_seconds: float = 8
 var _max_stamina := _stamina_seconds
