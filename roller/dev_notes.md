@@ -356,12 +356,53 @@ I've really been feeling the limitations of the drag and drop system!
 
 When we revisit UI later, can try to make our own, will reveal the tradeoffs, what are we losing?
 
+# More nice tempting juicy not core scope scope creep ideas
+
+Explicit and emergent synergies
+- Explicit: Item X gives +10% if item Y also owned
+- Emergent: Hitting some combo within 1 second -> + coins. Anything making ball faster or combo more common
+
+Look at https://luck-be-a-landlord.fandom.com/wiki/Items
+And nubby number factory for ideas and inspiration!
+
+> Every 3 spins, all symbols are considered adjacent.
+
+Generally, something making restrictive but powerful triggers not so restrictive
+
+> The conditional effects of essences must happen 2 times for them to be destroyed.
+
+> Re roll the board
+
+> More options / cheaper cost in store
+
+> Transform common item -> super rare one
+
+> Changing the probability distribution
+ 
+> Dud item, added as a challenge on later levels, or as a negative effect 
+
+# Roller 2025-10-25 Planning
+
+Remember the goal! We want something minimally playable, not even "fun" per-se
+The art direction not important right now. Don't need super fancy mechanics
+
+Let's boil it down to a handful of core mechanics first
+
+Let's first make a couple items
+Then add a store
+Then the rest of the items
+
 # Crop idea
 
 [ ] UX: SFX for feedback
 [ ] Ball: damage numbers
-[ ] Items: Chance to spawn a new crop
-[ ] Items: Speed on kill a crop
+[ ] Items: Ball bouncy off crops for a moment
+[ ] Items: We deal more "damage" (downlevel coin more)
+[ ] Items: Increase our hitbox size
+[ ] Items: Spawn a bounce pillar
+[ ] Items: Grow the crop you roll over
+[X] Items: Chance to spawn a new crop when ball bounce
+[X] Items: Speed on kill a crop
 [X] Items: Increase stamina
 [X] Level: Basic multi-level + permadeath
 [X] Board: crop glow up
@@ -455,6 +496,12 @@ What's the bare minimum we need to be fun?
 - Bounce system
     - It's super rewarding to bounce between a bunch of close-together items. Quick payoff
     - But it might also destroy the crops faster
+
+More on differentiation
+- Lean into the mechanics we can achieve by having cards generate the board, not "be" the board
+- Offer some degree of control over positioning? Ex: we can have card slots correspond to board segments
+- We want to pick a thematic and art style which stands out. It need not be "beautiful" so much as eye catching
+- Some kind of challenge/curse system randomized per round
 
 # Auto battle logic system
 

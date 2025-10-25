@@ -2,6 +2,7 @@ class_name PlayerBall extends CharacterBody2D
 
 signal finished(points: int)
 signal points_changed(old: int, new: int)
+signal spawn_item(chance: float)
 
 var _random := RandomNumberGenerator.new()
 var _speed: float = 400.0
@@ -30,6 +31,11 @@ func _physics_process(delta):
 	if collision_result:
 		velocity = velocity.bounce(collision_result.get_normal())
 		velocity = velocity.rotated(deg_to_rad(_random.randf_range(-5, 5)))
+		var spawn_chance := 0.0
+		for item in _items:
+			if item.item_id == E.ItemId.SPAWN_RANDOM_TILE_OBJECT:
+				spawn_chance = min(1.0, spawn_chance + 0.2)
+		spawn_item.emit(spawn_chance)
 	if _stamina_seconds <= 0:
 		var damping_factor: float = 4 * velocity.length() * delta
 		velocity -= velocity.normalized() * damping_factor

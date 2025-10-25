@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cdewixren54n7"]
+[gd_scene load_steps=11 format=3 uid="uid://cdewixren54n7"]
 
 [ext_resource type="Script" uid="uid://ctlovqr0sahr0" path="res://source/bounce_main.gd" id="1_ovsfe"]
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="1_p5ard"]
@@ -15,13 +15,23 @@ script = ExtResource("2_vx23h")
 item_id = 1
 metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 
+[sub_resource type="Resource" id="Resource_k3n88"]
+script = ExtResource("2_vx23h")
+item_id = 2
+metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
+
+[sub_resource type="Resource" id="Resource_ovsfe"]
+script = ExtResource("2_vx23h")
+item_id = 2
+metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_to078"]
 shader = ExtResource("1_p5ard")
 shader_parameter/saturation = 0.30000001425
 
 [node name="BounceMain" type="Node2D"]
 script = ExtResource("1_ovsfe")
-items = Array[ExtResource("2_vx23h")]([SubResource("Resource_0panw"), SubResource("Resource_0panw"), SubResource("Resource_0panw"), SubResource("Resource_vx23h")])
+items = Array[ExtResource("2_vx23h")]([SubResource("Resource_0panw"), SubResource("Resource_0panw"), SubResource("Resource_vx23h"), SubResource("Resource_k3n88"), SubResource("Resource_ovsfe")])
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_to078")
