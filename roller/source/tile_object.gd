@@ -1,5 +1,6 @@
 class_name TileObject extends Node2D
 
+const THOUSANDS_LEVEL_SUFFIXES = ["", "K", "M"]
 const LEVEL_COLORS := [
 	Color.BLACK, 
 	Color.GHOST_WHITE, # Level 1
@@ -17,9 +18,18 @@ var level: int = 1
 func _ready():
 	$Hitbox.body_entered.connect(_on_body_entered)
 
+const DIGITS_PER_THOUSAND_LEVEL: int = 3
+
 func _process(delta):
-	$LevelLabel.text = str(level)
-	$LevelLabel.set("theme_override_colors/font_color", LEVEL_COLORS[min(len(LEVEL_COLORS)- 1, level)])
+	var points = 2 ** (level - 1)
+	var thousands_level: int = 0
+	var normalized: int = points
+	while normalized > 1000:
+		normalized /= 1000
+		thousands_level += 1
+	var num_digits = str(points).length()
+	$LevelLabel.text = str(normalized) + THOUSANDS_LEVEL_SUFFIXES[thousands_level] # + "\n" + str(points)
+	$LevelLabel.set("theme_override_colors/font_color", LEVEL_COLORS[min(len(LEVEL_COLORS)- 1, num_digits)])
 
 func toggle_bounce(should: bool):
 	if should:
