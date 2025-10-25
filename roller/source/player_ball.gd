@@ -4,6 +4,7 @@ signal finished(points: int)
 signal points_changed(old: int, new: int)
 signal spawn_item(chance: float)
 signal spawn_bounce_pillar(chance: float)
+signal spawn_snail_trail(global_pos: Vector2)
 
 var _random := RandomNumberGenerator.new()
 var _speed: float = 1400.0
@@ -96,6 +97,12 @@ func _physics_process(delta):
 			if item.item_id == ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 				if _random.randf() < 0.1 and _bounce_off_everything_duration <= 0:
 					_bounce_off_everything_duration = 1.0
+	
+	if _ticks % 6 == 0:
+		for item in _items:
+			if item.item_id == ItemDef.ItemId.SNAIL_TRAIL_OF_LEVEL_UP_SLIME:
+				spawn_snail_trail.emit(global_position)
+			
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)

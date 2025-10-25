@@ -401,11 +401,11 @@ Then the rest of the items
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: Status effects last longer
-[ ] Items: Trail of fertilizer
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] UX: Display full item value (formatted), not exponent
 [ ] Round: Multiple "spins" to hit quota (3 tries?)
 [ ] Items: We deal more "damage" (downlevel coin more)
+[X] Items: Trail of fertilizer
 [X] Items: Ball bouncy off crops for a moment
 [X] Items: don't spawn collider in same square as ball! (check would overlap?)
 [X] Items: Increase our hitbox size status effect

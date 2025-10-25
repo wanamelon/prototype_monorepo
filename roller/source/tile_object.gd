@@ -40,6 +40,10 @@ func _physics_process(delta):
 	if rng.randf() < (delta * growth_probability_per_second):
 		level += 1
 
+func try_level_up_from_snail_trail(chance: float):
+	if rng.randf() < chance:
+		level += 1
+
 func _on_body_entered(body: Node2D):
 	if body is PlayerBall:
 		var player_ball := body as PlayerBall
