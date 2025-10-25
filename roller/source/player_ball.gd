@@ -14,6 +14,7 @@ var _items: Array[ItemDef] = []
 var _speed_buff_durations: Array[float] = []
 var _size_buff_durations: Array[float] = []
 var _items_destroyed: int = 0
+var _ticks: int = 0
 @onready var _original_size: float = ($CollisionShape2D.shape as CircleShape2D).radius
 @onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
 
@@ -38,6 +39,11 @@ func compute_level_up_on_hit_base_chance():
 		if item.item_id == ItemDef.ItemId.LEVEL_UP_ITEM_ON_TOUCH:
 			level_up_chance = min(1.0, level_up_chance + 0.1)
 	return level_up_chance
+
+var _bounce_off_everything_duration: float = 0.0
+
+func should_bounce_off_everything():
+	return _bounce_off_everything_duration > 0
 
 func _physics_process(delta):
 	var collision_result := move_and_collide(velocity * delta)
@@ -83,9 +89,17 @@ func _physics_process(delta):
 	var desired_sprite_radius_px: float = og_sprite_radius_px + capped_size_buff
 	$Sprite2D.scale = (desired_sprite_radius_px / og_sprite_radius_px) * _original_sprite_scale
 	
+	_ticks += 1
+	_bounce_off_everything_duration -= delta
+	if _ticks % 60 == 0:
+		for item in _items:
+			if item.item_id == ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
+				if _random.randf() < 0.1 and _bounce_off_everything_duration <= 0:
+					_bounce_off_everything_duration = 1.0
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
+	$BouncingModeSprite.visible = should_bounce_off_everything()
 
 func on_tile_destroyed():
 	_items_destroyed += 1

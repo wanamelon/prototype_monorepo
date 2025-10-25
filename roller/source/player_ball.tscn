@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn1uouo8aq22t"]
+[gd_scene load_steps=6 format=3 uid="uid://cn1uouo8aq22t"]
 
 [ext_resource type="Script" uid="uid://b8e2sfg7ru250" path="res://source/player_ball.gd" id="1_1phkq"]
 [ext_resource type="Texture2D" uid="uid://crkxiobtsaim" path="res://assets/rolling_ball/hole_large_end.png" id="2_23a83"]
 [ext_resource type="Texture2D" uid="uid://cltr6605421w6" path="res://assets/rolling_ball/ball_red_large.png" id="3_uutk1"]
+[ext_resource type="Texture2D" uid="uid://cwbxgh1pydykp" path="res://assets/rolling_ball/particle_3.png" id="4_23a83"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ovsfe"]
 radius = 48.0
@@ -30,3 +31,7 @@ texture_progress = ExtResource("2_23a83")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("3_uutk1")
+
+[node name="BouncingModeSprite" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("4_23a83")

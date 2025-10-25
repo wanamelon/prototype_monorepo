@@ -21,6 +21,19 @@ func _process(delta):
 	$LevelLabel.text = str(level)
 	$LevelLabel.set("theme_override_colors/font_color", LEVEL_COLORS[min(len(LEVEL_COLORS)- 1, level)])
 
+func toggle_bounce(should: bool):
+	if should:
+		var overlap_ball_query = PhysicsShapeQueryParameters2D.new()
+		overlap_ball_query.shape = $Hitbox/CollisionShape2D.shape
+		overlap_ball_query.transform = global_transform
+		overlap_ball_query.collision_mask = 1
+		overlap_ball_query.collide_with_areas = false
+		var overlaps = get_world_2d().direct_space_state.intersect_shape(overlap_ball_query)
+		if overlaps.is_empty():
+			$StaticBody2D/CollisionShape2D.disabled = false
+	else:
+		$StaticBody2D/CollisionShape2D.disabled = true
+
 func _physics_process(delta):
 	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
 	var growth_probability_per_second := 1.0 / expected_seconds_until_growth

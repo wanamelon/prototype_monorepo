@@ -14,6 +14,12 @@ func generate_grid_items(round: int):
 	for cell in available_cells.slice(0, 10 + round * 2):
 		_spawn_item(_create_coin_random_level(), cell)
 
+func _physics_process(delta):
+	if _player_ball:
+		for existing_item in $TileObjects.get_children():
+			if existing_item.has_method("toggle_bounce"):
+				existing_item.toggle_bounce(_player_ball.should_bounce_off_everything())
+
 func spawn_ball(items: Array[ItemDef]):
 	_player_ball = PLAYER_BALL_SCENE.instantiate().scene_init(items)
 	_player_ball.position = $TileMapLayer.map_to_local($TileMapLayer.get_used_cells().pick_random())

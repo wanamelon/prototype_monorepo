@@ -1,7 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://xmlcc5eo5opy"]
+[gd_scene load_steps=5 format=3 uid="uid://xmlcc5eo5opy"]
 
 [ext_resource type="Script" uid="uid://slh8w1pu44l0" path="res://source/tile_object.gd" id="1_abydu"]
 [ext_resource type="Texture2D" uid="uid://r3bfnria2cwq" path="res://assets/rolling_ball/hole_small_end_alt.png" id="2_e4inv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_abydu"]
+radius = 45.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sccbe"]
 radius = 50.0
@@ -12,6 +15,12 @@ script = ExtResource("1_abydu")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(2, 2)
 texture = ExtResource("2_e4inv")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CircleShape2D_abydu")
+disabled = true
 
 [node name="Hitbox" type="Area2D" parent="."]
 

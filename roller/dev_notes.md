@@ -405,8 +405,8 @@ Then the rest of the items
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] UX: Display full item value (formatted), not exponent
 [ ] Round: Multiple "spins" to hit quota (3 tries?)
-[ ] Items: Ball bouncy off crops for a moment
 [ ] Items: We deal more "damage" (downlevel coin more)
+[X] Items: Ball bouncy off crops for a moment
 [X] Items: don't spawn collider in same square as ball! (check would overlap?)
 [X] Items: Increase our hitbox size status effect
 [X] Items: Spawn a bounce pillar
