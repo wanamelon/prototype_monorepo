@@ -4,7 +4,8 @@ signal finished(points: int)
 signal points_changed(old: int, new: int)
 signal spawn_item(chance: float)
 signal spawn_bounce_pillar(chance: float)
-signal spawn_snail_trail(global_pos: Vector2)
+
+const SNAIL_TRAIL_SCENE: PackedScene = preload("res://source/snail_trail.tscn")
 
 var _random := RandomNumberGenerator.new()
 var _speed: float = 1400.0
@@ -16,6 +17,7 @@ var _speed_buff_durations: Array[float] = []
 var _size_buff_durations: Array[float] = []
 var _items_destroyed: int = 0
 var _ticks: int = 0
+var _dist_since_last_snail_trail: float = 0
 @onready var _original_size: float = ($CollisionShape2D.shape as CircleShape2D).radius
 @onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
 
@@ -47,6 +49,7 @@ func should_bounce_off_everything():
 	return _bounce_off_everything_duration > 0
 
 func _physics_process(delta):
+	var start_pos := position
 	var collision_result := move_and_collide(velocity * delta)
 	if collision_result:
 		velocity = velocity.bounce(collision_result.get_normal())
@@ -98,11 +101,25 @@ func _physics_process(delta):
 				if _random.randf() < 0.1 and _bounce_off_everything_duration <= 0:
 					_bounce_off_everything_duration = 1.0
 	
-	if _ticks % 6 == 0:
+	_dist_since_last_snail_trail += (position - start_pos).length()
+	if _dist_since_last_snail_trail > 50:
 		for item in _items:
 			if item.item_id == ItemDef.ItemId.SNAIL_TRAIL_OF_LEVEL_UP_SLIME:
-				spawn_snail_trail.emit(global_position)
-			
+				var snail_trail: Area2D = SNAIL_TRAIL_SCENE.instantiate()
+				snail_trail.top_level = true
+				snail_trail.position = global_position
+				_dist_since_last_snail_trail = 0
+				add_child(snail_trail)
+				break
+	
+	if _ticks % 6 == 0:
+		for item in _items:
+			if item.item_id == ItemDef.ItemId.SNAIL_TRAIL_OF_LEVEL_UP_SLIME_TIME_BASED:
+				var snail_trail: Area2D = SNAIL_TRAIL_SCENE.instantiate()
+				snail_trail.top_level = true
+				snail_trail.position = global_position
+				add_child(snail_trail)
+				break
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)

@@ -405,6 +405,7 @@ Then the rest of the items
 [ ] UX: Display full item value (formatted), not exponent
 [ ] Round: Multiple "spins" to hit quota (3 tries?)
 [ ] Items: We deal more "damage" (downlevel coin more)
+[X] Items: Trail is distance based, not time? oohh speed vs. slow synergy...
 [X] Items: Trail of fertilizer
 [X] Items: Ball bouncy off crops for a moment
 [X] Items: don't spawn collider in same square as ball! (check would overlap?)

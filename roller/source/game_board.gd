@@ -3,7 +3,6 @@ class_name GameBoard extends Node2D
 const PLAYER_BALL_SCENE: PackedScene = preload("res://source/player_ball.tscn")
 const TILE_OBJECT_SCENE: PackedScene = preload("res://source/tile_object.tscn")
 const BOUNCE_PILLAR_SCENE: PackedScene = preload("res://source/bounce_pillar.tscn")
-const SNAIL_TRAIL_SCENE: PackedScene = preload("res://source/snail_trail.tscn")
 var _random := RandomNumberGenerator.new()
 var _player_ball: PlayerBall
 
@@ -27,10 +26,6 @@ func spawn_ball(items: Array[ItemDef]):
 	_player_ball.spawn_item.connect(func (chance):
 		_spawn_item_in_random_cell(_create_coin_random_level(), chance))
 	_player_ball.spawn_bounce_pillar.connect(self._spawn_bounce_pillar)
-	_player_ball.spawn_snail_trail.connect(func (global_pos):
-		var snail_trail: Area2D = SNAIL_TRAIL_SCENE.instantiate()
-		snail_trail.position = to_local(global_pos)
-		add_child(snail_trail))
 	add_child(_player_ball)
 	return _player_ball
 

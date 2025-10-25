@@ -13,10 +13,10 @@ script = ExtResource("1_648pv")
 shape = SubResource("CircleShape2D_7eiht")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(1, 1, 1, 0.5882353)
+modulate = Color(1, 1, 1, 0.39215687)
 scale = Vector2(3, 3)
 texture = ExtResource("2_ns707")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.2
+wait_time = 0.1
 autostart = true
