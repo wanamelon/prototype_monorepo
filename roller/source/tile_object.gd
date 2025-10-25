@@ -47,15 +47,18 @@ func try_level_up_from_snail_trail(chance: float):
 func _on_body_entered(body: Node2D):
 	if body is PlayerBall:
 		var player_ball := body as PlayerBall
-		if level > 0:
-			player_ball.give_points(2 ** (level - 1))
-		var expected_growth_sec_base: float = 4.0
-		var expected_seconds_until_growth: float = expected_growth_sec_base + 8 * log(level)
-		var level_up_chance = player_ball.compute_level_up_on_hit_base_chance() * (expected_growth_sec_base / expected_seconds_until_growth)
-		if rng.randf() < level_up_chance:
-			level += 1
-		else:
-			level -= 1
-		if level <= 0:
-			player_ball.on_tile_destroyed()
-			queue_free()
+		var damage := player_ball.compute_damage_per_hit()
+		for i in range(damage):
+			if level > 0:
+				player_ball.give_points(2 ** (level - 1))
+			var expected_growth_sec_base: float = 4.0
+			var expected_seconds_until_growth: float = expected_growth_sec_base + 8 * log(level)
+			var level_up_chance = player_ball.compute_level_up_on_hit_base_chance() * (expected_growth_sec_base / expected_seconds_until_growth)
+			if rng.randf() < level_up_chance:
+				level += 1
+			else:
+				level -= 1
+			if level <= 0:
+				player_ball.on_tile_destroyed()
+				queue_free()
+				break

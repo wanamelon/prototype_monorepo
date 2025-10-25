@@ -125,6 +125,13 @@ func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
 	$BouncingModeSprite.visible = should_bounce_off_everything()
 
+func compute_damage_per_hit() -> int:
+	var damage: int = 1
+	for item in _items:
+		if item.item_id == ItemDef.ItemId.MORE_DAMAGE:
+			damage += 1
+	return damage
+
 func on_tile_destroyed():
 	_items_destroyed += 1
 	for item in _items:

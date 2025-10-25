@@ -404,7 +404,7 @@ Then the rest of the items
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] UX: Display full item value (formatted), not exponent
 [ ] Round: Multiple "spins" to hit quota (3 tries?)
-[ ] Items: We deal more "damage" (downlevel coin more)
+[X] Items: We deal more "damage" (downlevel coin more)
 [X] Items: Trail is distance based, not time? oohh speed vs. slow synergy...
 [X] Items: Trail of fertilizer
 [X] Items: Ball bouncy off crops for a moment
