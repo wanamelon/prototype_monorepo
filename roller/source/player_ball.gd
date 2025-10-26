@@ -10,7 +10,7 @@ const SNAIL_TRAIL_SCENE: PackedScene = preload("res://source/snail_trail.tscn")
 var _random := RandomNumberGenerator.new()
 var _speed: float = 400.0
 var _points: int = 0
-var _stamina_seconds: float = 1
+var _stamina_seconds: float = 4
 var _max_stamina := _stamina_seconds
 var _items: Array[ItemDef] = []
 var _speed_buff_durations: Array[float] = []
@@ -66,7 +66,8 @@ func _physics_process(delta):
 		var speed_with_buffs := _speed
 		var new_speed_buff_durations: Array[float] = []
 		for duration in _speed_buff_durations:
-			speed_with_buffs += 200 * duration
+			speed_with_buffs += 100 * min(1, duration)
+			speed_with_buffs = min(speed_with_buffs, 10_000)
 			var decremented = duration - delta
 			if decremented > 0:
 				new_speed_buff_durations.append(decremented)
@@ -80,7 +81,7 @@ func _physics_process(delta):
 	
 	var size_buff: float = 0
 	var new_size_buff_durations: Array[float] = []
-	for duration in _speed_buff_durations:
+	for duration in _size_buff_durations:
 		size_buff += min(4, 4 * duration)
 		var decremented = duration - delta
 		if decremented > 0:
@@ -99,7 +100,7 @@ func _physics_process(delta):
 		for item in _items:
 			if item.item_id == ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 				if _random.randf() < 0.1 and _bounce_off_everything_duration <= 0:
-					_bounce_off_everything_duration = 1.0
+					_bounce_off_everything_duration = 3.0
 	
 	_dist_since_last_snail_trail += (position - start_pos).length()
 	if _dist_since_last_snail_trail > 50:
@@ -146,6 +147,7 @@ func on_tile_destroyed():
 			_: pass
 
 func give_points(points: int):
+	$GainPointsAudioPlayer.pitch_scale = 1.2 - min(0.9, 0.9 * (log(points) / log(1e6)))
 	$GainPointsAudioPlayer.play()
 	gained_points.emit(points)
 	_points += points

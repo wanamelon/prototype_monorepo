@@ -35,7 +35,7 @@ func spawn_ball(items: Array[ItemDef]):
 
 func _create_coin_random_level():
 	var tile_obj = TILE_OBJECT_SCENE.instantiate()
-	tile_obj.level = _random.randi_range(1, 3)
+	tile_obj.level = _random.randi_range(1, 12)
 	return tile_obj
 
 func _spawn_item(item: Node2D, cell: Vector2i):
