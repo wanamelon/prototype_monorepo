@@ -393,9 +393,39 @@ Let's first make a couple items
 Then add a store
 Then the rest of the items
 
+# Making a clearer item system design
+
+Now we have real problems to solve!
+- If I want to tune an ability, I have to jump across some combo of 5 classes. Cognitive load
+- We're writing a bunch of same boilerplate for similar abilities (i.e. on a timer)
+- Anything requiring data about both player + grid means we need to add signals/method calls between those 
+- Cross-item interactions will necessitate some hacks
+- Implementations are hardcoded right alongside game board/player ball class
+  - This is a bit wishy-washy, but feels wrong
+- Player / TileObject config is also ehh...
+
+Putting it more concretely - the point of this is that we can add novel and deep mechanics
+For the end user. That's it! They don't care about spaghetti.
+- We need something flexible to add new mechanics
+- And to be EASY TO TUNE - lot of iteration may be needed, not just stats but which trigger/actions
+- Clear code reduce chance of bugs. Functional core imperative shell is actually awesome
+
+I still believe in the original conditions/actions framework, we just generalize this.
+Input state: Board, PlayerBall, Item
+Output: 
+
+[ ] 
+[ ] Basic framework for status effects (dedupe)
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers
+[ ] Bug fix: stuck between colliders at high speeds
+[ ] Items: coin level up time is decreased
+[ ] Items: higher base spawn level of coins
+[ ] Items: temporarily do ZERO damage
+[ ] Items: the lower your stamina, the higher your speed
+[ ] Items: when killing a coin, may level up the lowest value coin = highest value
 [ ] Items: Future: Mark price equal to adjacent items on spawn. Make 10x Delta value on expire
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
@@ -403,6 +433,8 @@ Then the rest of the items
 [ ] Items: Count overlap while bounce as hit also?
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Design: Item system design more generic
+[X] Bug fix: only 2 lives not 3?
+[X] Bug fix: overlapping items spawn
 [X] SFX: Roll, bounce, crop hit (+coins), crop grow, crop spawn
 [X] UX: Display full item value (formatted), not exponent
 [X] Round: Rogue choose item between
@@ -484,6 +516,39 @@ Cute, but also kind of ugly and lopsided
 The great power of chitch my queen
 The taxation element: we must MEET the tithe, not collect it
 How much can we attain hmm
+
+Alright round 2. Actually I'm a bit opposed to the crops thing.
+That just feels so hard to differentiate from the 10 billion farming games. Like why would I see that and click?
+
+We want something ideally that:
+- Stands out visually / narratively
+- I'm genuinely passionate about
+- Potential for a lot of depth
+- Fits with a simple art style
+- Makes some lick of logical sense, this is a loose requirement
+
+- Organ farmer - just crops but weird!
+- Punishing sinners in hell (by rolling over them)
+- Tax collector medieval
+- Tax collector modern financial (the fed)
+- Fishing - sand dollar etc.
+- Literal garbage, rolling around in garbage
+- In a sewer, a little rat/gremlin thing rolling over susshrooms
+- A rolling pin rolling over dough (food theme). What does leveling up mean?
+
+Visually I'm so impressed by cruelty squad and nubby.
+Those assets take very little time to make, but they are ultimately very unique and nice!
+
+HROT and any David Szcymanski game are also decent visual guides - those styles are harder than they look though!
+I should know, I tried...But that's maybe my own perfectionism
+
+The fuck is this?
+https://store.steampowered.com/app/3139570/Coop_Kaiju_Horror_Cooking/?curator_clanid=41064705
+It's actually charming kind of hehe
+
+I like the medieval vibe and retro graphics. I'm definitely very passionate about the ye olde aesthetic
+
+aeugh too much to think about, let's pivot to SWE
 
 ### Crops ideas
 
