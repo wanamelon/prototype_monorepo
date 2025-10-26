@@ -5,6 +5,7 @@ const TILE_OBJECT_SCENE: PackedScene = preload("res://source/tile_object.tscn")
 const BOUNCE_PILLAR_SCENE: PackedScene = preload("res://source/bounce_pillar.tscn")
 var _random := RandomNumberGenerator.new()
 var _player_ball: PlayerBall
+var _item_per_cell := {} # prevents race condition overlap, adding 2 items in one tick
 
 func clear():
 	for existing_item in $TileObjects.get_children():
@@ -39,21 +40,24 @@ func _create_coin_random_level():
 
 func _spawn_item(item: Node2D, cell: Vector2i):
 	item.position = $TileMapLayer.map_to_local(cell)
+	_item_per_cell[cell] = item
 	$TileObjects.call_deferred("add_child", item)
+	item.tree_exited.connect(func (): _item_per_cell.erase(cell))
 	if item is BouncePillar:
 		$PlacementAudioPlayer.play()
 	elif item is TileObject:
 		$SpawnCoinAudioPlayer.play()
 
 func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):
-	if _random.randf() > spawn_chance:
+	if _random.randf() > 1.0:
 		return
 	var available_cells: Array[Vector2i] = []
 	var occupied_cells: Array[Vector2i] = []
 	for existing_item: Node2D in $TileObjects.get_children():
 		occupied_cells.append($TileMapLayer.local_to_map(existing_item.position))
+	occupied_cells.append_array(_item_per_cell.keys())
 	for possible_grid_cell: Vector2i in $TileMapLayer.get_used_cells():
-		if not possible_grid_cell in occupied_cells:
+		if not occupied_cells.has(possible_grid_cell):
 			available_cells.append(possible_grid_cell)
 	available_cells.shuffle()
 	for spawn_cell in available_cells:
