@@ -60,8 +60,8 @@ shape = SubResource("WorldBoundaryShape2D_0panw")
 
 [node name="PlacementAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_kt6qa")
+volume_db = 10.0
 
 [node name="SpawnCoinAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_n8mxk")
-volume_db = -10.0
 pitch_scale = 1.5
