@@ -13,7 +13,6 @@ func _ready():
 	round_setup()
 
 func _on_player_finish(points: int):
-	_lives_remaining -= 1
 	if _lives_remaining <= 0:
 		print("Ended with points: ", _current_score)
 		if _current_score >= points_quota:
@@ -25,6 +24,7 @@ func _on_player_finish(points: int):
 			print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
 			get_tree().quit()
 	else:
+		_lives_remaining -= 1
 		stage_setup()
 
 func stage_setup():
