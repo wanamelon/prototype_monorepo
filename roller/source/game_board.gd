@@ -67,6 +67,7 @@ func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):
 		_spawn_item(item, spawn_cell)
 		break
 
+# TODO: Fix race condition spawning multiple in one frame!
 func _spawn_bounce_pillar(spawn_chance: float):
 	var bounce_pillar_count: int = 0
 	for existing_item: Node2D in $TileObjects.get_children():
