@@ -7,12 +7,14 @@ var points_quota: int
 var point_progress_bar_tween: Tween
 var _player_ball: PlayerBall
 var _lives_remaining: int = 2
-@export var items: Array[ItemDef]
+@export var item_configs: Array[ItemDef]
+var _item_system: ItemSystem = null
 
 func _ready():
 	round_setup()
 
 func _on_player_finish(points: int):
+	_item_system.queue_free()
 	if _lives_remaining <= 0:
 		print("Ended with points: ", _current_score)
 		if _current_score >= points_quota:
@@ -30,9 +32,11 @@ func _on_player_finish(points: int):
 func stage_setup():
 	$ProgressDisplay/LivesLabel.text = str(_lives_remaining) + " Lives Left"
 	$GameBoard.generate_grid_items(round)
-	_player_ball = $GameBoard.spawn_ball(items)
+	_player_ball = $GameBoard.spawn_ball(item_configs)
 	_player_ball.finished.connect(_on_player_finish)
 	_player_ball.gained_points.connect(_on_gain_points)
+	_item_system = ItemSystem.new(item_configs, _player_ball, $GameBoard)
+	add_child(_item_system)
 
 func round_setup():
 	_lives_remaining = 2
@@ -49,7 +53,7 @@ func generate_choices():
 	$ItemSelect.show()
 	for child in $ItemSelect/GridContainer.get_children():
 		child.queue_free()
-	# Choose random 3 of enum items
+	# Choose random 3 of enum item_configs
 	var possible_item_ids = ItemDef.ItemId.keys().duplicate()
 	possible_item_ids.shuffle()
 	for i in range(3):
@@ -57,7 +61,8 @@ func generate_choices():
 		button.text = format_enum_name(possible_item_ids[i])
 		$ItemSelect/GridContainer.add_child(button)
 		button.pressed.connect(func ():
-			items.append(ItemDef.new(ItemDef.ItemId[possible_item_ids[i]]))
+			item_configs.append(ItemDef.new(ItemDef.ItemId[possible_item_ids[i]]))
+			_item_system.add_item(ItemDef.ItemId[possible_item_ids[i]])
 			$ItemSelect.hide()
 			round_setup())
 

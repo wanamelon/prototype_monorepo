@@ -382,6 +382,8 @@ Generally, something making restrictive but powerful triggers not so restrictive
 
 > Dud item, added as a challenge on later levels, or as a negative effect
 
+> Items with across-round state, like "only usable 5 times"
+
 # Roller 2025-10-25 Planning
 
 Remember the goal! We want something minimally playable, not even "fun" per-se
@@ -414,8 +416,98 @@ I still believe in the original conditions/actions framework, we just generalize
 Input state: Board, PlayerBall, Item
 Output: 
 
-[ ] 
-[ ] Basic framework for status effects (dedupe)
+# Item system refactor 1 Impl notes
+
+Overall structure
+```
+Evaluate physics -> produce events
+Eval item triggers for non-map items -> events
+    Create trigger context
+    
+Eval item triggers for map items     -> events
+    
+```
+
+Maybe before that, we can represent items as separate classes, each duplicated
+Then deduplicate parts. That way we incrementally improve. Monolithic change = not smart idea
+Hell, each item can be just a method: Given state + events, do whatever mods / return events. But class nice for state
+And then we can imagine patterns in the "actions" and "triggers"
+
+Maybe we don't need events for hitting and the such? Can the player / crop just have methods for onHit?
+A crop IS an item, that's the weird thing. But player maybe doesn't make sense as an item?
+
+We can decouple the physical crop collider/sprite object from the crop item logic maybe?
+Well, why? That actually makes sense to be defined in one place IMO. If the crop grows, and we want to trigger animation,
+why should we have to pass that as an event through some external system?
+A couple possible benefits:
+- Event interception. Effect: "Ignore hit" or "count hit as two" or "count hit as hit on all squares" etc
+- Fully decoupling the core logic from the nastier side-effect-y parts
+  - But we'll need a way to talk back to them!
+
+On the flipside, for something like snail trail, we want to spawn it where the player's position is
+How will that flow? Each trail segment probably should be an item, since it has triggers/effects and a physical body
+
+```
+SnailTrailSpawner
+- distanceSinceLastSpawned
+::evaluateTriggers(tick, player, inventory, board)
+    distanceSince += player distance moved
+    if it's over threshold, reset that shit and spawn a segment @ player loc
+    where should it go? I dunno, we can make some shared node or add to board for now
+
+SnailTrailSegment
+- lastTriggerTick
+::evaluateTriggers(tick, player, inventory, board)
+    if periodic timer passed,
+    generate a LevelUp event with a TargetingConfig = AOE circle?
+...outside, some logic to translate events with TargetingConfig -> an event per grid item?
+    If everything's a circle, this is pretty much ok
+    or maybe crops decide for themselves if such a thing applies?
+    latter simpler for now I guess
+    
+Crop
+::evaluateTriggers
+    we can look for LevelUpEvent with an applicable targeting
+    and then I decide if I'm next to that I guess...
+```
+
+```
+OverlapEvent
+    Source: an object or enum?
+    OverlapShape: 
+
+PlayerBall
+::doTick
+    send back a PlayerOverlapEvent with position + radius, which bounce count
+
+~~HarvestCropItem (hidden)~~
+or hmm...should it be part of the crop? Like each item defines its interaction, yeah
+
+Also in our beloved crop class
+- 
+::evaluateTriggers(tick, player, inventory, board, events)
+    if there's an overlap event, we must check if it's in same bounce as before
+    if indeed it's a new bounce, then we need to down-level
+    We'll do queue_free at end in a cleanup method
+```
+
+What about grow on hit? Also on PlayerOverlapEvent I guess? But it needs to target crops
+Ah ok this can send a LevelUpEvent with whatever chance, same deal really
+It listens for PlayerOverlap and turns it into LevelUp
+
+Trigger types:
+- Round start: Generate initial crops, ADD_STAMINA
+- On bounce: SPAWN_RANDOM_TILE_OBJECT
+- On hit: LEVEL_UP_ITEM_ON_TOUCH
+- On dist travel?: SNAIL_TRAIL_OF_LEVEL_UP_SLIME
+  - Seems a good fit for state - this item should track player state changes...
+- On kill: SPAWN_BOUNCE_PILLAR, SPEED_BUFF_ON_DESTROY, INCREASE_SIZE (need counter)
+- Timer: BOUNCE_OFF_EVERYTHING, SNAIL_TRAIL_OF_LEVEL_UP_SLIME_TIME_BASED
+
+We may want to factor out config into some central place no?
+
+Player:
+-
 
 # Crop idea (bankrolled bazillionaire)
 
@@ -433,6 +525,9 @@ Output:
 [ ] Items: Count overlap while bounce as hit also?
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Design: Item system design more generic
+[ ] Design: Implement for add stamina
+[ ] Design: Rough sketch of architecture
+[ ] Design: Basic framework for status effects (dedupe)
 [X] Bug fix: only 2 lives not 3?
 [X] Bug fix: overlapping items spawn
 [X] SFX: Roll, bounce, crop hit (+coins), crop grow, crop spawn

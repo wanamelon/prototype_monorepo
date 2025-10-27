@@ -23,12 +23,6 @@ var _dist_since_last_snail_trail: float = 0
 
 func scene_init(items: Array[ItemDef]):
 	_items = items
-	for item in items:
-		match item.item_id:
-			ItemDef.ItemId.ADD_STAMINA:
-				_max_stamina += 2
-				_stamina_seconds += 2
-			_: pass
 	return self
 
 func _ready():
