@@ -82,11 +82,11 @@ func _physics_process(delta):
 	var size_buff: float = 0
 	var new_size_buff_durations: Array[float] = []
 	for duration in _size_buff_durations:
-		size_buff += min(4, 4 * duration)
+		size_buff += min(5, 5 * duration)
 		var decremented = duration - delta
 		if decremented > 0:
 			new_size_buff_durations.append(decremented)
-	var capped_size_buff: float = min(4, size_buff)
+	var capped_size_buff: float = min(20, size_buff)
 	var size_with_buffs: float = _original_size + capped_size_buff
 	_size_buff_durations = new_size_buff_durations
 	$CollisionShape2D.shape.radius = size_with_buffs
