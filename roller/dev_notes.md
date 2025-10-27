@@ -398,35 +398,27 @@ Then the rest of the items
 # Making a clearer item system design
 
 Now we have real problems to solve!
+
 - If I want to tune an ability, I have to jump across some combo of 5 classes. Cognitive load
 - We're writing a bunch of same boilerplate for similar abilities (i.e. on a timer)
-- Anything requiring data about both player + grid means we need to add signals/method calls between those 
+- Anything requiring data about both player + grid means we need to add signals/method calls between those
 - Cross-item interactions will necessitate some hacks
 - Implementations are hardcoded right alongside game board/player ball class
-  - This is a bit wishy-washy, but feels wrong
+    - This is a bit wishy-washy, but feels wrong
 - Player / TileObject config is also ehh...
 
 Putting it more concretely - the point of this is that we can add novel and deep mechanics
 For the end user. That's it! They don't care about spaghetti.
+
 - We need something flexible to add new mechanics
 - And to be EASY TO TUNE - lot of iteration may be needed, not just stats but which trigger/actions
 - Clear code reduce chance of bugs. Functional core imperative shell is actually awesome
 
 I still believe in the original conditions/actions framework, we just generalize this.
 Input state: Board, PlayerBall, Item
-Output: 
+Output:
 
 # Item system refactor 1 Impl notes
-
-Overall structure
-```
-Evaluate physics -> produce events
-Eval item triggers for non-map items -> events
-    Create trigger context
-    
-Eval item triggers for map items     -> events
-    
-```
 
 Maybe before that, we can represent items as separate classes, each duplicated
 Then deduplicate parts. That way we incrementally improve. Monolithic change = not smart idea
@@ -437,12 +429,14 @@ Maybe we don't need events for hitting and the such? Can the player / crop just 
 A crop IS an item, that's the weird thing. But player maybe doesn't make sense as an item?
 
 We can decouple the physical crop collider/sprite object from the crop item logic maybe?
-Well, why? That actually makes sense to be defined in one place IMO. If the crop grows, and we want to trigger animation,
+Well, why? That actually makes sense to be defined in one place IMO. If the crop grows, and we want to trigger
+animation,
 why should we have to pass that as an event through some external system?
 A couple possible benefits:
+
 - Event interception. Effect: "Ignore hit" or "count hit as two" or "count hit as hit on all squares" etc
 - Fully decoupling the core logic from the nastier side-effect-y parts
-  - But we'll need a way to talk back to them!
+    - But we'll need a way to talk back to them!
 
 On the flipside, for something like snail trail, we want to spawn it where the player's position is
 How will that flow? Each trail segment probably should be an item, since it has triggers/effects and a physical body
@@ -496,15 +490,117 @@ Ah ok this can send a LevelUpEvent with whatever chance, same deal really
 It listens for PlayerOverlap and turns it into LevelUp
 
 Trigger types:
+
 - Round start: Generate initial crops, ADD_STAMINA
 - On bounce: SPAWN_RANDOM_TILE_OBJECT
 - On hit: LEVEL_UP_ITEM_ON_TOUCH
 - On dist travel?: SNAIL_TRAIL_OF_LEVEL_UP_SLIME
-  - Seems a good fit for state - this item should track player state changes...
+    - Seems a good fit for state - this item should track player state changes...
 - On kill: SPAWN_BOUNCE_PILLAR, SPEED_BUFF_ON_DESTROY, INCREASE_SIZE (need counter)
 - Timer: BOUNCE_OFF_EVERYTHING, SNAIL_TRAIL_OF_LEVEL_UP_SLIME_TIME_BASED
 
 We may want to factor out config into some central place no?
+
+### More nice design realizations:
+
+***
+Really nice simplification.
+One problem giving me a headache: If one item triggers off event X, and another item can produce event X,
+do we need to eval that 2nd item before? Otherwise, we might end up never triggering first item.
+That would necessitate either a DAG algo or manually deciding prios.
+A simpler way: Base all triggers off the events from LAST TICK.
+All events spawned this round are counted as spawning at the same time, and ignored for trigger eval
+Exceptions/caveats:
+
+- Physics events in same tick are used (we discard those from last round)
+- Event effect still applies same round, ex: apply status effect, spawn item
+
+***
+The player SHOULD be an item - there is nothing truly special about player ball
+Other items can bounce/overlap/etc. too! Other items have colliders and sprites and anims too!
+The only special part (point count) should not even be player state, it's game state
+
+***
+Also - don't worry that it's "inelegant" for overlap event to include a bounce count / overlapper id.
+We're doing this because we want the player's overlap to be counted once per bounce (by some griditems)
+But this system is general! If we want to trigger a chance check every frame we overlap, this system allows!
+
+***
+GridItem, Inventory item, etc. are only different in the location we specify.
+Same item framework for all
+
+***
+
+```
+interface Item:
+    spawn() -> { PhysicsBodyParams physicsBody, Node2D displayBody }
+    evaluate_status_effects() -> Array[ItemEvent]
+    advance_physics(delta) -> Array[ItemEvent]
+    evaluate_triggers(match_state) -> Array[ItemEvent]
+    clean_up()
+```
+
+***
+Item layout: composition or inheritance?
+Composition: ItemLogic and state is separated from the physics calc and animations
+Inherit: Item is a Node2D in the world. Do we lose anything? I guess queue free-ing may be a bit complex?
+Eh, I like separate logic.
+
+- A, it's great for testing, so a good heuristic for low dependencies / logic is concentrated in one place
+- B, makes it really easy to sim if we do gen algo in the future, just get rid of random BS
+
+Will admit those are weaker reasons.
+Inheritance seems strong - then we can manipulate everything in one node and one class
+Hmm. No, there are real benefits to disentangling animation/sprite logic
+Physics logic is a bit trickier. We directly depend on that for bounce events. It's not super avoidable?
+Oh but is it? Can a ShapeQuery2D do the same thing? eh, that's a bit low level nay? And for multi ball...
+
+Perhaps we can define the Item class as a static inner class in the true Node2D item?
+Weird but I think it works? 2 classes also isn't the worst thing ever. A bit nasty to jump around I guess
+
+I bet we can abstract the physics part a bit.
+Overlaps we don't even have to worry about - that's just simple math because everything's circle
+So it's just StaticBody and CharacterBody.
+these even have be entangled to a given item?
+I mean yeah, the lifecycle (spawn, queue free) is tied together, state (position, speed) etc.
+Boil it down. The bare minimum we need. Those bodies are effectively just tools we're hijacking in order to do
+collision calculations. They don't need special state, just expose an interface
+Similar to the idea with the multiplayer game. There is some "singleton-esque" object managing all physics bodies.
+
+Items can have a "spawn" method creating + returning the associated display node + physics node(s)
+Track those nodes in a StatefulPhysicsCalculator (just a Node2D)
+In each item's advance_physics(), it'll just ask StatefulPhysicsCalculator for a collision result from some item
+In clean_up, we need to de-register those somehow (how to guarantee no leaks eh??) - for now, manual
+Maybe we emit a signal on item cleanup?
+
+CoinItem:
+Status effects
+OriginalState (includes config and parts which vary later)
+CurrentState
+CoinInGameBody
+
+or CoinItem Node2D:
+...status effects, state, etc.
+...item methods
+area2d
+sprite
+etc.
+
+***
+Overall structure
+
+```
+Given (tick, score, [EquippedItem{ Item, Slot }])
+
+Apply item status effects -> new events
+Advance physics -> new events
+Eval trigger groups for items -> new events
+    Create trigger context
+    Evaluate triggers
+    Apply actions
+Apply events ([de]-spawn, add status effect)
+Clean up (if level <= 0, queue free())
+```
 
 Player:
 -
@@ -616,6 +712,7 @@ Alright round 2. Actually I'm a bit opposed to the crops thing.
 That just feels so hard to differentiate from the 10 billion farming games. Like why would I see that and click?
 
 We want something ideally that:
+
 - Stands out visually / narratively
 - I'm genuinely passionate about
 - Potential for a lot of depth

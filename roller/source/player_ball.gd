@@ -16,6 +16,7 @@ var _items: Array[ItemDef] = []
 var _speed_buff_durations: Array[float] = []
 var _size_buff_durations: Array[float] = []
 var _items_destroyed: int = 0
+var _bounce_count: int = 0
 var _ticks: int = 0
 var _dist_since_last_snail_trail: float = 0
 @onready var _original_size: float = ($CollisionShape2D.shape as CircleShape2D).radius
@@ -41,12 +42,16 @@ var _bounce_off_everything_duration: float = 0.0
 func should_bounce_off_everything():
 	return _bounce_off_everything_duration > 0
 
+func advance_tick(delta: float) -> Array[ItemSystem.ItemEvent]:
+	return [ItemSystem.OverlapEvent.new(_bounce_count, global_position, $CollisionShape2D.shape.radius)]
+
 func _physics_process(delta):
 	var start_pos := position
 	var collision_result := move_and_collide(velocity * delta)
 	if collision_result:
 		velocity = velocity.bounce(collision_result.get_normal())
 		velocity = velocity.rotated(deg_to_rad(_random.randf_range(-5, 5)))
+		_bounce_count += 1
 		$BounceAudioPlayer.play()
 		var spawn_chance := 0.0
 		for item in _items:
