@@ -533,12 +533,19 @@ Same item framework for all
 
 ```
 interface Item:
-    spawn() -> { PhysicsBodyParams physicsBody, Node2D displayBody }
+    _inject(physics_calc, etc., location?)
+    spawn()
     evaluate_status_effects() -> Array[ItemEvent]
     advance_physics(delta) -> Array[ItemEvent]
     evaluate_triggers(match_state) -> Array[ItemEvent]
     clean_up()
 ```
+
+How do we pass the external dependencies? Such as physics calculator, grid calculator, etc
+Ideally we inject those at construction time. Items can't really share a constructor sadly
+I'm not gonna build an entire DI framework haha. We can just do a javabeans style "call this method to init me"
+
+
 
 ***
 Item layout: composition or inheritance?
@@ -602,8 +609,7 @@ Apply events ([de]-spawn, add status effect)
 Clean up (if level <= 0, queue free())
 ```
 
-Player:
--
+---
 
 # Crop idea (bankrolled bazillionaire)
 
@@ -621,9 +627,12 @@ Player:
 [ ] Items: Count overlap while bounce as hit also?
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Design: Item system design more generic
-[ ] Design: Implement for add stamina
-[ ] Design: Rough sketch of architecture
+[ ] Design: Clean up unused code in item system and related
 [ ] Design: Basic framework for status effects (dedupe)
+[ ] Design: Migrate player ball to item system
+[ ] Design: Migrate crop to item system
+[X] Design: Implement for add stamina
+[X] Design: Rough sketch of architecture
 [X] Bug fix: only 2 lives not 3?
 [X] Bug fix: overlapping items spawn
 [X] SFX: Roll, bounce, crop hit (+coins), crop grow, crop spawn
