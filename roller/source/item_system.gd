@@ -46,6 +46,9 @@ func _physics_process(__):
 			var give_points_event := event as GivePointsEvent
 			_match_state.points += give_points_event.points
 			score_changed.emit(_match_state.points)
+		elif event is DespawnEvent:
+			_items.erase(event.target)
+			event.target.queue_free()
 	_tick += 1
 	_match_state.tick += 1
 
@@ -149,6 +152,11 @@ class SpawnEvent extends ItemEvent:
 		self.factory = factory
 		self.targeting_config = targeting_config
 		self.spawn_chance = spawn_chance
+
+class DespawnEvent extends ItemEvent:
+	var target: Item
+	func _init(target: Item):
+		self.target = target
 
 class OverlapEvent extends ItemEvent:
 	var player_bounce_count: int

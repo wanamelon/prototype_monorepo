@@ -648,6 +648,72 @@ of
 the scenes. No yeah good arg, let's just make Playerball HAVE A characterbody, make that one top level though
 
 ***
+
+Crop migrating to new system
+
+[X] spawner
+[X] random level
+[X] points on hit
+[X] downlevel on hit
+[X] despawn on level zero
+
+What's the bare minimum functionality?
+Well, we need the sprite to show up
+Means we also need a crop spawner item!
+Imagine we only care about the round start one
+simple enough. many ways to implement trigger, cheese way is have a state for hasBeenActivated
+as discussed, should create a SpawnEvent, and those are all handled together near frame end by separate code
+For that, we need a way to instance this scene
+When player overlaps it, give some points and downlevel -> PointsEvent
+big question: how to represent such an overlap? should I think or just try something?
+I mean definitely we will query player for overlap event(s)
+But from there, we need to figure out which crop it applies to.
+should all that logic be inside our crop class? Or perhaps the player generates not one overlap but multi
+based on which areas it detects etc. And then each one is like Overlap { itemRef, bounce_count, ... }
+or we generate both? eh, in that case it's possible for inconsistent state no?
+I like to have more logic inside individual items to begin, and if we see pattern we can extract. that's flexible
+
+So to sum up:
+player physics event -> return a OverlapEvent(originator, size, etc.)
+in crop tick activate, filter for such events which are from a PlayerBall (or perhaps with a given tags)
+and for each one, we do our downlevel and generate a GivePointsEvent(), play whatever effects
+we'll also maintain some internal state!
+
+hmm ok if there are 2 events level up and level down, but we are at level 0, then order matters
+we would always want to evaluate the level up event first. but that knowledge can live isolated here!
+Fair, don't need a system level solution
+It should try and level up each tick, with some percent
+For that, we should create a level up event, but also directly mod our state
+The point of the event is only for triggering other stuff
+If we need to truly "intercept" / change that level up
+
+Stretch (afterwards):
+chance grow on hit
+ideally this lives in a different item entirely?
+that item listens for player overlap events and creates attempt level up events
+Ah, one tricky thing: If we modify the level within crop.activate, then we might despawn before we can ever
+trigger such a level up event. Would be better if crop creates a ChangeLevelEvent, defer both -> next round
+that also helps us I guess for "Increase hit damage" modifier maybe? many ways to achieve that though
+like it could be a status effect on the player which impacts their "damage" state var
+or it could be an event modifier which makes every hit-triggered negative ChangeLevelEvent from a crop more big
+like, one of these seems suspiciously more simple...
+
+ok actually, that brings up an idea - should even leveling down/taking damage on hit be defined as a different
+item? well, the crop has the context about what it's overlapping etc. because it has the hitbox
+but presumably we could have another item just querying X overlaps Y and generating events
+
+It feels a bit bad to have too much behavior in crop because then to influence that we only have 2 options:
+status effect or events. Hmm at the same time, what is simpler? What will end up mattering for end user?
+
+If we have a real ability idea we want to add, and it necessitates that, sure go ahead! Let's come at it with
+the real motivation, not theoreticals which are exhausting. No mental cycles wasted on speculation.
+enabling player bouncy
+a status effect on crop for isEnableCollision. then each frame we try and declaratively move the real state
+of the collision object closer to that desired, however this may fail if for example state is false but player
+is overlapping us and we're not allowed. Quite easy to check, we can use our hitbox no? or phys query
+Snail trail
+
+***
 Overall structure
 
 ```

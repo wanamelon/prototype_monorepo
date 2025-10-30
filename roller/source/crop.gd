@@ -1,55 +1,23 @@
 class_name Crop extends ItemSystem.Item
 
-"""
-What's the bare minimum functionality?
-Well, we need the sprite to show up
-	Means we also need a crop spawner item!
-	Imagine we only care about the round start one
-		simple enough. many ways to implement trigger, cheese way is have a state for hasBeenActivated
-		as discussed, should create a SpawnEvent, and those are all handled together near frame end by separate code
-	For that, we need a way to instance this scene
-When player overlaps it, give some points and downlevel -> PointsEvent
-	big question: how to represent such an overlap? should I think or just try something?
-	I mean definitely we will query player for overlap event(s)
-	But from there, we need to figure out which crop it applies to.
-	should all that logic be inside our crop class? Or perhaps the player generates not one overlap but multi
-	based on which areas it detects etc. And then each one is like Overlap { itemRef, bounce_count, ... }
-	or we generate both? eh, in that case it's possible for inconsistent state no?
-	I like to have more logic inside individual items to begin, and if we see pattern we can extract. that's flexible
-	
-	So to sum up:
-		player physics event -> return a OverlapEvent(originator, size, etc.)
-		in crop tick activate, filter for such events which are from a PlayerBall (or perhaps with a given tags)
-		and for each one, we do our downlevel and generate a GivePointsEvent(), play whatever effects
-		we'll also maintain some internal state!
-	
-	hmm ok if there are 2 events level up and level down, but we are at level 0, then order matters
-		we would always want to evaluate the level up event first. but that knowledge can live isolated here!
-		Fair, don't need a system level solution
-It should try and level up each tick, with some percent
-	For that, we should create a level up event, but also directly mod our state
-	The point of the event is only for triggering other stuff
-	If we need to truly "intercept" / change that level up
-
-Stretch (afterwards):
-	chance grow on hit
-		ideally this lives in a different item entirely?
-		that item listens for player overlap events and creates attempt level up events
-	enabling player bouncy
-	Snail trail
-"""
-
-var last_bounce_per_player := {}
+var last_hit_per_id := {}
 
 func activate(state: MatchState):
 	var events: Array[ItemEvent] = []
 	for area: Area2D in $Hitbox.get_overlapping_areas():
 		if area.get_parent() is PlayerBall:
 			var player := area.get_parent() as PlayerBall
-			var last_hit_info = last_bounce_per_player.get(player.get_instance_id(), [-1, -1000])
+			var last_hit_info = last_hit_per_id.get(player.get_instance_id(), [-1, -1000])
 			if last_hit_info[0] != player._bounce_count and state.tick > last_hit_info[1] + 6:
-				events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
-			last_bounce_per_player[player.get_instance_id()] = [player._bounce_count, state.tick]
+				var damage := player.compute_damage_per_hit()
+				for i in range(damage):
+					events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+					level -= 1
+					if level <= 0:
+						player.on_tile_destroyed()
+						events.append(ItemSystem.DespawnEvent.new(self))
+						break
+			last_hit_per_id[player.get_instance_id()] = [player._bounce_count, state.tick]
 		#var item := find_parent_item(area)
 		#if item is PlayerBallItem:
 			#events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
