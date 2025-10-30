@@ -49,7 +49,7 @@ func _spawn_item(item: Node2D, cell: Vector2i):
 		$SpawnCoinAudioPlayer.play()
 
 func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):
-	if _random.randf() > 1.0:
+	if _random.randf() > spawn_chance:
 		return
 	var available_cells: Array[Vector2i] = []
 	var occupied_cells: Array[Vector2i] = []

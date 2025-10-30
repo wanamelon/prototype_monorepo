@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://1e3xm6ur0cmn"]
+
+[ext_resource type="Script" uid="uid://bbgfi3wxcdfkk" path="res://source/crop.gd" id="1_1owf8"]
+[ext_resource type="Texture2D" uid="uid://r3bfnria2cwq" path="res://assets/rolling_ball/hole_small_end_alt.png" id="2_8owxi"]
+[ext_resource type="AudioStream" uid="uid://lq1tdvpynlb3" path="res://assets/audio/level_up.mp3" id="3_54d5u"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_abydu"]
+radius = 45.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sccbe"]
+radius = 50.0
+
+[node name="Crop" type="Node2D"]
+script = ExtResource("1_1owf8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_8owxi")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("CircleShape2D_abydu")
+disabled = true
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_sccbe")
+
+[node name="LevelLabel" type="Label" parent="."]
+offset_left = -64.0
+offset_top = -160.0
+offset_right = 64.0
+offset_bottom = 150.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 50
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelUpAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_54d5u")
+volume_db = -10.0
+pitch_scale = 1.5

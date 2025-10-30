@@ -533,19 +533,44 @@ Same item framework for all
 
 ```
 interface Item:
-    _inject(physics_calc, etc., location?)
-    spawn()
+    _inject(physics_calc, location, etc.)
+    spawn() # for user setup, like register static bodies and a sprite somewhere
     evaluate_status_effects() -> Array[ItemEvent]
     advance_physics(delta) -> Array[ItemEvent]
     evaluate_triggers(match_state) -> Array[ItemEvent]
-    clean_up()
+    clean_up() -> bool should_deregister
 ```
 
 How do we pass the external dependencies? Such as physics calculator, grid calculator, etc
 Ideally we inject those at construction time. Items can't really share a constructor sadly
 I'm not gonna build an entire DI framework haha. We can just do a javabeans style "call this method to init me"
 
+Instead of externally creating a "trigger context" every time, we just inject it.
+There's a universal context (all items, board, tick, last round events, etc.)
+And then specifics like item's state including its location
 
+***
+Representing location
+
+There are 3:
+
+- Grid cell, just a Vector2() / Vector2i(): which?
+- Inventory slot, probably just an int number
+- Unplaced
+
+Actually, maybe scratch that: What about the player balls, slime trails?
+Do we make a fourth, or just replace GridCell with PhysicalLocation or BoardLocation?
+
+Like I feel like it makes sense to have some concept of a grid not just areas
+At the same time, we can do adjacency etc. with an AABB check against real positions.
+
+Go with simplest for now, just one type. Later can add another if we need
+
+***
+
+How to do status effects really?
+Each item can have and original and current state, plus status effects
+Near start of each tick, we will apply the status effects to impact the current state?
 
 ***
 Item layout: composition or inheritance?
@@ -592,6 +617,35 @@ or CoinItem Node2D:
 area2d
 sprite
 etc.
+
+What if CropItem is just a script we attach to the scene?
+Then it won't be decoupled. If we say want to run the sim without creating full game w/ sprites etc., we can't!
+Maybe we can attach it to a dummy node with expected node paths? That seems like a not great solution
+because if some of that animation logic expectes real values...
+
+Better would be to separate the scene display logic into its own fella.
+And we can connect the Item <-> its scene via signals perhaps. That is the most decoupled.
+It's annoying to write signals ofc. Much quicker to go $AudioPlayer.play
+I don't really see a use case for that level of decoupling
+
+Like, it's theoretically elegant but THE USER DOES NOT CARE!!!
+What will deliver the most fun game the quickest?
+
+I guess in that case we just want Item = Node2D, and attach that script to the scene.
+For creating items, will just be a scene init, add to tree, and we call _inject and spawn
+
+yeah no, that's the engineer in me talking. this is the good pragmatic way for now
+I do like the idea to keep the physics separated
+No shot I'm doing Item extends CharacterBody haha, so the PlayerBallItem must "has a" characterbody, not is a, in that
+case
+Which is just as unclean and weird, like we're moving a characterbody under a node2d, can that node2d move, wtf?
+
+It makes perfect sense to have some level of separation between the player's visual and physics body, for example what
+if we want to implement a smoothed visual interpolation, or some slug ball shaking?
+
+I guess the one not so nice thing is we have to take care of physics body lifecycle manually, rather than it being part
+of
+the scenes. No yeah good arg, let's just make Playerball HAVE A characterbody, make that one top level though
 
 ***
 Overall structure

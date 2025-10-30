@@ -17,6 +17,7 @@ func _init(items: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard
 		var item := _item_for_id(item_def.item_id)
 		item._inject(_physics_calculator)
 		_items.append(item)
+	_items.append(CropSpawner.new())
 	_match_state = MatchState.new(0, _player_ball, _items, [] as Array[ItemEvent])
 
 func _item_for_id(item_id: ItemDef.ItemId) -> Item:
@@ -32,6 +33,11 @@ func _physics_process(__):
 	for item: Item in _items:
 		var new_events := item.activate(_match_state)
 		events.append_array(new_events)
+	for event in events:
+		if event is SpawnEvent:
+			# TODO: respect targeting config
+			var spawn := event as SpawnEvent
+			_game_board._spawn_item_in_random_cell(spawn.factory.call(), spawn.spawn_chance)
 	_tick += 1
 	_match_state.tick += 1
 
@@ -48,7 +54,7 @@ class MatchState:
 		self.events = events
 
 @abstract
-class Item extends RefCounted:
+class Item extends Node2D:
 	signal destroyed()
 	
 	var _physics_calculator: StatefulPhysicsCalculator
@@ -78,8 +84,35 @@ class AddStaminaItem extends Item:
 		return [] as Array[ItemEvent]
 
 class PlayerBallItem extends Item:
+	func spawn():
+		var circle = CircleShape2D.new()
+		circle.radius = 48
+		# TODO: fill in position
+		_physics_calculator.provision_physics_body(self, Vector2(), circle, false)
+	
 	func activate(state: MatchState):
 		return [] as Array[ItemEvent]
+
+#class CropItem extends Item:
+#
+#	func spawn():
+#		pass
+#
+#	func activate(state: MatchState):
+#		return [] as Array[ItemEvent]
+
+@abstract
+class Location extends RefCounted:
+	pass
+
+class GridLocation extends Location:
+	pass
+
+class ItemSlotLocation extends Location:
+	pass
+
+class UnplacedLocation extends Location:
+	pass
 
 @abstract
 class ItemEvent extends RefCounted:
@@ -87,6 +120,17 @@ class ItemEvent extends RefCounted:
 
 class BounceEvent extends ItemEvent:
 	pass
+
+class SpawnEvent extends ItemEvent:
+	# Later: Make this more declarative?
+	var factory: Callable
+	var targeting_config: TargetingConfig
+	var spawn_chance: float
+	
+	func _init(factory: Callable, targeting_config: TargetingConfig, spawn_chance: float):
+		self.factory = factory
+		self.targeting_config = targeting_config
+		self.spawn_chance = spawn_chance
 
 class OverlapEvent extends ItemEvent:
 	var player_bounce_count: int
@@ -99,6 +143,13 @@ class OverlapEvent extends ItemEvent:
 		self.radius = radius 
 
 class LevelUpEvent extends ItemEvent:
+	pass
+
+@abstract
+class TargetingConfig extends RefCounted:
+	pass
+
+class AnyFreeCell extends TargetingConfig:
 	pass
 
 class CollisionResult extends RefCounted:
@@ -141,8 +192,10 @@ class StatefulPhysicsCalculator extends Node2D:
 			print("Trying to move a static body")
 			return null
 		var character := item_and_body.body as CharacterBody2D
+		character.position = start_pos
 		var collision_shape: CollisionShape2D = character.get_node("CollisionShape2D")
 		collision_shape.shape = shape
 		var kinematic_collision := character.move_and_collide(motion)
+		# TODO: this is wrong, it should return collided item if available (i.e. it's not a wall or whatever)
 		return CollisionResult.new(kinematic_collision, character.position, item_and_body.item) # TODO: global pos?
 		
