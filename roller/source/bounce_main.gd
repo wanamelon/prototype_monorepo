@@ -62,7 +62,6 @@ func generate_choices():
 		$ItemSelect/GridContainer.add_child(button)
 		button.pressed.connect(func ():
 			item_configs.append(ItemDef.new(ItemDef.ItemId[possible_item_ids[i]]))
-			_item_system.add_item(ItemDef.ItemId[possible_item_ids[i]])
 			$ItemSelect.hide()
 			round_setup())
 
