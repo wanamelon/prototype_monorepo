@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cn1uouo8aq22t"]
+[gd_scene load_steps=13 format=3 uid="uid://cn1uouo8aq22t"]
 
 [ext_resource type="Script" uid="uid://b8e2sfg7ru250" path="res://source/player_ball.gd" id="1_1phkq"]
 [ext_resource type="Texture2D" uid="uid://crkxiobtsaim" path="res://assets/rolling_ball/hole_large_end.png" id="2_23a83"]
@@ -22,6 +22,9 @@ stream_2/stream = ExtResource("7_go6as")
 random_pitch = 1.02
 streams_count = 1
 stream_0/stream = ExtResource("8_ldloj")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ldloj"]
+radius = 50.0
 
 [node name="PlayerBall" type="CharacterBody2D"]
 script = ExtResource("1_1phkq")
@@ -57,3 +60,8 @@ volume_db = 10.0
 
 [node name="GainPointsAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_ldloj")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_ldloj")

@@ -39,8 +39,30 @@ Stretch (afterwards):
 	Snail trail
 """
 
+var last_bounce_per_player := {}
+
 func activate(state: MatchState):
-	return [] as Array[ItemEvent]
+	var events: Array[ItemEvent] = []
+	for area: Area2D in $Hitbox.get_overlapping_areas():
+		if area.get_parent() is PlayerBall:
+			var player := area.get_parent() as PlayerBall
+			var last_hit_info = last_bounce_per_player.get(player.get_instance_id(), [-1, -1000])
+			if last_hit_info[0] != player._bounce_count and state.tick > last_hit_info[1] + 6:
+				events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+			last_bounce_per_player[player.get_instance_id()] = [player._bounce_count, state.tick]
+		#var item := find_parent_item(area)
+		#if item is PlayerBallItem:
+			#events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+			
+	return events
+
+func find_parent_item(node: Node) -> ItemSystem.Item:
+	var current_node := node
+	while not current_node is ItemSystem.Item:
+		current_node = current_node.get_parent()
+		if current_node == null:
+			assert(false, "No item parent for node %s" % node.get_path())
+	return current_node
 
 const THOUSANDS_LEVEL_SUFFIXES = ["", "K", "M"]
 const LEVEL_COLORS := [
@@ -91,6 +113,9 @@ func _process(delta):
 	#var growth_probability_per_second := 1.0 / expected_seconds_until_growth
 	#if rng.randf() < (delta * growth_probability_per_second):
 		#_level_up()
+
+func compute_point_value():
+	return 2 ** (level - 1)
 
 #func try_level_up_from_snail_trail(chance: float):
 	#if rng.randf() < chance:

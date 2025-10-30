@@ -1,5 +1,7 @@
 class_name ItemSystem extends Node
 
+signal score_changed(new_score: int)
+
 const TICK_DELTA: float = 1.0 / 60.0
 var _items: Array[Item] = []
 var _player_ball: PlayerBall
@@ -8,7 +10,7 @@ var _tick: int = 0
 var _match_state: MatchState
 var _physics_calculator: StatefulPhysicsCalculator
 
-func _init(items: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard):
+func _init(items: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard, points: int):
 	_player_ball = player_ball
 	_game_board = game_board
 	_physics_calculator = StatefulPhysicsCalculator.new()
@@ -18,7 +20,7 @@ func _init(items: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard
 		item._inject(_physics_calculator)
 		_items.append(item)
 	_items.append(CropSpawner.new())
-	_match_state = MatchState.new(0, _player_ball, _items, [] as Array[ItemEvent])
+	_match_state = MatchState.new(0, points, _player_ball, _items, [] as Array[ItemEvent])
 
 func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 	match item_id:
@@ -37,18 +39,29 @@ func _physics_process(__):
 		if event is SpawnEvent:
 			# TODO: respect targeting config
 			var spawn := event as SpawnEvent
-			_game_board._spawn_item_in_random_cell(spawn.factory.call(), spawn.spawn_chance)
+			var new_item: Item = spawn.factory.call()
+			_game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
+			_items.append(new_item)
+		elif event is GivePointsEvent:
+			var give_points_event := event as GivePointsEvent
+			_match_state.points += give_points_event.points
+			score_changed.emit(_match_state.points)
 	_tick += 1
 	_match_state.tick += 1
 
+func get_score() -> int:
+	return _match_state.points
+
 class MatchState:
 	var tick: int
+	var points: int
 	var player_ball: PlayerBall
 	var items: Array[Item]
 	var events: Array[ItemEvent]
 	
-	func _init(tick: int, player_ball: PlayerBall, items: Array[Item], events: Array[ItemEvent]):
+	func _init(tick: int, points: int, player_ball: PlayerBall, items: Array[Item], events: Array[ItemEvent]):
 		self.tick = tick
+		self.points = points
 		self.player_ball = player_ball
 		self.items = items
 		self.events = events
@@ -120,6 +133,11 @@ class ItemEvent extends RefCounted:
 
 class BounceEvent extends ItemEvent:
 	pass
+
+class GivePointsEvent extends ItemEvent:
+	var points: int
+	func _init(points: int):
+		self.points = points
 
 class SpawnEvent extends ItemEvent:
 	# Later: Make this more declarative?

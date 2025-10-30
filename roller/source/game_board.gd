@@ -15,8 +15,8 @@ func generate_grid_items(round: int):
 	clear()
 	var available_cells: Array[Vector2i] = $TileMapLayer.get_used_cells().duplicate()
 	available_cells.shuffle()
-	for cell in available_cells.slice(0, 10 + round * 2):
-		_spawn_item(_create_coin_random_level(), cell)
+	#for cell in available_cells.slice(0, 10 + round * 2):
+		#_spawn_item(_create_coin_random_level(), cell)
 
 func _physics_process(delta):
 	if _player_ball:

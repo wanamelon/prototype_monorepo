@@ -20,7 +20,7 @@ func _on_player_finish(points: int):
 		if _current_score >= points_quota:
 			print("Round won. WE'RE DOING IT AGAIN!")
 			round += 1
-			$GameBoard.clear()
+			$GameBoard.clear()		
 			generate_choices()
 		else:
 			print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
@@ -35,7 +35,9 @@ func stage_setup():
 	_player_ball = $GameBoard.spawn_ball(item_configs)
 	_player_ball.finished.connect(_on_player_finish)
 	_player_ball.gained_points.connect(_on_gain_points)
-	_item_system = ItemSystem.new(item_configs, _player_ball, $GameBoard)
+	var current_score := 0 if _item_system == null else _item_system.get_score()
+	_item_system = ItemSystem.new(item_configs, _player_ball, $GameBoard, current_score)
+	_item_system.score_changed.connect(_on_score_changed)
 	add_child(_item_system)
 
 func round_setup():
@@ -70,6 +72,7 @@ func format_enum_name(enum_name: String) -> String:
 	return formatted_name.capitalize()
 
 func _on_gain_points(points: int):
+	return
 	_current_score += points
 	if point_progress_bar_tween:
 		point_progress_bar_tween.kill()
@@ -77,3 +80,11 @@ func _on_gain_points(points: int):
 	var progress_percent: float = 100.0 * _current_score / points_quota
 	point_progress_bar_tween.tween_property($ProgressDisplay/ProgressBar, "value", progress_percent, 0.5)
 	$ProgressDisplay/Label.text = "%d / %d" % [_current_score , points_quota]
+
+func _on_score_changed(new_score: int):
+	if point_progress_bar_tween:
+		point_progress_bar_tween.kill()
+	point_progress_bar_tween = create_tween()
+	var progress_percent: float = 100.0 * new_score / points_quota
+	point_progress_bar_tween.tween_property($ProgressDisplay/ProgressBar, "value", progress_percent, 0.5)
+	$ProgressDisplay/Label.text = "%d / %d" % [new_score , points_quota]
