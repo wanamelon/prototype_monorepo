@@ -14,19 +14,20 @@ func _ready():
 	round_setup()
 
 func _on_player_finish(points: int):
-	_item_system.queue_free()
 	if _lives_remaining <= 0:
-		print("Ended with points: ", _current_score)
-		if _current_score >= points_quota:
+		print("Ended with points: ", _item_system.get_score())
+		if _item_system.get_score() >= points_quota:
 			print("Round won. WE'RE DOING IT AGAIN!")
 			round += 1
-			$GameBoard.clear()		
+			$GameBoard.clear()
+			_item_system.queue_free()		
 			generate_choices()
 		else:
 			print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
 			get_tree().quit()
 	else:
 		_lives_remaining -= 1
+		_item_system.queue_free()
 		stage_setup()
 
 func stage_setup():
