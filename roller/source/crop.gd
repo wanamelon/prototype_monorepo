@@ -18,24 +18,28 @@ var level: int = 1
 
 func activate(state: MatchState):
 	var events: Array[ItemEvent] = []
-	events.append_array(_level_down_if_hit(state))
-	events.append_array(_apply_level_changes(state))
+	_try_level_up_on_tick(state, events)
+	_level_down_if_hit(state, events)
+	_apply_level_changes(state, events)
 	return events
 
-func _level_down_if_hit(state: MatchState):
-	var events: Array[ItemEvent] = []
+func _try_level_up_on_tick(state: MatchState, o_events: Array[ItemEvent]):
+	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
+	var growth_probability_per_second := 1.0 / expected_seconds_until_growth
+	if rng.randf() < (state.delta * growth_probability_per_second):
+		o_events.append(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self)))
+
+func _level_down_if_hit(state: MatchState, o_events: Array[ItemEvent]):
 	for event in state.last_tick_events:
 		if event is ItemSystem.FreshOverlapEvent:
 			var overlap := event as ItemSystem.FreshOverlapEvent
 			# TODO: should not depend on first/second order bruh
 			if overlap.first is PlayerBall and overlap.second == self:
 				var player := overlap.first as PlayerBall
-				events.append(ItemSystem.LevelChangeEvent.new(
+				o_events.append(ItemSystem.LevelChangeEvent.new(
 					-player.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self)))
-	return events
 
-func _apply_level_changes(state: MatchState):
-	var events: Array[ItemEvent] = []
+func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
 	var total_positive_level_change: int = 0
 	var total_negative_level_change: int = 0
 	for event in state.last_tick_events:
@@ -52,19 +56,18 @@ func _apply_level_changes(state: MatchState):
 		$LevelDownAudioPlayer.play()
 	var level_changes_canceled_out: int = min(abs(total_positive_level_change), abs(total_negative_level_change))
 	for i in range(level_changes_canceled_out):
-		events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
+		o_events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 	var net_level_change := total_positive_level_change + total_negative_level_change
 	if net_level_change > 0:
 		level = min(20, level + net_level_change)
 	else:
 		for i in range(abs(net_level_change)):
-			events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
+			o_events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 			level -= 1
 			if level <= 0:
 				state.player_ball.on_tile_destroyed()
-				events.append(ItemSystem.DespawnEvent.new(self))
+				o_events.append(ItemSystem.DespawnEvent.new(self))
 				break
-	return events
 
 func _compute_point_value():
 	return 2 ** (level - 1)
@@ -93,36 +96,6 @@ func _process(delta):
 	#else:
 		#$StaticBody2D/CollisionShape2D.disabled = true
 
-#func _physics_process(delta):
-	#var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
-	#var growth_probability_per_second := 1.0 / expected_seconds_until_growth
-	#if rng.randf() < (delta * growth_probability_per_second):
-		#_level_up()
-
 #func try_level_up_from_snail_trail(chance: float):
 	#if rng.randf() < chance:
 		#_level_up()
-
-#func _change_level(amount: int):
-	#if amount > 0:
-		#$LevelUpAudioPlayer.play()
-	#level = max(0, min(20, level + amount))
-
-#func _on_body_entered(body: Node2D):
-	#if body is PlayerBall:
-		#var player_ball := body as PlayerBall
-		#var damage := player_ball.compute_damage_per_hit()
-		#for i in range(damage):
-			#if level > 0:
-				#player_ball.give_points(2 ** (level - 1))
-			#var expected_growth_sec_base: float = 4.0
-			#var expected_seconds_until_growth: float = expected_growth_sec_base + 8 * log(level)
-			#var level_up_chance = player_ball.compute_level_up_on_hit_base_chance() * (expected_growth_sec_base / expected_seconds_until_growth)
-			#if rng.randf() < level_up_chance:
-				#_level_up()
-			#else:
-				#level -= 1
-			#if level <= 0:
-				#player_ball.on_tile_destroyed()
-				#queue_free()
-				#break
