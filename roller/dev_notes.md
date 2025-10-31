@@ -756,9 +756,9 @@ migrating to new system
 [ ] figure out less boilerplate overlap event
 [ ] implement grow from snail trail
 [ ] ball: plan out the migration
-[ ] make that bouncy more generic
-[ ] BOUNCE: destroying static bodies when gone
-[ ] BOUNCE: basic triggering + creating static bodies for all items
+[X] make that bouncy more generic
+[X] BOUNCE: destroying static bodies when gone
+[X] BOUNCE: basic triggering + creating static bodies for all items
 [X] crop: level up chance
 [X] make overlap event not have change
 [X] Clean up levelup on hit

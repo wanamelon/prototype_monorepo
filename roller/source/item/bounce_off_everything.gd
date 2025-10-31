@@ -2,15 +2,6 @@ class_name BounceOffEverything extends ItemSystem.Item
 
 const BOUNCE_STATIC_BODY_NAME := "BounceOffEverythingBody"
 
-"""
-So the basic problems:
-- status effect-like behavior
-- figuring out which grid cells are populated
-- should we spawn separate static bodies or tie them to nodes?
-- oh wait that's brilliant, then despawn takes care of them heehee
-- and any logic which tries to find the parent item we bounced off will indeed look at the item in that cell
-"""
-
 var _bounce_off_everything_duration: float = 0.0
 
 func activate(state: MatchState):
@@ -20,7 +11,9 @@ func activate(state: MatchState):
 	if _bounce_off_everything_duration > 0:
 		for item in state.items:
 			# TODO: only do this for STATIC grid items (or keep it as crop?)!!
-			if item is Crop and not item.has_node(BOUNCE_STATIC_BODY_NAME):
+			if (item is Crop 
+					and not item.has_node(BOUNCE_STATIC_BODY_NAME)
+					and not _would_overlap_existing_body(item.global_transform)):
 				item.add_child(_create_bounce_body())
 	else:
 		for item in state.items:
@@ -38,3 +31,14 @@ func _create_bounce_body() -> StaticBody2D:
 	bounce_body.add_child(collision_shape)
 	bounce_body.name = BOUNCE_STATIC_BODY_NAME
 	return bounce_body
+
+func _would_overlap_existing_body(new_body_global_transform: Transform2D):
+	var collider_circle := CircleShape2D.new()
+	collider_circle.radius = 45
+	var overlap_ball_query = PhysicsShapeQueryParameters2D.new()
+	overlap_ball_query.shape = collider_circle
+	overlap_ball_query.transform = new_body_global_transform
+	overlap_ball_query.collision_mask = 1
+	overlap_ball_query.collide_with_areas = false
+	var overlaps = _item_root.get_world_2d().direct_space_state.intersect_shape(overlap_ball_query)
+	return not overlaps.is_empty()

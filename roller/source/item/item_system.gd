@@ -12,10 +12,12 @@ func _init(item_defs: Array[ItemDef], player_ball: PlayerBall, game_board: GameB
 	_game_board = game_board
 	_physics_calculator = StatefulPhysicsCalculator.new()
 	add_child(_physics_calculator)
+	var item_root := Node2D.new()
+	add_child(item_root)
 	var items: Array[Item] = []
 	for item_def in item_defs:
 		var item := _item_for_id(item_def.item_id)
-		item._inject(_physics_calculator)
+		item._inject(_physics_calculator, item_root)
 		items.append(item)
 	_match_state = MatchState.new(0, points, player_ball, items, [] as Array[ItemEvent])
 
@@ -124,9 +126,11 @@ class Item extends Node2D:
 	signal destroyed()
 	
 	var _physics_calculator: StatefulPhysicsCalculator
+	var _item_root: Node2D
 	
-	func _inject(physics_calculator: StatefulPhysicsCalculator):
+	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D):
 		_physics_calculator = physics_calculator
+		_item_root = item_root
 	
 	# Business logic spawn setup: What bodies/display nodes to register...
 	func spawn():
