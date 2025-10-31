@@ -1,5 +1,6 @@
 class_name Crop extends ItemSystem.Item
 
+const CROP_SCENE: PackedScene = preload("res://source/item/crop.tscn")
 const THOUSANDS_LEVEL_SUFFIXES = ["", "K", "M"]
 const DIGITS_PER_THOUSAND_LEVEL: int = 3
 const LEVEL_COLORS := [
@@ -15,6 +16,9 @@ const LEVEL_COLORS := [
 ]
 var rng := RandomNumberGenerator.new()
 var level: int = 1
+
+static func instance() -> Crop:
+	return CROP_SCENE.instantiate()
 
 func activate(state: MatchState):
 	var events: Array[ItemEvent] = []

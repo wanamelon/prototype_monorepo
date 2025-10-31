@@ -1,6 +1,5 @@
 class_name CropSpawner extends ItemSystem.Item
 
-const CROP_SCENE: PackedScene = preload("res://source/crop.tscn")
 var _random := RandomNumberGenerator.new()
 
 func activate(state: MatchState):
@@ -8,7 +7,7 @@ func activate(state: MatchState):
 	if state.tick == 0:
 		for i in range(10): # TODO: configurable?
 			var factory = func ():
-				var crop = CROP_SCENE.instantiate()
+				var crop := Crop.instance()
 				crop.level = _random.randi_range(1, 3)
 				return crop
 			events.append(ItemSystem.SpawnEvent.new(factory, ItemSystem.AnyFreeCell.new(), 1.0))

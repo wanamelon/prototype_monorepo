@@ -1,8 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cdewixren54n7"]
+[gd_scene load_steps=13 format=3 uid="uid://cdewixren54n7"]
 
 [ext_resource type="Script" uid="uid://ctlovqr0sahr0" path="res://source/bounce_main.gd" id="1_ovsfe"]
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="1_p5ard"]
-[ext_resource type="Script" uid="uid://ckw8rr21jqg1f" path="res://source/item_def.gd" id="2_0panw"]
+[ext_resource type="Script" uid="uid://ckw8rr21jqg1f" path="res://source/item/item_def.gd" id="2_0panw"]
 [ext_resource type="Texture2D" uid="uid://df8r231n3c6yr" path="res://assets/rolling_ball/background_blue.png" id="3_vx23h"]
 [ext_resource type="PackedScene" uid="uid://cy54rx8phsksw" path="res://source/game_board.tscn" id="4_vx23h"]
 [ext_resource type="Texture2D" uid="uid://ccdy67xn8m374" path="res://assets/rolling_ball/block_locked_square.png" id="6_0panw"]
@@ -22,13 +22,18 @@ script = ExtResource("2_0panw")
 item_id = 10
 metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 
+[sub_resource type="Resource" id="Resource_3yruk"]
+script = ExtResource("2_0panw")
+item_id = 6
+metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_to078"]
 shader = ExtResource("1_p5ard")
 shader_parameter/saturation = 0.30000001425
 
 [node name="BounceMain" type="Node2D"]
 script = ExtResource("1_ovsfe")
-item_configs = Array[ExtResource("2_0panw")]([SubResource("Resource_k3n88"), SubResource("Resource_ovsfe"), SubResource("Resource_a5fj5")])
+item_configs = Array[ExtResource("2_0panw")]([SubResource("Resource_k3n88"), SubResource("Resource_ovsfe"), SubResource("Resource_a5fj5"), SubResource("Resource_3yruk")])
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_to078")
