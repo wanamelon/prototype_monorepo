@@ -73,6 +73,7 @@ class MatchState:
 	var player_ball: PlayerBall
 	var items: Array[Item]
 	var last_tick_events: Array[ItemEvent]
+	var delta: float = 1.0 / 60.0
 	
 	func _init(tick: int, points: int, player_ball: PlayerBall, items: Array[Item], events: Array[ItemEvent]):
 		self.tick = tick
@@ -110,7 +111,7 @@ func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
 			var overlap_key = stable_overlap_key(match_state.player_ball, overlapped_item)
 			var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
 			if (last_overlap_state.last_hit_phase != match_state.player_ball._bounce_count 
-					and match_state.tick > last_overlap_state.last_hit_tick + 6):
+					and match_state.tick > last_overlap_state.last_hit_tick + 30):
 				overlaps.append(FreshOverlapEvent.new(match_state.player_ball, overlapped_item))
 				last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
 					match_state.player_ball._bounce_count, match_state.tick)
