@@ -20,11 +20,13 @@ func _on_player_finish(points: int):
 			print("Round won. WE'RE DOING IT AGAIN!")
 			round += 1
 			$GameBoard.clear()
-			_item_system.queue_free()		
+			_item_system.queue_free()
 			generate_choices()
 		else:
 			print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
-			get_tree().quit()
+			_item_system.queue_free()
+			$GameOverAudioPlayer.play()
+			$GameOverAudioPlayer.finished.connect(func (): get_tree().quit())
 	else:
 		_lives_remaining -= 1
 		_item_system.queue_free()
