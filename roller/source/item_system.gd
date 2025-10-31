@@ -3,24 +3,21 @@ class_name ItemSystem extends Node
 signal score_changed(new_score: int)
 
 const TICK_DELTA: float = 1.0 / 60.0
-var _items: Array[Item] = []
-var _player_ball: PlayerBall
+
 var _game_board: GameBoard
-var _tick: int = 0
 var _match_state: MatchState
 var _physics_calculator: StatefulPhysicsCalculator
 
-func _init(items: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard, points: int):
-	_player_ball = player_ball
+func _init(item_defs: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard, points: int):
 	_game_board = game_board
 	_physics_calculator = StatefulPhysicsCalculator.new()
 	add_child(_physics_calculator)
-	for item_def in items:
+	var items: Array[Item] = []
+	for item_def in item_defs:
 		var item := _item_for_id(item_def.item_id)
 		item._inject(_physics_calculator)
-		_items.append(item)
-	_items.append(CropSpawner.new())
-	_match_state = MatchState.new(0, points, _player_ball, _items, [] as Array[ItemEvent])
+		items.append(item)
+	_match_state = MatchState.new(0, points, player_ball, items, [] as Array[ItemEvent])
 
 func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 	match item_id:
@@ -28,14 +25,15 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return AddStaminaItem.new()
 		ItemDef.ItemId.LEVEL_UP_ITEM_ON_TOUCH:
 			return LevelUpCropOnHit.new()
+		ItemDef.ItemId.SPAWN_CROPS_ON_START:
+			return CropSpawner.new()
 		_:
 			return AddStaminaItem.new()
 
 func _physics_process(__):
 	var events: Array[ItemEvent] = []
-	events.append_array(_player_ball.advance_tick(TICK_DELTA))
 	events.append_array(compute_overlaps(_match_state))
-	for item: Item in _items:
+	for item: Item in _match_state.items:
 		var new_events := item.activate(_match_state)
 		events.append_array(new_events)
 	for event in events:
@@ -44,19 +42,18 @@ func _physics_process(__):
 			var spawn := event as SpawnEvent
 			var new_item: Item = spawn.factory.call()
 			_game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
-			_items.append(new_item)
+			_match_state.items.append(new_item)
 		elif event is GivePointsEvent:
 			var give_points_event := event as GivePointsEvent
 			_match_state.points += give_points_event.points
 			score_changed.emit(_match_state.points)
 		elif event is DespawnEvent:
-			_items.erase(event.target)
+			_match_state.items.erase(event.target)
 			event.target.queue_free()
 		elif event is FreshOverlapEvent:
 			var overlap := event as FreshOverlapEvent
 #			print("Overlapped ", overlap.first.name, " ", overlap.first.position, " ", overlap.second.name, " ", overlap.second.position)
 	_match_state.last_tick_events = events
-	_tick += 1
 	_match_state.tick += 1
 
 func get_score() -> int:
@@ -215,16 +212,6 @@ class DespawnEvent extends ItemEvent:
 	var target: Item
 	func _init(target: Item):
 		self.target = target
-
-class OverlapEvent extends ItemEvent:
-	var player_bounce_count: int
-	var global_position: Vector2
-	var radius: float
-	
-	func _init(player_bounce_count: int, global_position: Vector2, radius: float):
-		self.player_bounce_count = player_bounce_count 
-		self.global_position = global_position 
-		self.radius = radius 
 
 class LevelChangeEvent extends ItemEvent:
 	var levels: int

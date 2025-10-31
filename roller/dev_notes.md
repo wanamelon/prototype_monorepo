@@ -738,14 +738,22 @@ Overall structure draft 5
 
 ***
 
+Feeling shenanigans
+
+esteemed sewer earl
+esteemed sewer earl (REAL)
+
+***
+
 migrating to new system
 
-[X] Clean up levelup on hit
-[ ] enable player bouncy on crops
-[ ] make that bouncy more generic
-[ ] ball: plan out the migration
-[ ] implement grow from snail trail
 [ ] crop sounds -> shared audio player node?
+[ ] implement grow from snail trail
+[ ] ball: plan out the migration
+[ ] make that bouncy more generic
+[ ] enable player bouncy on crops
+[ ] make overlap event simpler
+[X] Clean up levelup on hit
 [X] grow on hit chance
 [X] fresh hit overlap system
 [X] spawner
@@ -755,6 +763,11 @@ migrating to new system
 [X] despawn on level zero
 
 ---
+
+"I too want a wound that I can say you gave me" huge line ty Casca
+
+esteemed sewer earl
+esteemed sewer earl (REAL)
 
 one thing annoying is we need to kind of keep track of "novel" overlaps
 aka area entered / exited. The point of this is:

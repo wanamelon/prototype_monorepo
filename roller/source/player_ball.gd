@@ -42,9 +42,6 @@ var _bounce_off_everything_duration: float = 0.0
 func should_bounce_off_everything():
 	return _bounce_off_everything_duration > 0
 
-func advance_tick(delta: float) -> Array[ItemSystem.ItemEvent]:
-	return [ItemSystem.OverlapEvent.new(_bounce_count, global_position, $CollisionShape2D.shape.radius)]
-
 func _physics_process(delta):
 	var start_pos := position
 	var collision_result := move_and_collide(velocity * delta)

@@ -6,7 +6,7 @@ var _random := RandomNumberGenerator.new()
 func activate(state: MatchState):
 	var events: Array[ItemEvent] = []
 	if state.tick == 0:
-		for i in range(30): # TODO: configurable?
+		for i in range(10): # TODO: configurable?
 			var factory = func ():
 				var crop = CROP_SCENE.instantiate()
 				crop.level = _random.randi_range(1, 3)
