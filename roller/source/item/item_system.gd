@@ -27,6 +27,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return LevelUpCropOnHit.new()
 		ItemDef.ItemId.SPAWN_CROPS_ON_START:
 			return CropSpawner.new()
+		ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
+			return BounceOffEverything.new()
 		_:
 			return AddStaminaItem.new()
 

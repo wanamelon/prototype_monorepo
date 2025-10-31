@@ -740,19 +740,27 @@ Overall structure draft 5
 
 Feeling shenanigans
 
-esteemed sewer earl
-esteemed sewer earl (REAL)
+esteemed sewer earl I
+esteemed sewer earl II
+ye olde slug balle
+the four humours: the black bile
+rotting sock
+the TITHE
+my liege!
 
 ***
 
 migrating to new system
 
 [ ] crop sounds -> shared audio player node?
+[ ] figure out less boilerplate overlap event
 [ ] implement grow from snail trail
 [ ] ball: plan out the migration
 [ ] make that bouncy more generic
-[ ] enable player bouncy on crops
-[ ] make overlap event simpler
+[ ] BOUNCE: destroying static bodies when gone
+[ ] BOUNCE: basic triggering + creating static bodies for all items
+[X] crop: level up chance
+[X] make overlap event not have change
 [X] Clean up levelup on hit
 [X] grow on hit chance
 [X] fresh hit overlap system

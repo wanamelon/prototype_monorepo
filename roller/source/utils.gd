@@ -1,5 +1,7 @@
 class_name Utils
 
+static var RNG := RandomNumberGenerator.new()
+
 static func filter(list: Array, predicate: Callable, retain_matching: bool = true):
 	var matches = []
 	var not_matches = []
