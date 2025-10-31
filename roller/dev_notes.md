@@ -649,13 +649,44 @@ the scenes. No yeah good arg, let's just make Playerball HAVE A characterbody, m
 
 ***
 
-Crop migrating to new system
+migrating to new system
 
+[X] fresh hit overlap system
+[ ] grow on hit chance
+[ ] enable player bouncy on crops
+[ ] make that bouncy more generic
+[ ] ball: plan out the migration
+[ ] implement grow from snail trail
 [X] spawner
 [X] random level
 [X] points on hit
 [X] downlevel on hit
 [X] despawn on level zero
+
+---
+
+one thing annoying is we need to kind of keep track of "novel" overlaps
+aka area entered / exited. The point of this is:
+
+- First time we contact a crop, we should do some actions
+- But if I'm between two bouncies and rolling over a crop constantly, feels bad if we never count as hitting it
+- So a nice solution is on each bounce of the ball, anything we overlap after that (until next bounce) is a hit
+- And we'll have some tiny bit of throttling to ensure we don't hit 60 times/second
+
+This is actually quite a bit to replicate in every item. Problem I'm solving is "LevelUpOnHit"
+So this needs to keep track of all the player balls, all the crops, the last hit/tick per combo
+It's probably not that bad tbh but why duplicate this everywhere, it's sad, we should just handle it generically
+For example by doing those physics events in a central place! FreshOverlapEvent { first item, second item }
+
+Let's try that! But how hmm...
+With a stateful physics calculator it is fairly easy, but if we don't know all objects it's a bit tougher...
+Eh, maybe let's go by convention. A "hitbox" always an area2D, and we just collect those
+The sad part is it's not quite safe if we misname. Also what if an object needs >1?
+No that's not a huge concern. We can do a warn log if needed
+
+
+
+---
 
 What's the bare minimum functionality?
 Well, we need the sprite to show up

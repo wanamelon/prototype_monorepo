@@ -32,6 +32,7 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 func _physics_process(__):
 	var events: Array[ItemEvent] = []
 	events.append_array(_player_ball.advance_tick(TICK_DELTA))
+	events.append_array(compute_overlaps(_match_state))
 	for item: Item in _items:
 		var new_events := item.activate(_match_state)
 		events.append_array(new_events)
@@ -49,6 +50,9 @@ func _physics_process(__):
 		elif event is DespawnEvent:
 			_items.erase(event.target)
 			event.target.queue_free()
+		elif event is FreshOverlapEvent:
+			var overlap := event as FreshOverlapEvent
+#			print("Overlapped ", overlap.first.name, " ", overlap.first.position, " ", overlap.second.name, " ", overlap.second.position)
 	_tick += 1
 	_match_state.tick += 1
 
@@ -68,6 +72,41 @@ class MatchState:
 		self.player_ball = player_ball
 		self.items = items
 		self.events = events
+
+class OverlapState:
+	var last_hit_phase: int
+	var last_hit_tick: int
+	func _init(last_hit_phase, last_hit_tick):
+		self.last_hit_phase = last_hit_phase
+		self.last_hit_tick = last_hit_tick
+
+var last_overlap_state_per_uid_pair := {}
+
+static func stable_overlap_key(first: Object, second: Object):
+	var uids = [first.get_instance_id(), second.get_instance_id()]
+	uids.sort()
+	return uids
+
+func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
+	var overlaps: Array[ItemEvent] = []
+	var hitbox_to_item = {}
+	for item in match_state.items:
+		for child in item.get_children():
+			if child.name.to_lower() == "hitbox":
+				assert(child is Area2D, "Hitboxes should be area2d!")
+				hitbox_to_item[child] = item
+	var player_hitbox: Area2D = match_state.player_ball.get_node("Hitbox")
+	for overlapped in player_hitbox.get_overlapping_areas():
+		var overlapped_item: Item = hitbox_to_item.get(overlapped)
+		if overlapped_item != null:
+			var overlap_key = stable_overlap_key(match_state.player_ball, overlapped_item)
+			var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
+			if (last_overlap_state.last_hit_phase != match_state.player_ball._bounce_count 
+					and match_state.tick > last_overlap_state.last_hit_tick + 6):
+				overlaps.append(FreshOverlapEvent.new(match_state.player_ball, overlapped_item))
+				last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
+					match_state.player_ball._bounce_count, match_state.tick)
+	return overlaps
 
 @abstract
 class Item extends Node2D:
@@ -137,6 +176,14 @@ class ItemEvent extends RefCounted:
 class BounceEvent extends ItemEvent:
 	pass
 
+class FreshOverlapEvent extends ItemEvent:
+	var first
+	var second
+	
+	func _init(first, second):
+		self.first = first
+		self.second = second
+
 class GivePointsEvent extends ItemEvent:
 	var points: int
 	func _init(points: int):
@@ -169,7 +216,10 @@ class OverlapEvent extends ItemEvent:
 		self.radius = radius 
 
 class LevelUpEvent extends ItemEvent:
-	pass
+	var chance: float
+	
+	func _init(chance: float):
+		self.chance = chance
 
 @abstract
 class TargetingConfig extends RefCounted:
