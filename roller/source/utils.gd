@@ -1,5 +1,12 @@
 class_name Utils
 
+static func filter(list: Array, predicate: Callable, retain_matching: bool = true):
+	var matches = []
+	var not_matches = []
+	for element in list:
+		(matches if predicate.call(element) else not_matches).append(element)
+	return matches if retain_matching else not_matches
+
 static func get_only_element_of_list(list: Array):
 	assert(list.size() == 1, "Cannot get only element of list with size != 1")
 	return list[0]

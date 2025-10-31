@@ -1,84 +1,7 @@
 class_name Crop extends ItemSystem.Item
 
-var last_hit_per_id := {}
-var _random := RandomNumberGenerator.new()
-
-func activate(state: MatchState):
-	var events: Array[ItemEvent] = []
-	for event in state.last_tick_events:
-		if event is ItemSystem.FreshOverlapEvent:
-			var overlap := event as ItemSystem.FreshOverlapEvent
-			# TODO: should not depend on first/second order bruh
-			if overlap.first is PlayerBall and overlap.second == self:
-				var player := overlap.first as PlayerBall
-				for i in range(player.compute_damage_per_hit()):
-					events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
-					events.append(ItemSystem.LevelChangeEvent.new(
-						-player.compute_damage_per_hit(), 1.0, ItemSystem.SpecificItem.new(self)))
-					level -= 1
-					if level <= 0:
-						player.on_tile_destroyed()
-						events.append(ItemSystem.DespawnEvent.new(self))
-						break
-	# first process all damage events?
-	# What's intuitive for the player?
-	# Roughly - we should give points = what's on screen
-	# thought experiment: super high damage. We should just give sum(level, level-dmg) { level_pts } right?
-	# yeah makes sense I guess the simplest thing is think about pairs of level down, level up
-	# in that case, we stay at same level, but get points == current
-	# so let's make the logic like that. For i in negative change, if there's a positive, cancel it out and give
-	# and then add remaining positive at end (play a noise if so)
-	var positive_level_change: int = 0
-	var negative_level_change: int = 0
-	for event in state.last_tick_events:
-		if event is ItemSystem.LevelChangeEvent:
-			var level_change := event as ItemSystem.LevelChangeEvent
-			if (level_change.target is ItemSystem.SpecificItem and level_change.target.target == self):
-				if level_change.levels >= 0:
-					positive_level_change += level_change.levels
-				else:
-					negative_level_change += level_change.levels
-				#if _random.randf() < level_change.chance:
-					#$LevelUpAudioPlayer.play()
-					#level = min(20, level + level_change.levels)
-	if positive_level_change > 0:
-		$LevelUpAudioPlayer.play()
-	#for i in range(negative_level_change):
-		#events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
-		#if positive_level_change > 0:
-			#positive_level_change -= 1
-			#continue # cancel out downlevel
-		#level -= 1
-		#if level <= 0:
-			#break
-	#if level <= 0:
-		#state.player_ball.on_tile_destroyed()
-		#events.append(ItemSystem.DespawnEvent.new(self))
-	var level_changes_canceled_out: int = min(abs(positive_level_change), abs(negative_level_change))
-	for i in range(level_changes_canceled_out):
-		events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
-	var net_level_change := positive_level_change + negative_level_change
-	if net_level_change > 0:
-		level = min(20, level + net_level_change)
-	else:
-		for i in range(abs(net_level_change)):
-			events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
-			level -= 1
-			if level <= 0:
-				state.player_ball.on_tile_destroyed()
-				events.append(ItemSystem.DespawnEvent.new(self))
-				break
-	return events
-
-func find_parent_item(node: Node) -> ItemSystem.Item:
-	var current_node := node
-	while not current_node is ItemSystem.Item:
-		current_node = current_node.get_parent()
-		if current_node == null:
-			assert(false, "No item parent for node %s" % node.get_path())
-	return current_node
-
 const THOUSANDS_LEVEL_SUFFIXES = ["", "K", "M"]
+const DIGITS_PER_THOUSAND_LEVEL: int = 3
 const LEVEL_COLORS := [
 	Color.BLACK, 
 	Color.GHOST_WHITE, # Level 1
@@ -93,10 +16,58 @@ const LEVEL_COLORS := [
 var rng := RandomNumberGenerator.new()
 var level: int = 1
 
-#func _ready():
-	#$Hitbox.body_entered.connect(_on_body_entered)
+func activate(state: MatchState):
+	var events: Array[ItemEvent] = []
+	events.append_array(_level_down_if_hit(state))
+	events.append_array(_apply_level_changes(state))
+	return events
 
-const DIGITS_PER_THOUSAND_LEVEL: int = 3
+func _level_down_if_hit(state: MatchState):
+	var events: Array[ItemEvent] = []
+	for event in state.last_tick_events:
+		if event is ItemSystem.FreshOverlapEvent:
+			var overlap := event as ItemSystem.FreshOverlapEvent
+			# TODO: should not depend on first/second order bruh
+			if overlap.first is PlayerBall and overlap.second == self:
+				var player := overlap.first as PlayerBall
+				events.append(ItemSystem.LevelChangeEvent.new(
+					-player.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self)))
+	return events
+
+func _apply_level_changes(state: MatchState):
+	var events: Array[ItemEvent] = []
+	var total_positive_level_change: int = 0
+	var total_negative_level_change: int = 0
+	for event in state.last_tick_events:
+		if event is ItemSystem.LevelChangeEvent:
+			var level_change := event as ItemSystem.LevelChangeEvent
+			if (level_change.target is ItemSystem.SpecificItem and level_change.target.target == self):
+				if level_change.levels >= 0:
+					total_positive_level_change += level_change.levels
+				else:
+					total_negative_level_change += level_change.levels
+	if total_positive_level_change > 0:
+		$LevelUpAudioPlayer.play()
+	if total_negative_level_change < 0:
+		$LevelDownAudioPlayer.play()
+	var level_changes_canceled_out: int = min(abs(total_positive_level_change), abs(total_negative_level_change))
+	for i in range(level_changes_canceled_out):
+		events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
+	var net_level_change := total_positive_level_change + total_negative_level_change
+	if net_level_change > 0:
+		level = min(20, level + net_level_change)
+	else:
+		for i in range(abs(net_level_change)):
+			events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
+			level -= 1
+			if level <= 0:
+				state.player_ball.on_tile_destroyed()
+				events.append(ItemSystem.DespawnEvent.new(self))
+				break
+	return events
+
+func _compute_point_value():
+	return 2 ** (level - 1)
 
 func _process(delta):
 	var points = 2 ** (level - 1)
@@ -106,7 +77,7 @@ func _process(delta):
 		normalized /= 1000
 		thousands_level += 1
 	var num_digits = str(points).length()
-	$LevelLabel.text = str(normalized) + THOUSANDS_LEVEL_SUFFIXES[thousands_level] # + "\n" + str(points)
+	$LevelLabel.text = str(normalized) + THOUSANDS_LEVEL_SUFFIXES[thousands_level]
 	$LevelLabel.set("theme_override_colors/font_color", LEVEL_COLORS[min(len(LEVEL_COLORS)- 1, num_digits)])
 
 #func toggle_bounce(should: bool):
@@ -127,9 +98,6 @@ func _process(delta):
 	#var growth_probability_per_second := 1.0 / expected_seconds_until_growth
 	#if rng.randf() < (delta * growth_probability_per_second):
 		#_level_up()
-
-func compute_point_value():
-	return 2 ** (level - 1)
 
 #func try_level_up_from_snail_trail(chance: float):
 	#if rng.randf() < chance:

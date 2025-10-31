@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://1e3xm6ur0cmn"]
+[gd_scene load_steps=7 format=3 uid="uid://1e3xm6ur0cmn"]
 
 [ext_resource type="Script" uid="uid://bbgfi3wxcdfkk" path="res://source/crop.gd" id="1_1owf8"]
 [ext_resource type="Texture2D" uid="uid://r3bfnria2cwq" path="res://assets/rolling_ball/hole_small_end_alt.png" id="2_8owxi"]
 [ext_resource type="AudioStream" uid="uid://lq1tdvpynlb3" path="res://assets/audio/level_up.mp3" id="3_54d5u"]
+[ext_resource type="AudioStream" uid="uid://dwfd2dplrtomh" path="res://assets/audio/damage.mp3" id="4_8owxi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_abydu"]
 radius = 45.0
@@ -44,3 +45,6 @@ vertical_alignment = 1
 stream = ExtResource("3_54d5u")
 volume_db = -10.0
 pitch_scale = 1.5
+
+[node name="LevelDownAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_8owxi")

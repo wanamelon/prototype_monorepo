@@ -679,6 +679,12 @@ Taken at an extreme, we don't want the user to see an overlap and then wait a no
 On the other, 1/60th second isn't that noticeable, and treating everything consistently might be simpler
 Go with simpler if it's not going to affect the user
 
+^^ revisiting. It actually is noticeable having a gap between physics event and reactions.
+For example, a player clearly hits/bounces something but there's just a tiny gap until I hear audio
+ah never mind, it's more that the player sprite is too large compared to the area2d
+this is not that noticeable at higher speeds. and when I made the phys event change, it didn't help
+real problem, wrong diagnosis
+
 kk thought experiment. crop level up on hit
 T1: generate player overlap event
 T2: levelUp item sees that event -> level up event. Also, crop sees it -> level down event
@@ -693,6 +699,7 @@ like yeah the actual problem is we want items to define how we react to events, 
 allow items to react to events spawned by OTHER ITEMS in the same tick. There are all sorts of ordering issues
 it's nicer to just define a set of reactions and let the game loop handle sorting out the "trigger dependencies"
 but at the same time, there are some cases that produces an unnatural effect, specifically if:
+
 - Event A triggers item X -> level up a crop (event for next frame?)
 - Event A ALSO triggers the crop -> level down (in same frame)
 - So we quickly level down and up, when it's maybe a bit cleaner to do one atomic operation
@@ -713,13 +720,15 @@ Do we need this "chance" to be part of the event data, or should each item do th
 It smells like "needless boilerplate" to have a "ChanceOfLevelUp" and "LevelUp", same for spawns
 
 I think either:
+
 - we make it generic
-  - a "ChanceEvent" has a levelup
-  - or a LevelUp has a "Chance" field which can also represent "done"
+    - a "ChanceEvent" has a levelup
+    - or a LevelUp has a "Chance" field which can also represent "done"
 - we just don't. Items do that check and spawn a yep 100% happened event
 
 The real catch is spawns I guess. There might be a bunch of spawners competing for limited space, and we still want each
-to have a fair ish chance. But in that case, maybe just randomizing spawn order is enough, and we can add "weights" in the
+to have a fair ish chance. But in that case, maybe just randomizing spawn order is enough, and we can add "weights" in
+the
 future if it's absolutely a pain point for users. Simplicity!
 
 ***
@@ -731,11 +740,13 @@ Overall structure draft 5
 
 migrating to new system
 
-[ ] grow on hit chance
+[X] Clean up levelup on hit
 [ ] enable player bouncy on crops
 [ ] make that bouncy more generic
 [ ] ball: plan out the migration
 [ ] implement grow from snail trail
+[ ] crop sounds -> shared audio player node?
+[X] grow on hit chance
 [X] fresh hit overlap system
 [X] spawner
 [X] random level

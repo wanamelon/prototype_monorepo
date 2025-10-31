@@ -62,6 +62,14 @@ func _physics_process(__):
 func get_score() -> int:
 	return _match_state.points
 
+static func find_parent_item(node: Node) -> ItemSystem.Item:
+	var current_node := node
+	while not current_node is ItemSystem.Item:
+		current_node = current_node.get_parent()
+		if current_node == null:
+			assert(false, "No item parent for node %s" % node.get_path())
+	return current_node
+
 class MatchState:
 	var tick: int
 	var points: int
@@ -220,11 +228,9 @@ class OverlapEvent extends ItemEvent:
 
 class LevelChangeEvent extends ItemEvent:
 	var levels: int
-	var chance: float
 	var target: TargetingConfig
-	func _init(levels: int, chance: float, target: TargetingConfig):
+	func _init(levels: int, target: TargetingConfig):
 		self.levels = levels
-		self.chance = chance
 		self.target = target
 
 @abstract
