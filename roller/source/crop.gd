@@ -1,27 +1,73 @@
 class_name Crop extends ItemSystem.Item
 
 var last_hit_per_id := {}
+var _random := RandomNumberGenerator.new()
 
 func activate(state: MatchState):
 	var events: Array[ItemEvent] = []
-	for area: Area2D in $Hitbox.get_overlapping_areas():
-		if area.get_parent() is PlayerBall:
-			var player := area.get_parent() as PlayerBall
-			var last_hit_info = last_hit_per_id.get(player.get_instance_id(), [-1, -1000])
-			if last_hit_info[0] != player._bounce_count and state.tick > last_hit_info[1] + 6:
-				var damage := player.compute_damage_per_hit()
-				for i in range(damage):
+	for event in state.last_tick_events:
+		if event is ItemSystem.FreshOverlapEvent:
+			var overlap := event as ItemSystem.FreshOverlapEvent
+			# TODO: should not depend on first/second order bruh
+			if overlap.first is PlayerBall and overlap.second == self:
+				var player := overlap.first as PlayerBall
+				for i in range(player.compute_damage_per_hit()):
 					events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+					events.append(ItemSystem.LevelChangeEvent.new(
+						-player.compute_damage_per_hit(), 1.0, ItemSystem.SpecificItem.new(self)))
 					level -= 1
 					if level <= 0:
 						player.on_tile_destroyed()
 						events.append(ItemSystem.DespawnEvent.new(self))
 						break
-			last_hit_per_id[player.get_instance_id()] = [player._bounce_count, state.tick]
-		#var item := find_parent_item(area)
-		#if item is PlayerBallItem:
-			#events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
-			
+	# first process all damage events?
+	# What's intuitive for the player?
+	# Roughly - we should give points = what's on screen
+	# thought experiment: super high damage. We should just give sum(level, level-dmg) { level_pts } right?
+	# yeah makes sense I guess the simplest thing is think about pairs of level down, level up
+	# in that case, we stay at same level, but get points == current
+	# so let's make the logic like that. For i in negative change, if there's a positive, cancel it out and give
+	# and then add remaining positive at end (play a noise if so)
+	var positive_level_change: int = 0
+	var negative_level_change: int = 0
+	for event in state.last_tick_events:
+		if event is ItemSystem.LevelChangeEvent:
+			var level_change := event as ItemSystem.LevelChangeEvent
+			if (level_change.target is ItemSystem.SpecificItem and level_change.target.target == self):
+				if level_change.levels >= 0:
+					positive_level_change += level_change.levels
+				else:
+					negative_level_change += level_change.levels
+				#if _random.randf() < level_change.chance:
+					#$LevelUpAudioPlayer.play()
+					#level = min(20, level + level_change.levels)
+	if positive_level_change > 0:
+		$LevelUpAudioPlayer.play()
+	#for i in range(negative_level_change):
+		#events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+		#if positive_level_change > 0:
+			#positive_level_change -= 1
+			#continue # cancel out downlevel
+		#level -= 1
+		#if level <= 0:
+			#break
+	#if level <= 0:
+		#state.player_ball.on_tile_destroyed()
+		#events.append(ItemSystem.DespawnEvent.new(self))
+	var level_changes_canceled_out: int = min(abs(positive_level_change), abs(negative_level_change))
+	for i in range(level_changes_canceled_out):
+		events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+	var net_level_change := positive_level_change + negative_level_change
+	if net_level_change > 0:
+		level = min(20, level + net_level_change)
+	else:
+		for i in range(abs(net_level_change)):
+			events.append(ItemSystem.GivePointsEvent.new(compute_point_value()))
+			level -= 1
+			if level <= 0:
+				state.player_ball.on_tile_destroyed()
+				events.append(ItemSystem.DespawnEvent.new(self))
+				break
 	return events
 
 func find_parent_item(node: Node) -> ItemSystem.Item:
@@ -88,11 +134,12 @@ func compute_point_value():
 #func try_level_up_from_snail_trail(chance: float):
 	#if rng.randf() < chance:
 		#_level_up()
-#
-#func _level_up():
-	#$LevelUpAudioPlayer.play()
-	#level = min(20, level + 1)
-#
+
+#func _change_level(amount: int):
+	#if amount > 0:
+		#$LevelUpAudioPlayer.play()
+	#level = max(0, min(20, level + amount))
+
 #func _on_body_entered(body: Node2D):
 	#if body is PlayerBall:
 		#var player_ball := body as PlayerBall

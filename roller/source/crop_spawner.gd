@@ -9,7 +9,7 @@ func activate(state: MatchState):
 		for i in range(5): # TODO: configurable?
 			var factory = func ():
 				var crop = CROP_SCENE.instantiate()
-				crop.level = _random.randi_range(1, 1)
+				crop.level = _random.randi_range(1, 3)
 				return crop
 			events.append(ItemSystem.SpawnEvent.new(factory, ItemSystem.AnyFreeCell.new(), 1.0))
 	return events

@@ -26,6 +26,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 	match item_id:
 		ItemDef.ItemId.ADD_STAMINA:
 			return AddStaminaItem.new()
+		ItemDef.ItemId.LEVEL_UP_ITEM_ON_TOUCH:
+			return LevelUpCropOnHit.new()
 		_:
 			return AddStaminaItem.new()
 
@@ -53,6 +55,7 @@ func _physics_process(__):
 		elif event is FreshOverlapEvent:
 			var overlap := event as FreshOverlapEvent
 #			print("Overlapped ", overlap.first.name, " ", overlap.first.position, " ", overlap.second.name, " ", overlap.second.position)
+	_match_state.last_tick_events = events
 	_tick += 1
 	_match_state.tick += 1
 
@@ -64,14 +67,14 @@ class MatchState:
 	var points: int
 	var player_ball: PlayerBall
 	var items: Array[Item]
-	var events: Array[ItemEvent]
+	var last_tick_events: Array[ItemEvent]
 	
 	func _init(tick: int, points: int, player_ball: PlayerBall, items: Array[Item], events: Array[ItemEvent]):
 		self.tick = tick
 		self.points = points
 		self.player_ball = player_ball
 		self.items = items
-		self.events = events
+		self.last_tick_events = events
 
 class OverlapState:
 	var last_hit_phase: int
@@ -215,11 +218,14 @@ class OverlapEvent extends ItemEvent:
 		self.global_position = global_position 
 		self.radius = radius 
 
-class LevelUpEvent extends ItemEvent:
+class LevelChangeEvent extends ItemEvent:
+	var levels: int
 	var chance: float
-	
-	func _init(chance: float):
+	var target: TargetingConfig
+	func _init(levels: int, chance: float, target: TargetingConfig):
+		self.levels = levels
 		self.chance = chance
+		self.target = target
 
 @abstract
 class TargetingConfig extends RefCounted:
@@ -227,6 +233,11 @@ class TargetingConfig extends RefCounted:
 
 class AnyFreeCell extends TargetingConfig:
 	pass
+
+class SpecificItem extends TargetingConfig:
+	var target: Item
+	func _init(target: Item):
+		self.target = target
 
 class CollisionResult extends RefCounted:
 	var collision: KinematicCollision2D

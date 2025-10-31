@@ -649,14 +649,94 @@ the scenes. No yeah good arg, let's just make Playerball HAVE A characterbody, m
 
 ***
 
+Event order. I still like the idea of not doing explicit order.
+For trigger evaluation, it should be based on a read-only view of the events/state at the start of the tick,
+aka the events created the last tick + the frozen state at frame begin
+
+One question is: Can item activation modify the item's state. I'd argue YES
+Otherwise literally every change needs to be driven by events which feels restrictive.
+Events represent stuff that other things would want to react to, not literally every time we increment some internal
+counter
+
+I think a good balance is something like this:
+
+```
+Item
+    baseState <- contains the base stats and other state relevant to other parts of system
+    tickStartState <- immutable deep copy, used for trigger evaluation
+        ex: Item which does a speed boost for every player ball with < 25% stamina
+        to figure out which items to target with that status effect event, we base it off their tickStartState!
+        this tickStartState includes all status effects etc. (because those can change stats relevant to
+    currentState <- mutable, will be used to compute next tickStartState
+        specifically function(baseState, last currentState, status effects) -> next tickStartState
+    maybe there can also be internal vars (book-keeping etc.) which aren't really "game state"        
+```
+
+It's a little complicated, but only a little. It gives us a lot of predictability and flexibility
+
+Should we treat physics events separately? I'm a little torn. On the one hand, it's nice to react immediately to these.
+Taken at an extreme, we don't want the user to see an overlap and then wait a noticeable pause before anything happens
+On the other, 1/60th second isn't that noticeable, and treating everything consistently might be simpler
+Go with simpler if it's not going to affect the user
+
+kk thought experiment. crop level up on hit
+T1: generate player overlap event
+T2: levelUp item sees that event -> level up event. Also, crop sees it -> level down event
+T3: Crop sees changeLevel events -> give points, etc.. Same frame, give points applied?
+
+So that's a 3 frame delay, not the best? 200ms is "slow" for a human, but even at 60ms it is a bit sad
+The ideal situation is to see all three in one frame. That's achievable with a for-loop, but then one tick != phys
+frame.
+Maybe that's a fine solution though? The issue is we need to account for time delta correctly
+
+like yeah the actual problem is we want items to define how we react to events, but it gets super hairy if we
+allow items to react to events spawned by OTHER ITEMS in the same tick. There are all sorts of ordering issues
+it's nicer to just define a set of reactions and let the game loop handle sorting out the "trigger dependencies"
+but at the same time, there are some cases that produces an unnatural effect, specifically if:
+- Event A triggers item X -> level up a crop (event for next frame?)
+- Event A ALSO triggers the crop -> level down (in same frame)
+- So we quickly level down and up, when it's maybe a bit cleaner to do one atomic operation
+- Sure, we may want 2 sfx to both play, but that's for sure doable (like we add up all level downs and ups separately)
+
+the easy way is make level down also an event, but that just feels so wrong for some reason? Like we could just
+mod our state but instead we vomit up this event like hnnng
+
+Also question should reacting to a level down event be part of the item? I think that's sensible
+What is the alternative? We define something like a "modifyStateEvent", where something outside manipulates item state?
+
+***
+
+A few patterns I noticed:
+
+events which have a chance to happen vs. it definitely happened
+Do we need this "chance" to be part of the event data, or should each item do the probability check?
+It smells like "needless boilerplate" to have a "ChanceOfLevelUp" and "LevelUp", same for spawns
+
+I think either:
+- we make it generic
+  - a "ChanceEvent" has a levelup
+  - or a LevelUp has a "Chance" field which can also represent "done"
+- we just don't. Items do that check and spawn a yep 100% happened event
+
+The real catch is spawns I guess. There might be a bunch of spawners competing for limited space, and we still want each
+to have a fair ish chance. But in that case, maybe just randomizing spawn order is enough, and we can add "weights" in the
+future if it's absolutely a pain point for users. Simplicity!
+
+***
+
+Overall structure draft 5
+
+
+***
+
 migrating to new system
 
-[X] fresh hit overlap system
 [ ] grow on hit chance
 [ ] enable player bouncy on crops
 [ ] make that bouncy more generic
 [ ] ball: plan out the migration
 [ ] implement grow from snail trail
+[X] fresh hit overlap system
 [X] spawner
 [X] random level
 [X] points on hit
@@ -684,7 +764,23 @@ Eh, maybe let's go by convention. A "hitbox" always an area2D, and we just colle
 The sad part is it's not quite safe if we misname. Also what if an object needs >1?
 No that's not a huge concern. We can do a warn log if needed
 
+Draft 1 done, but it feels brittle. We shouldn't assume it's just player overlaps right?
+Well, why not make different classes? Like a SnailTrailOverlap etc.? That's fairly easy for search...
+eh, because it's inheritance vs composition? Frankly I like the idea of one overlap class with flavors
+Such as "fresh" vs "any overlap", and just a first/second item
+the tough part is how do we filter those? actually not that hard! consider the real use cases:
 
+> I'm a crop. Find all overlap events with (me + a player ball) which are fresh. -> give points, level down
+> I'm a LevelUpOnHit item. I'm looking for all new overlaps between crops, player balls which are fresh...
+> I'm SnailTrailItem. Looking for all (not new) overlaps between a snail trail segment and a crop -> try level up
+> eh for that last one, it's maybe simpler for SnailTrailSegment to do an overlap check
+> but I can imagine an item that's like "look for all overlaps of XYZ on crops, spawn a laser"
+> A "looking glass" hovering over the board
+
+Maybe on area enter/exit is a good enough? Do we really need the extra checks?
+Simpler is better, but we shouldn't give up a core design feature for the sake of slightly simpler logic
+
+just build it dude. don't solve phantasm problems
 
 ---
 
