@@ -9,6 +9,6 @@ func activate(state: MatchState):
 			var overlap := event as ItemSystem.FreshOverlapEvent
 			# TODO: should not depend on first/second order bruh
 			if overlap.first is Roller and overlap.second is Crop:
-				if _random.randf() < 0.2:
-					events.append(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(overlap.second)))
+				if _random.randf() < 0.1:
+					events.append(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(overlap.second), overlap.first))
 	return events

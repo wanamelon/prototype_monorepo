@@ -6,8 +6,8 @@ var _bounce_off_everything_duration: float = 0.0
 
 func activate(state: MatchState):
 	var events: Array[ItemEvent] = []
-	if state.tick % 60 == 0 and Utils.RNG.randf() < 1.1 and _bounce_off_everything_duration <= 0:
-		_bounce_off_everything_duration = 0.5
+	if state.tick % 60 == 0 and Utils.RNG.randf() < 0.1 and _bounce_off_everything_duration <= 0:
+		_bounce_off_everything_duration = 2.5
 	if _bounce_off_everything_duration > 0:
 		for item in state.items:
 			# TODO: only do this for STATIC grid items (or keep it as crop?)!!

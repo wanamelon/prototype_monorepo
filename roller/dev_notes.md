@@ -752,13 +752,14 @@ my liege!
 
 migrating to new system
 
+[ ] inventory slots
 [ ] pass events back via a signal / private instance method (no need for return array)
 [ ] move game board to new system
 [ ] crop sounds -> shared audio player node?
 [ ] figure out less boilerplate overlap event
 [ ] implement grow from snail trail
 [ ] clean up old crop code
-[ ] ball: plan out the migration
+[X] ball: plan out the migration
 [X] make that bouncy more generic
 [X] BOUNCE: destroying static bodies when gone
 [X] BOUNCE: basic triggering + creating static bodies for all items
@@ -772,6 +773,42 @@ migrating to new system
 [X] points on hit
 [X] downlevel on hit
 [X] despawn on level zero
+
+---
+
+About handling item spawns...
+
+2 cases:
+
+- the items we start out with (all inventory or hidden)
+- adding new items in midst of a round
+
+Right now, former we are handling purely via "add child"
+But for roller, we need to put that in map somewhere, or perhaps even have the player place it!
+And later on when we have inventory slots, will need to spawn items there
+
+Should we keep the 2 system separate or unify?
+
+- Maybe a "spawnOnBegin" item which inits/places all our start items
+- or make spawns totally config-driven rather than code-driven
+    - the start-of-round items will just be an item enum + a location? hmm but we need params also (crop level?)
+
+like yeah we'd want to influence what level crops spawn with, that's a core item mechanic. hmm but doable via system 2
+other cases: items with a consumable amount of lives, persisting across rounds like the soul from luck landlord
+yeah but that's not necessary yet
+
+ok what if:
+
+```
+ItemDef
+    ItemId enum
+    Location
+    params dict { ... } ( used for instancing )
+```
+
+Or perhaps ItemDef has subclasses, rather than protobuf-style enum? do we need that though?
+then all we need is a way to decide the position
+hehe just hardcoded it for now, solves problem
 
 ---
 

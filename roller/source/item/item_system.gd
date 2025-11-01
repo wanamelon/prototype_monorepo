@@ -1,4 +1,4 @@
-class_name ItemSystem extends Node
+class_name ItemSystem extends Node2D
 
 signal score_changed(new_score: int)
 signal match_finished()
@@ -34,7 +34,9 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 		ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 			return BounceOffEverything.new()
 		ItemDef.ItemId.ROLLER:
-			return Roller.instance()
+			var roller := Roller.instance()
+			roller.position = Vector2(1920, 1080) / 2.0
+			return roller
 		_:
 			return AddStaminaItem.new()
 
@@ -130,7 +132,7 @@ func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
 					var overlap_key = stable_overlap_key(roller, overlapped_item)
 					var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
 					if (last_overlap_state.last_hit_phase != roller._bounce_count 
-							and match_state.tick > last_overlap_state.last_hit_tick + 30):
+							and match_state.tick > last_overlap_state.last_hit_tick + 10):
 						overlaps.append(FreshOverlapEvent.new(roller, overlapped_item))
 						last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
 							roller._bounce_count, match_state.tick)
@@ -171,14 +173,6 @@ class AddStaminaItem extends Item:
 			_added_stamina = true
 		return [] as Array[ItemEvent]
 
-#class CropItem extends Item:
-#
-#	func spawn():
-#		pass
-#
-#	func activate(state: MatchState):
-#		return [] as Array[ItemEvent]
-
 @abstract
 class Location extends RefCounted:
 	pass
@@ -195,6 +189,14 @@ class UnplacedLocation extends Location:
 @abstract
 class ItemEvent extends RefCounted:
 	pass
+
+class ItemDestroyed extends ItemEvent:
+	var destroyer: Item
+	var victim: Item
+	
+	func _init(destroyer: Item, victim: Item):
+		self.destroyer = destroyer
+		self.victim = victim
 
 class BounceEvent extends ItemEvent:
 	var roller: Roller
@@ -230,15 +232,19 @@ class SpawnEvent extends ItemEvent:
 
 class DespawnEvent extends ItemEvent:
 	var target: Item
-	func _init(target: Item):
+	var source: Item
+	func _init(target: Item, source: Item):
 		self.target = target
+		self.source = source
 
 class LevelChangeEvent extends ItemEvent:
 	var levels: int
 	var target: TargetingConfig
-	func _init(levels: int, target: TargetingConfig):
+	var source: Item
+	func _init(levels: int, target: TargetingConfig, source: Item):
 		self.levels = levels
 		self.target = target
+		self.source = source
 
 @abstract
 class TargetingConfig extends RefCounted:

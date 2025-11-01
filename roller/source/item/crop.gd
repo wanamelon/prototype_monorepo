@@ -31,7 +31,7 @@ func _try_level_up_on_tick(state: MatchState, o_events: Array[ItemEvent]):
 	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
 	var growth_probability_per_second := 1.0 / expected_seconds_until_growth
 	if rng.randf() < (state.delta * growth_probability_per_second):
-		o_events.append(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self)))
+		o_events.append(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self), self))
 
 func _level_down_if_hit(state: MatchState, o_events: Array[ItemEvent]):
 	for event in state.last_tick_events:
@@ -41,7 +41,7 @@ func _level_down_if_hit(state: MatchState, o_events: Array[ItemEvent]):
 			if overlap.first is Roller and overlap.second == self:
 				var roller := overlap.first as Roller
 				o_events.append(ItemSystem.LevelChangeEvent.new(
-					-roller.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self)))
+					-roller.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self), overlap.first))
 
 func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
 	var total_positive_level_change: int = 0
@@ -69,8 +69,24 @@ func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
 			o_events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 			level -= 1
 			if level <= 0:
-				o_events.append(ItemSystem.DespawnEvent.new(self))
+				o_events.append(ItemSystem.DespawnEvent.new(self, _find_largest_damage_source(state)))
 				break
+
+func _find_largest_damage_source(state: MatchState) -> Item:
+	var damage_per_source := {}
+	for event in state.last_tick_events:
+		if event is ItemSystem.LevelChangeEvent:
+			var level_change := event as ItemSystem.LevelChangeEvent
+			if (level_change.target is ItemSystem.SpecificItem and level_change.target.target == self):
+				if level_change.levels < 0:
+					damage_per_source[level_change.source] = damage_per_source.get(level_change.source, 0) + abs(level_change.levels)
+	var max_damage = 0
+	var max_item = null
+	for source in damage_per_source:
+		if damage_per_source[source] > max_damage:
+			max_item = source
+			max_damage = damage_per_source[source]
+	return max_item
 
 func _compute_point_value():
 	return 2 ** (level - 1)
