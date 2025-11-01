@@ -35,6 +35,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return SpeedBuffOnDestroy.instance()
 		ItemDef.ItemId.INCREASE_SIZE:
 			return SizeBuffOnDestroy.new()
+		ItemDef.ItemId.SPAWN_RANDOM_TILE_OBJECT:
+			return SpawnCropOnBounce.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0

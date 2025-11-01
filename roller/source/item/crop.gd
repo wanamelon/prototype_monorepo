@@ -1,6 +1,7 @@
 class_name Crop extends ItemSystem.Item
 
 const CROP_SCENE: PackedScene = preload("res://source/item/crop.tscn")
+const MAX_LEVEL: int = 20
 const THOUSANDS_LEVEL_SUFFIXES = ["", "K", "M"]
 const DIGITS_PER_THOUSAND_LEVEL: int = 3
 const LEVEL_COLORS := [
@@ -17,8 +18,10 @@ const LEVEL_COLORS := [
 var rng := RandomNumberGenerator.new()
 var level: int = 1
 
-static func instance() -> Crop:
-	return CROP_SCENE.instantiate()
+static func instance(mean_level: float = 1.0, level_std: float = 1.0) -> Crop:
+	var crop: Crop = CROP_SCENE.instantiate()
+	crop.level = clampi(int(round(Utils.RNG.randfn(mean_level, level_std))), 1, MAX_LEVEL)
+	return crop
 
 func activate(state: MatchState):
 	_try_level_up_on_tick(state)
@@ -61,7 +64,7 @@ func _apply_level_changes(state: MatchState):
 		_add_event(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 	var net_level_change := total_positive_level_change + total_negative_level_change
 	if net_level_change > 0:
-		level = min(20, level + net_level_change)
+		level = min(MAX_LEVEL, level + net_level_change)
 	else:
 		for i in range(abs(net_level_change)):
 			_add_event(ItemSystem.GivePointsEvent.new(_compute_point_value()))
