@@ -774,6 +774,28 @@ migrating to new system
 [X] downlevel on hit
 [X] despawn on level zero
 
+
+---
+
+Status effects
+
+examples:
+
+- speed buff / size buff work basically the same
+    - modify some property by some amount
+    - have a duration
+    - can stack
+
+The easiest for now is something like { effectType, duration }
+maybe a max stack size, but that can be done on player side tbh
+
+later, we'll want an ItemTarget config (one specific item, many items)
+but for now AddStatusEffect will hardcode to one specific item
+
+and I think a more generic version would be a PropertyModifier with some expression
+And even more generically, properties can be objects with tags, clamp bounds, signals on change, etc.
+but that's not needed for now. Generate the "data" (bad repetitive code) and then see the pattern. Code is alive!
+
 ---
 
 About handling item spawns...

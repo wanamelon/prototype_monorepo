@@ -21,7 +21,7 @@ To start, a bare minimum one which just does the existing functionalities
 
 const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 
-@onready var _original_size: float = ($CharacterBody2D/CollisionShape2D.shape as CircleShape2D).radius
+@onready var _original_collision_shape := $CharacterBody2D/CollisionShape2D.shape as CircleShape2D
 @onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
 # TODO: belong inside character body?
 var _speed: float = 400.0
@@ -29,8 +29,6 @@ var _bounce_count: int = 0
 var _velocity: Vector2
 var _stamina_seconds: float = 10
 var _max_stamina := _stamina_seconds
-var _speed_buff_durations: Array[float] = []
-var _size_buff_durations: Array[float] = []
 var finished := false
 
 static func instance() -> Roller:
@@ -62,47 +60,30 @@ func activate(state: MatchState):
 			finished = true
 			events.append(ItemSystem.DespawnEvent.new(self, self))
 	else:
-		_apply_speed_buffs(state.delta)
-	_apply_size_buffs(state.delta)
+		_apply_speed_buffs()
+	_apply_size_buffs()
 	_stamina_seconds -= state.delta
-	_add_buffs_on_destroy(state.last_tick_events)
 	return events
 
-func _add_buffs_on_destroy(events: Array[ItemSystem.ItemEvent]):
-	for event in events:
-		if event is ItemSystem.DespawnEvent:
-			var despawn := event as ItemSystem.DespawnEvent
-			if despawn.source is Roller:
-				_speed_buff_durations.append(2.5)
-				if _size_buff_durations.size() < 4 and Utils.RNG.randf() < 0.2:
-					_size_buff_durations.append(1.5)
-
-func _apply_speed_buffs(delta):
+func _apply_speed_buffs():
 	var speed_with_buffs := _speed
-	var new_speed_buff_durations: Array[float] = []
-	for duration in _speed_buff_durations:
-		speed_with_buffs += 100 * min(1, duration)
-		speed_with_buffs = min(speed_with_buffs, 10_000)
-		var decremented = duration - delta
-		if decremented > 0:
-			new_speed_buff_durations.append(decremented)
-	_speed_buff_durations = new_speed_buff_durations
+	for effect in status_effects:
+		if effect.id == ItemSystem.StatusEffectId.SPEED_BUFF:
+			speed_with_buffs += effect.intensity * min(1, effect.duration_sec)
+			speed_with_buffs = min(speed_with_buffs, 10_000)
 	_velocity = _velocity.normalized() * speed_with_buffs
 
-func _apply_size_buffs(delta):
-	var size_buff: float = 0
-	var new_size_buff_durations: Array[float] = []
-	for duration in _size_buff_durations:
-		size_buff += min(5, 5 * duration)
-		var decremented = duration - delta
-		if decremented > 0:
-			new_size_buff_durations.append(decremented)
-	var capped_size_buff: float = min(20, size_buff)
-	var size_with_buffs: float = _original_size + capped_size_buff
-	_size_buff_durations = new_size_buff_durations
-	$CharacterBody2D/CollisionShape2D.shape.radius = size_with_buffs
+func _apply_size_buffs():
+	var size_buff_px: float = 0
+	for effect in status_effects:
+		if effect.id == ItemSystem.StatusEffectId.SIZE_BUFF:
+			size_buff_px += effect.intensity * min(1, effect.duration_sec)
+			size_buff_px = min(20, size_buff_px)
+	var expanded_collider: CircleShape2D = _original_collision_shape.duplicate_deep()
+	expanded_collider.radius += size_buff_px
+	$CharacterBody2D/CollisionShape2D.shape = expanded_collider
 	var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
-	var desired_sprite_radius_px: float = og_sprite_radius_px + capped_size_buff
+	var desired_sprite_radius_px: float = og_sprite_radius_px + size_buff_px
 	$Sprite2D.scale = (desired_sprite_radius_px / og_sprite_radius_px) * _original_sprite_scale
 
 func _process(delta):

@@ -13,12 +13,10 @@ func _init(item_defs: Array[ItemDef], game_board: GameBoard, points: int):
 	_game_board = game_board
 	_physics_calculator = StatefulPhysicsCalculator.new()
 	add_child(_physics_calculator)
-	var item_root := Node2D.new()
-	add_child(item_root)
 	var items: Array[Item] = []
 	for item_def in item_defs:
 		var item := _item_for_id(item_def.item_id)
-		item._inject(_physics_calculator, item_root)
+		item._inject(_physics_calculator, self)
 		add_child(item)
 		items.append(item)
 	_match_state = MatchState.new(0, points, items, [] as Array[ItemEvent])
@@ -33,6 +31,10 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return CropSpawner.new()
 		ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 			return BounceOffEverything.new()
+		ItemDef.ItemId.SPEED_BUFF_ON_DESTROY:
+			return SpeedBuffOnDestroy.new()
+		ItemDef.ItemId.INCREASE_SIZE:
+			return SizeBuffOnDestroy.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0
@@ -49,6 +51,7 @@ func _physics_process(__):
 		events.append_array(new_events)
 	_apply_events(events)
 	_check_end_condition()
+	_advance_status_effect_timers()
 	_match_state.last_tick_events = events
 	_match_state.tick += 1
 
@@ -60,6 +63,15 @@ func _check_end_condition():
 	if active_roller_count <= 0:
 		match_finished.emit()
 
+func _advance_status_effect_timers():
+	for item: Item in _match_state.items:
+		var active_effects: Array[StatusEffect] = []
+		for effect in item.status_effects:
+			effect.duration_sec = effect.duration_sec - _match_state.delta
+			if effect.duration_sec > 0:
+				active_effects.append(effect)
+		item.status_effects = active_effects
+
 func _apply_events(events: Array[ItemEvent]):
 	for event in events:
 		if event is SpawnEvent:
@@ -67,14 +79,18 @@ func _apply_events(events: Array[ItemEvent]):
 			var spawn := event as SpawnEvent
 			var new_item: Item = spawn.factory.call()
 			_game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
+			new_item._inject(_physics_calculator, self)
 			_match_state.items.append(new_item)
 		elif event is DespawnEvent:
 			_match_state.items.erase(event.target)
 			event.target.queue_free()
-		if event is GivePointsEvent:
+		elif event is GivePointsEvent:
 			var give_points_event := event as GivePointsEvent
 			_match_state.points += give_points_event.points
 			score_changed.emit(_match_state.points)
+		elif event is AddStatusEffect:
+			var add_effect := event as AddStatusEffect
+			event.target.status_effects.append(event.effect)
 
 func get_score() -> int:
 	return _match_state.points
@@ -145,6 +161,7 @@ class Item extends Node2D:
 	
 	var _physics_calculator: StatefulPhysicsCalculator
 	var _item_root: Node2D
+	var status_effects: Array[StatusEffect] = []
 	
 	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D):
 		_physics_calculator = physics_calculator
@@ -178,13 +195,35 @@ class UnplacedLocation extends Location:
 class ItemEvent extends RefCounted:
 	pass
 
-class ItemDestroyed extends ItemEvent:
-	var destroyer: Item
-	var victim: Item
+enum StatusEffectId {
+	SPEED_BUFF,
+	SIZE_BUFF
+}
+
+class StatusEffect extends RefCounted:
+	var id: StatusEffectId
+	var intensity: float
+	var duration_sec: float
+	func _init(id: StatusEffectId, intensity: float, duration_sec: float):
+		self.id = id
+		self.intensity = intensity
+		self.duration_sec = duration_sec
+
+class AddStatusEffect extends ItemEvent:
+	var effect: StatusEffect
+	var target: Item
 	
-	func _init(destroyer: Item, victim: Item):
-		self.destroyer = destroyer
-		self.victim = victim
+	func _init(effect: StatusEffect, target: Item):
+		self.effect = effect
+		self.target = target
+
+#class ItemDestroyed extends ItemEvent:
+#	var destroyer: Item
+#	var victim: Item
+#	
+#	func _init(destroyer: Item, victim: Item):
+#		self.destroyer = destroyer
+#		self.victim = victim
 
 class BounceEvent extends ItemEvent:
 	var roller: Roller
