@@ -26,7 +26,7 @@ func _init(item_defs: Array[ItemDef], game_board: GameBoard, points: int):
 func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 	match item_id:
 		ItemDef.ItemId.ADD_STAMINA:
-			return AddStaminaItem.new()
+			return AddStamina.new()
 		ItemDef.ItemId.LEVEL_UP_ITEM_ON_TOUCH:
 			return LevelUpCropOnHit.new()
 		ItemDef.ItemId.SPAWN_CROPS_ON_START:
@@ -38,7 +38,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			roller.position = Vector2(1920, 1080) / 2.0
 			return roller
 		_:
-			return AddStaminaItem.new()
+			assert(false, "Unknown item id %s" % item_id)
+			return null
 
 func _physics_process(__):
 	var events: Array[ItemEvent] = []
@@ -159,19 +160,6 @@ class Item extends Node2D:
 	
 	# The core of the logic! Evaluate triggers and perform actions
 	@abstract func activate(state: MatchState) -> Array[ItemEvent]
-
-class AddStaminaItem extends Item:
-	var _added_stamina := false
-	
-	func activate(state: MatchState):
-		if not _added_stamina:
-			# TODO: do as status effect
-			for item in state.items:
-				if item is Roller:
-					item._stamina_seconds += 10
-					item._max_stamina += 10
-			_added_stamina = true
-		return [] as Array[ItemEvent]
 
 @abstract
 class Location extends RefCounted:
