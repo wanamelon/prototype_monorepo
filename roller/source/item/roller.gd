@@ -6,12 +6,13 @@ To start, a bare minimum one which just does the existing functionalities
 [X] basic wiring item spawn
 [X] move around
 [X] Stamina system
-[ ] signal for round end (stamina gone)
+[X] fix progress bar gone?
+[X] signal for round end (stamina gone)
+[X] eliminate refs to old player_ball
+[X] generate bounces events
 [ ] spawn the ball in a sane place
-[ ] eliminate refs to old player_ball
-[ ] generate bounces?
-[ ] item destroyed event
-[ ]
+[ ] decide how wire item destroyed event
+[ ] add back in on-kill abilities
 """
 
 const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
@@ -20,7 +21,7 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
-var _stamina_seconds: float = 10
+var _stamina_seconds: float = 1
 var _max_stamina := _stamina_seconds
 var finished := false
 
@@ -51,3 +52,8 @@ func activate(state: MatchState):
 			events.append(ItemSystem.DespawnEvent.new(self))
 	_stamina_seconds -= state.delta
 	return events
+
+func _process(delta):
+	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
+	# TODO: Wire this somehow?
+	#$BouncingModeSprite.visible = should_bounce_off_everything()
