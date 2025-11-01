@@ -12,6 +12,7 @@ enum ItemId {
 	SNAIL_TRAIL_OF_LEVEL_UP_SLIME_TIME_BASED,
 	MORE_DAMAGE,
 	SPAWN_CROPS_ON_START,
+	ROLLER,
 }
 
 @export var item_id: ItemId

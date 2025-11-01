@@ -1,6 +1,7 @@
 class_name ItemSystem extends Node
 
 signal score_changed(new_score: int)
+signal match_finished()
 
 const TICK_DELTA: float = 1.0 / 60.0
 
@@ -8,7 +9,7 @@ var _game_board: GameBoard
 var _match_state: MatchState
 var _physics_calculator: StatefulPhysicsCalculator
 
-func _init(item_defs: Array[ItemDef], player_ball: PlayerBall, game_board: GameBoard, points: int):
+func _init(item_defs: Array[ItemDef], game_board: GameBoard, points: int):
 	_game_board = game_board
 	_physics_calculator = StatefulPhysicsCalculator.new()
 	add_child(_physics_calculator)
@@ -18,8 +19,9 @@ func _init(item_defs: Array[ItemDef], player_ball: PlayerBall, game_board: GameB
 	for item_def in item_defs:
 		var item := _item_for_id(item_def.item_id)
 		item._inject(_physics_calculator, item_root)
+		add_child(item)
 		items.append(item)
-	_match_state = MatchState.new(0, points, player_ball, items, [] as Array[ItemEvent])
+	_match_state = MatchState.new(0, points, items, [] as Array[ItemEvent])
 
 func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 	match item_id:
@@ -31,6 +33,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return CropSpawner.new()
 		ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 			return BounceOffEverything.new()
+		ItemDef.ItemId.ROLLER:
+			return Roller.instance()
 		_:
 			return AddStaminaItem.new()
 
@@ -41,8 +45,17 @@ func _physics_process(__):
 		var new_events := item.activate(_match_state)
 		events.append_array(new_events)
 	_apply_events(events)
+	_check_end_condition()
 	_match_state.last_tick_events = events
 	_match_state.tick += 1
+
+func _check_end_condition():
+	var active_roller_count: int = 0
+	for item: Item in _match_state.items:
+		if item is Roller and not (item as Roller).finished:
+			active_roller_count += 1
+	if active_roller_count <= 0:
+		match_finished.emit()
 
 func _apply_events(events: Array[ItemEvent]):
 	for event in events:
@@ -68,21 +81,19 @@ static func find_parent_item(node: Node) -> ItemSystem.Item:
 	while not current_node is ItemSystem.Item:
 		current_node = current_node.get_parent()
 		if current_node == null:
-			assert(false, "No item parent for node %s" % node.get_path())
+			return null
 	return current_node
 
 class MatchState:
 	var tick: int
 	var points: int
-	var player_ball: PlayerBall
 	var items: Array[Item]
 	var last_tick_events: Array[ItemEvent]
 	var delta: float = 1.0 / 60.0
 	
-	func _init(tick: int, points: int, player_ball: PlayerBall, items: Array[Item], events: Array[ItemEvent]):
+	func _init(tick: int, points: int, items: Array[Item], events: Array[ItemEvent]):
 		self.tick = tick
 		self.points = points
-		self.player_ball = player_ball
 		self.items = items
 		self.last_tick_events = events
 
@@ -108,17 +119,21 @@ func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
 			if child.name.to_lower() == "hitbox":
 				assert(child is Area2D, "Hitboxes should be area2d!")
 				hitbox_to_item[child] = item
-	var player_hitbox: Area2D = match_state.player_ball.get_node("Hitbox")
-	for overlapped in player_hitbox.get_overlapping_areas():
-		var overlapped_item: Item = hitbox_to_item.get(overlapped)
-		if overlapped_item != null:
-			var overlap_key = stable_overlap_key(match_state.player_ball, overlapped_item)
-			var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
-			if (last_overlap_state.last_hit_phase != match_state.player_ball._bounce_count 
-					and match_state.tick > last_overlap_state.last_hit_tick + 30):
-				overlaps.append(FreshOverlapEvent.new(match_state.player_ball, overlapped_item))
-				last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
-					match_state.player_ball._bounce_count, match_state.tick)
+#	var rollers = Utils.filter(match_state.items, func (i): i is Roller)
+	for item in match_state.items:
+		if item is Roller:
+			var roller := item as Roller 
+			var player_hitbox: Area2D = roller.get_node("Hitbox")
+			for overlapped in player_hitbox.get_overlapping_areas():
+				var overlapped_item: Item = hitbox_to_item.get(overlapped)
+				if overlapped_item != null:
+					var overlap_key = stable_overlap_key(roller, overlapped_item)
+					var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
+					if (last_overlap_state.last_hit_phase != roller._bounce_count 
+							and match_state.tick > last_overlap_state.last_hit_tick + 30):
+						overlaps.append(FreshOverlapEvent.new(roller, overlapped_item))
+						last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
+							roller._bounce_count, match_state.tick)
 	return overlaps
 
 @abstract
@@ -148,19 +163,12 @@ class AddStaminaItem extends Item:
 	
 	func activate(state: MatchState):
 		if not _added_stamina:
-			state.player_ball._stamina_seconds += 10
-			state.player_ball._max_stamina += 10
+			# TODO: do as status effect
+			for item in state.items:
+				if item is Roller:
+					item._stamina_seconds += 10
+					item._max_stamina += 10
 			_added_stamina = true
-		return [] as Array[ItemEvent]
-
-class PlayerBallItem extends Item:
-	func spawn():
-		var circle = CircleShape2D.new()
-		circle.radius = 48
-		# TODO: fill in position
-		_physics_calculator.provision_physics_body(self, Vector2(), circle, false)
-	
-	func activate(state: MatchState):
 		return [] as Array[ItemEvent]
 
 #class CropItem extends Item:
@@ -189,7 +197,12 @@ class ItemEvent extends RefCounted:
 	pass
 
 class BounceEvent extends ItemEvent:
-	pass
+	var roller: Roller
+	var collided_item: Item # CAN BE NULL!
+	
+	func _init(roller: Roller, collided_item: Item):
+		self.roller = roller
+		self.collided_item = collided_item
 
 class FreshOverlapEvent extends ItemEvent:
 	var first

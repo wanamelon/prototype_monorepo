@@ -5,7 +5,6 @@ const GAME_BOARD_SCENE: PackedScene = preload("res://source/game_board.tscn")
 var round: int = 0
 var points_quota: int
 var point_progress_bar_tween: Tween
-var _player_ball: PlayerBall
 var _lives_remaining: int = 2
 @export var item_configs: Array[ItemDef]
 var _item_system: ItemSystem = null
@@ -13,7 +12,7 @@ var _item_system: ItemSystem = null
 func _ready():
 	round_setup()
 
-func _on_player_finish(points: int):
+func _on_player_finish():
 	if _lives_remaining <= 0:
 		print("Ended with points: ", _item_system.get_score())
 		if _item_system.get_score() >= points_quota:
@@ -35,12 +34,10 @@ func _on_player_finish(points: int):
 func stage_setup():
 	$ProgressDisplay/LivesLabel.text = str(_lives_remaining) + " Lives Left"
 	$GameBoard.generate_grid_items(round)
-	_player_ball = $GameBoard.spawn_ball(item_configs)
-	_player_ball.finished.connect(_on_player_finish)
-	_player_ball.gained_points.connect(_on_gain_points)
 	var current_score := 0 if _item_system == null else _item_system.get_score()
-	_item_system = ItemSystem.new(item_configs, _player_ball, $GameBoard, current_score)
+	_item_system = ItemSystem.new(item_configs, $GameBoard, current_score)
 	_item_system.score_changed.connect(_on_score_changed)
+	_item_system.match_finished.connect(_on_player_finish)
 	add_child(_item_system)
 
 func round_setup():
@@ -73,16 +70,6 @@ func generate_choices():
 func format_enum_name(enum_name: String) -> String:
 	var formatted_name = enum_name.to_lower().replace("_", " ")
 	return formatted_name.capitalize()
-
-func _on_gain_points(points: int):
-	return
-	_current_score += points
-	if point_progress_bar_tween:
-		point_progress_bar_tween.kill()
-	point_progress_bar_tween = create_tween()
-	var progress_percent: float = 100.0 * _current_score / points_quota
-	point_progress_bar_tween.tween_property($ProgressDisplay/ProgressBar, "value", progress_percent, 0.5)
-	$ProgressDisplay/Label.text = "%d / %d" % [_current_score , points_quota]
 
 func _on_score_changed(new_score: int):
 	if point_progress_bar_tween:

@@ -38,10 +38,10 @@ func _level_down_if_hit(state: MatchState, o_events: Array[ItemEvent]):
 		if event is ItemSystem.FreshOverlapEvent:
 			var overlap := event as ItemSystem.FreshOverlapEvent
 			# TODO: should not depend on first/second order bruh
-			if overlap.first is PlayerBall and overlap.second == self:
-				var player := overlap.first as PlayerBall
+			if overlap.first is Roller and overlap.second == self:
+				var roller := overlap.first as Roller
 				o_events.append(ItemSystem.LevelChangeEvent.new(
-					-player.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self)))
+					-roller.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self)))
 
 func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
 	var total_positive_level_change: int = 0
@@ -69,7 +69,6 @@ func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
 			o_events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 			level -= 1
 			if level <= 0:
-				state.player_ball.on_tile_destroyed()
 				o_events.append(ItemSystem.DespawnEvent.new(self))
 				break
 
@@ -86,20 +85,3 @@ func _process(delta):
 	var num_digits = str(points).length()
 	$LevelLabel.text = str(normalized) + THOUSANDS_LEVEL_SUFFIXES[thousands_level]
 	$LevelLabel.set("theme_override_colors/font_color", LEVEL_COLORS[min(len(LEVEL_COLORS)- 1, num_digits)])
-
-#func toggle_bounce(should: bool):
-	#if should:
-		#var overlap_ball_query = PhysicsShapeQueryParameters2D.new()
-		#overlap_ball_query.shape = $Hitbox/CollisionShape2D.shape
-		#overlap_ball_query.transform = global_transform
-		#overlap_ball_query.collision_mask = 1
-		#overlap_ball_query.collide_with_areas = false
-		#var overlaps = get_world_2d().direct_space_state.intersect_shape(overlap_ball_query)
-		#if overlaps.is_empty():
-			#$StaticBody2D/CollisionShape2D.disabled = false
-	#else:
-		#$StaticBody2D/CollisionShape2D.disabled = true
-
-#func try_level_up_from_snail_trail(chance: float):
-	#if rng.randf() < chance:
-		#_level_up()

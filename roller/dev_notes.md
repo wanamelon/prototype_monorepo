@@ -752,9 +752,12 @@ my liege!
 
 migrating to new system
 
+[ ] pass events back via a signal / private instance method (no need for return array)
+[ ] move game board to new system
 [ ] crop sounds -> shared audio player node?
 [ ] figure out less boilerplate overlap event
 [ ] implement grow from snail trail
+[ ] clean up old crop code
 [ ] ball: plan out the migration
 [X] make that bouncy more generic
 [X] BOUNCE: destroying static bodies when gone
