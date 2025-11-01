@@ -28,7 +28,7 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
-var _stamina_seconds: float = 10
+var _stamina_seconds: float = 5
 var _max_stamina := _stamina_seconds
 var finished := false
 
@@ -61,8 +61,16 @@ func activate(state: MatchState):
 			_add_event(ItemSystem.DespawnEvent.new(self, self))
 	else:
 		_apply_speed_buffs()
+	_apply_stamina_buffs()
 	_apply_size_buffs()
 	_stamina_seconds -= state.delta
+
+func _apply_stamina_buffs():
+	for effect in status_effects:
+		if effect.id == ItemSystem.StatusEffectId.STAMINA_BUFF:
+			_stamina_seconds += effect.intensity
+			_max_stamina += effect.intensity
+			status_effects.erase(effect)
 
 func _apply_speed_buffs():
 	var speed_with_buffs := _speed

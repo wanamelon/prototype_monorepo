@@ -206,7 +206,8 @@ class ItemEvent extends RefCounted:
 
 enum StatusEffectId {
 	SPEED_BUFF,
-	SIZE_BUFF
+	SIZE_BUFF,
+	STAMINA_BUFF
 }
 
 class StatusEffect extends RefCounted:

@@ -1,12 +1,10 @@
 class_name AddStamina extends ItemSystem.Item
 
-var _added_stamina := false
+var _items_added_stamina_for = []
 
 func activate(state: MatchState):
-	if not _added_stamina:
-		# TODO: do as status effect
-		for item in state.items:
-			if item is Roller:
-				item._stamina_seconds += 10
-				item._max_stamina += 10
-		_added_stamina = true
+	for item in state.items:
+		if item is Roller and not item in _items_added_stamina_for:
+			_add_event(ItemSystem.AddStatusEffect.new(
+				ItemSystem.StatusEffect.new(ItemSystem.StatusEffectId.STAMINA_BUFF, 2, 1e9), item))
+			_items_added_stamina_for.append(item)
