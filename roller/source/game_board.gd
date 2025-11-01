@@ -2,7 +2,7 @@ class_name GameBoard extends Node2D
 
 const PLAYER_BALL_SCENE: PackedScene = preload("res://source/player_ball.tscn")
 const TILE_OBJECT_SCENE: PackedScene = preload("res://source/tile_object.tscn")
-const BOUNCE_PILLAR_SCENE: PackedScene = preload("res://source/bounce_pillar.tscn")
+const BOUNCE_PILLAR_SCENE: PackedScene = preload("res://source/item/bounce_pillar.tscn")
 var _random := RandomNumberGenerator.new()
 var _player_ball: PlayerBall
 var _item_per_cell := {} # prevents race condition overlap, adding 2 items in one tick

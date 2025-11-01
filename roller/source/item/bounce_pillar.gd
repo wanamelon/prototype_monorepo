@@ -3,7 +3,7 @@ class_name BouncePillar extends ItemSystem.Item
 var hit_points: int = 5
 
 static func instance() -> BouncePillar:
-	return load("res://source/bounce_pillar.tscn").instantiate()
+	return load("res://source/item/bounce_pillar.tscn").instantiate()
 
 func activate(state: MatchState):
 	if ($StaticBody2D/CollisionShape2D.disabled

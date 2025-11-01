@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bej1km1vqhxtr"]
 
-[ext_resource type="Script" uid="uid://cam7syiypokk8" path="res://source/bounce_pillar.gd" id="1_kf50q"]
+[ext_resource type="Script" uid="uid://cam7syiypokk8" path="res://source/item/bounce_pillar.gd" id="1_kf50q"]
 [ext_resource type="Texture2D" uid="uid://cltr6605421w6" path="res://assets/rolling_ball/ball_red_large.png" id="2_kf50q"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kf50q"]
