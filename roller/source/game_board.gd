@@ -45,7 +45,7 @@ func _spawn_item(item: Node2D, cell: Vector2i):
 	item.tree_exited.connect(func (): _item_per_cell.erase(cell))
 	if item is BouncePillar:
 		$PlacementAudioPlayer.play()
-	elif item is TileObject:
+	elif item is Crop:
 		$SpawnCoinAudioPlayer.play()
 
 func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):

@@ -1,22 +1,19 @@
-class_name BouncePillar extends Node2D
+class_name BouncePillar extends ItemSystem.Item
 
 var hit_points: int = 5
 
-func _ready():
-	$Hitbox.body_entered.connect(self._on_body_entered)
+static func instance() -> BouncePillar:
+	return load("res://source/bounce_pillar.tscn").instantiate()
 
-func can_place(global_pos: Vector2, world_2d):
-	var query = PhysicsShapeQueryParameters2D.new()
-	query.shape = $Hitbox/CollisionShape2D.shape
-	query.transform = Transform2D(0, global_pos) 
-	query.collision_mask = 1
-	query.collide_with_areas = false
-	var overlaps = world_2d.direct_space_state.intersect_shape(query)
-	return overlaps.is_empty()
-
-func _on_body_entered(body):
-	if body is PlayerBall:
-		hit_points -= 1
-	if hit_points <= 0:
-		body.on_tile_destroyed()
-		queue_free()
+func activate(state: MatchState):
+	if ($StaticBody2D/CollisionShape2D.disabled
+		and _item_root.is_safe_to_place($StaticBody2D/CollisionShape2D.shape, global_position)):
+		$StaticBody2D/CollisionShape2D.disabled = false
+	for event in state.last_tick_events:
+		if event is ItemSystem.FreshOverlapEvent:
+			var overlap := event as ItemSystem.FreshOverlapEvent
+			if overlap.first is Roller and overlap.second == self:
+				hit_points -= 1
+				if hit_points <= 0:
+					_add_event(ItemSystem.DespawnEvent.new(self, overlap.first))
+					break

@@ -20,6 +20,7 @@ texture = ExtResource("2_kf50q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource("CircleShape2D_kf50q")
+disabled = true
 
 [node name="Hitbox" type="Area2D" parent="."]
 
