@@ -13,7 +13,7 @@ func activate(state: MatchState):
 			# TODO: only do this for STATIC grid items (or keep it as crop?)!!
 			if (item is Crop 
 					and not item.has_node(BOUNCE_STATIC_BODY_NAME)
-					and not _would_overlap_existing_body(item.global_transform)):
+					and _item_root.is_safe_to_place(_collider_circle(), item.global_position)):
 				item.add_child(BOUNCE_BODY_SCENE.instantiate())
 	else:
 		for item in state.items:
@@ -21,13 +21,7 @@ func activate(state: MatchState):
 				item.remove_child(item.get_node(BOUNCE_STATIC_BODY_NAME))
 	_bounce_off_everything_duration -= state.delta
 
-func _would_overlap_existing_body(new_body_global_transform: Transform2D):
+func _collider_circle():
 	var collider_circle := CircleShape2D.new()
 	collider_circle.radius = 45
-	var overlap_ball_query = PhysicsShapeQueryParameters2D.new()
-	overlap_ball_query.shape = collider_circle
-	overlap_ball_query.transform = new_body_global_transform
-	overlap_ball_query.collision_mask = 1
-	overlap_ball_query.collide_with_areas = false
-	var overlaps = _item_root.get_world_2d().direct_space_state.intersect_shape(overlap_ball_query)
-	return not overlaps.is_empty()
+	return collider_circle

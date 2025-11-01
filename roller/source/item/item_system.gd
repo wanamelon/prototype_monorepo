@@ -157,12 +157,21 @@ func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
 							roller._bounce_count, match_state.tick)
 	return overlaps
 
+func is_safe_to_place(shape: Shape2D, global_pos: Vector2):
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0, global_pos) 
+	query.collision_mask = 1
+	query.collide_with_areas = false
+	var overlaps = get_world_2d().direct_space_state.intersect_shape(query)
+	return overlaps.is_empty()
+
 @abstract
 class Item extends Node2D:
 	signal destroyed()
 	
 	var _physics_calculator: StatefulPhysicsCalculator
-	var _item_root: Node2D
+	var _item_root: ItemSystem
 	var status_effects: Array[StatusEffect] = []
 	var _new_events: Array[ItemEvent] = []
 	
