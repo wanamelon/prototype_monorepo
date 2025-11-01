@@ -32,7 +32,7 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 		ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 			return BounceOffEverything.new()
 		ItemDef.ItemId.SPEED_BUFF_ON_DESTROY:
-			return SpeedBuffOnDestroy.new()
+			return SpeedBuffOnDestroy.instance()
 		ItemDef.ItemId.INCREASE_SIZE:
 			return SizeBuffOnDestroy.new()
 		ItemDef.ItemId.ROLLER:
