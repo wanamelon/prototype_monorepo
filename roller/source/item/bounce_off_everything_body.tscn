@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://yqpdxmfe2cjs"]
+
+[ext_resource type="Texture2D" uid="uid://cmvt10slodjoe" path="res://assets/dotted_circle.png" id="1_01r23"]
+[ext_resource type="Script" uid="uid://cf2r685kvmv5t" path="res://source/item/bounce_off_everything_body.gd" id="1_geavp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_geavp"]
+radius = 45.0
+
+[node name="BounceOffEverythingBody" type="StaticBody2D"]
+script = ExtResource("1_geavp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_geavp")
+
+[node name="Outline" type="Sprite2D" parent="."]
+modulate = Color(0.99, 0, 0, 0.27058825)
+scale = Vector2(0.95, 0.95)
+texture = ExtResource("1_01r23")

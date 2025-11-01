@@ -13,8 +13,9 @@ To start, a bare minimum one which just does the existing functionalities
 [X] spawn the ball in a sane place
 [X] decide how to wire item destroyed event
 [X] speed buff on kill
-[ ] add grow on kill
-[ ] bouncing mode sprite
+[X] add grow on kill
+[X] bouncing mode sprite
+[ ] stamina as status effect?
 [ ] spawn bounce pillar
 [ ] more damage item?
 """
