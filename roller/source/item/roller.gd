@@ -44,7 +44,6 @@ func compute_damage_per_hit():
 	return 1
 
 func activate(state: MatchState):
-	var events: Array[ItemEvent] = []
 	var collision_result: KinematicCollision2D = $CharacterBody2D.move_and_collide(_velocity * state.delta)
 	position = $CharacterBody2D.position
 	if collision_result:
@@ -52,18 +51,17 @@ func activate(state: MatchState):
 		_velocity = _velocity.rotated(deg_to_rad(Utils.RNG.randf_range(-5, 5)))
 		_bounce_count += 1
 		$BounceAudioPlayer.play()
-		events.append(ItemSystem.BounceEvent.new(self, ItemSystem.find_parent_item(collision_result.get_collider())))
+		_add_event(ItemSystem.BounceEvent.new(self, ItemSystem.find_parent_item(collision_result.get_collider())))
 	if _stamina_seconds <= 0:
 		var damping_factor: float = 4 * _velocity.length() * state.delta
 		_velocity -= _velocity.normalized() * damping_factor
 		if _velocity.length() < 5:
 			finished = true
-			events.append(ItemSystem.DespawnEvent.new(self, self))
+			_add_event(ItemSystem.DespawnEvent.new(self, self))
 	else:
 		_apply_speed_buffs()
 	_apply_size_buffs()
 	_stamina_seconds -= state.delta
-	return events
 
 func _apply_speed_buffs():
 	var speed_with_buffs := _speed

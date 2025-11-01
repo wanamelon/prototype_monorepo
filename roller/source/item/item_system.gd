@@ -47,8 +47,8 @@ func _physics_process(__):
 	var events: Array[ItemEvent] = []
 	events.append_array(compute_overlaps(_match_state))
 	for item: Item in _match_state.items:
-		var new_events := item.activate(_match_state)
-		events.append_array(new_events)
+		item.activate(_match_state)
+		events.append_array(item.flush_events())
 	_apply_events(events)
 	_check_end_condition()
 	_advance_status_effect_timers()
@@ -162,6 +162,7 @@ class Item extends Node2D:
 	var _physics_calculator: StatefulPhysicsCalculator
 	var _item_root: Node2D
 	var status_effects: Array[StatusEffect] = []
+	var _new_events: Array[ItemEvent] = []
 	
 	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D):
 		_physics_calculator = physics_calculator
@@ -176,7 +177,15 @@ class Item extends Node2D:
 		return []
 	
 	# The core of the logic! Evaluate triggers and perform actions
-	@abstract func activate(state: MatchState) -> Array[ItemEvent]
+	@abstract func activate(state: MatchState) -> void
+	
+	func _add_event(event: ItemEvent) -> void:
+		_new_events.append(event)
+	
+	func flush_events() -> Array[ItemEvent]:
+		var copy = _new_events.duplicate()
+		_new_events.clear()
+		return copy
 
 @abstract
 class Location extends RefCounted:

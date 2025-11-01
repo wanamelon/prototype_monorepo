@@ -10,4 +10,3 @@ func activate(state: MatchState):
 				item._stamina_seconds += 10
 				item._max_stamina += 10
 		_added_stamina = true
-	return [] as Array[ItemEvent]

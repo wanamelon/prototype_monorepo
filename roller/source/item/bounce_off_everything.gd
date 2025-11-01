@@ -5,7 +5,6 @@ const BOUNCE_STATIC_BODY_NAME := "BounceOffEverythingBody"
 var _bounce_off_everything_duration: float = 0.0
 
 func activate(state: MatchState):
-	var events: Array[ItemEvent] = []
 	if state.tick % 60 == 0 and Utils.RNG.randf() < 0.1 and _bounce_off_everything_duration <= 0:
 		_bounce_off_everything_duration = 2.5
 	if _bounce_off_everything_duration > 0:
@@ -20,7 +19,6 @@ func activate(state: MatchState):
 			if item is Crop and item.has_node(BOUNCE_STATIC_BODY_NAME):
 				item.remove_child(item.get_node(BOUNCE_STATIC_BODY_NAME))
 	_bounce_off_everything_duration -= state.delta
-	return events
 
 func _create_bounce_body() -> StaticBody2D:
 	var bounce_body = StaticBody2D.new()

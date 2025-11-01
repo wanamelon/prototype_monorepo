@@ -21,29 +21,27 @@ static func instance() -> Crop:
 	return CROP_SCENE.instantiate()
 
 func activate(state: MatchState):
-	var events: Array[ItemEvent] = []
-	_try_level_up_on_tick(state, events)
-	_level_down_if_hit(state, events)
-	_apply_level_changes(state, events)
-	return events
+	_try_level_up_on_tick(state)
+	_level_down_if_hit(state)
+	_apply_level_changes(state)
 
-func _try_level_up_on_tick(state: MatchState, o_events: Array[ItemEvent]):
+func _try_level_up_on_tick(state: MatchState):
 	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
 	var growth_probability_per_second := 1.0 / expected_seconds_until_growth
 	if rng.randf() < (state.delta * growth_probability_per_second):
-		o_events.append(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self), self))
+		_add_event(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self), self))
 
-func _level_down_if_hit(state: MatchState, o_events: Array[ItemEvent]):
+func _level_down_if_hit(state: MatchState):
 	for event in state.last_tick_events:
 		if event is ItemSystem.FreshOverlapEvent:
 			var overlap := event as ItemSystem.FreshOverlapEvent
 			# TODO: should not depend on first/second order bruh
 			if overlap.first is Roller and overlap.second == self:
 				var roller := overlap.first as Roller
-				o_events.append(ItemSystem.LevelChangeEvent.new(
+				_add_event(ItemSystem.LevelChangeEvent.new(
 					-roller.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self), overlap.first))
 
-func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
+func _apply_level_changes(state: MatchState):
 	var total_positive_level_change: int = 0
 	var total_negative_level_change: int = 0
 	for event in state.last_tick_events:
@@ -60,16 +58,16 @@ func _apply_level_changes(state: MatchState, o_events: Array[ItemEvent]):
 		$LevelDownAudioPlayer.play()
 	var level_changes_canceled_out: int = min(abs(total_positive_level_change), abs(total_negative_level_change))
 	for i in range(level_changes_canceled_out):
-		o_events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
+		_add_event(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 	var net_level_change := total_positive_level_change + total_negative_level_change
 	if net_level_change > 0:
 		level = min(20, level + net_level_change)
 	else:
 		for i in range(abs(net_level_change)):
-			o_events.append(ItemSystem.GivePointsEvent.new(_compute_point_value()))
+			_add_event(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 			level -= 1
 			if level <= 0:
-				o_events.append(ItemSystem.DespawnEvent.new(self, _find_largest_damage_source(state)))
+				_add_event(ItemSystem.DespawnEvent.new(self, _find_largest_damage_source(state)))
 				break
 
 func _find_largest_damage_source(state: MatchState) -> Item:
