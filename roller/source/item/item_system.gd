@@ -40,6 +40,11 @@ func _physics_process(__):
 	for item: Item in _match_state.items:
 		var new_events := item.activate(_match_state)
 		events.append_array(new_events)
+	_apply_events(events)
+	_match_state.last_tick_events = events
+	_match_state.tick += 1
+
+func _apply_events(events: Array[ItemEvent]):
 	for event in events:
 		if event is SpawnEvent:
 			# TODO: respect targeting config
@@ -47,18 +52,13 @@ func _physics_process(__):
 			var new_item: Item = spawn.factory.call()
 			_game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
 			_match_state.items.append(new_item)
-		elif event is GivePointsEvent:
-			var give_points_event := event as GivePointsEvent
-			_match_state.points += give_points_event.points
-			score_changed.emit(_match_state.points)
 		elif event is DespawnEvent:
 			_match_state.items.erase(event.target)
 			event.target.queue_free()
-		elif event is FreshOverlapEvent:
-			var overlap := event as FreshOverlapEvent
-#			print("Overlapped ", overlap.first.name, " ", overlap.first.position, " ", overlap.second.name, " ", overlap.second.position)
-	_match_state.last_tick_events = events
-	_match_state.tick += 1
+		if event is GivePointsEvent:
+			var give_points_event := event as GivePointsEvent
+			_match_state.points += give_points_event.points
+			score_changed.emit(_match_state.points)
 
 func get_score() -> int:
 	return _match_state.points
