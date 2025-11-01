@@ -25,6 +25,7 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 @onready var _original_collision_shape := $CharacterBody2D/CollisionShape2D.shape as CircleShape2D
 @onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
 # TODO: belong inside character body?
+var _damage: int = 1
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
@@ -41,8 +42,12 @@ static func instance() -> Roller:
 func _ready():
 	$CharacterBody2D.position = position
 
-func compute_damage_per_hit():
-	return 1
+func compute_damage_per_hit() -> int:
+	var damage_with_buffs: int = _damage
+	for effect in status_effects:
+		if effect.id == ItemSystem.StatusEffectId.DAMAGE_BUFF:
+			damage_with_buffs += int(floor(effect.intensity))
+	return damage_with_buffs
 
 func activate(state: MatchState):
 	var collision_result: KinematicCollision2D = $CharacterBody2D.move_and_collide(_velocity * state.delta)

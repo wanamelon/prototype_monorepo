@@ -42,6 +42,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return SpawnCropOnBounce.new()
 		ItemDef.ItemId.SPAWN_BOUNCE_PILLAR:
 			return SpawnBouncePillar.new()
+		ItemDef.ItemId.MORE_DAMAGE:
+			return MoreDamage.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0
@@ -226,7 +228,8 @@ class ItemEvent extends RefCounted:
 enum StatusEffectId {
 	SPEED_BUFF,
 	SIZE_BUFF,
-	STAMINA_BUFF
+	STAMINA_BUFF,
+	DAMAGE_BUFF
 }
 
 class StatusEffect extends RefCounted:
