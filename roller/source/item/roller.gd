@@ -15,8 +15,8 @@ To start, a bare minimum one which just does the existing functionalities
 [X] speed buff on kill
 [X] add grow on kill
 [X] bouncing mode sprite
-[ ] stamina as status effect?
-[ ] spawn bounce pillar
+[X] stamina as status effect?
+[X] spawn bounce pillar
 [ ] more damage item?
 """
 
@@ -85,13 +85,17 @@ func _apply_size_buffs():
 	for effect in status_effects:
 		if effect.id == ItemSystem.StatusEffectId.SIZE_BUFF:
 			size_buff_px += effect.intensity * min(1, effect.duration_sec)
-			size_buff_px = min(20, size_buff_px)
-	var expanded_collider: CircleShape2D = _original_collision_shape.duplicate_deep()
-	expanded_collider.radius += size_buff_px
-	$CharacterBody2D/CollisionShape2D.shape = expanded_collider
-	var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
-	var desired_sprite_radius_px: float = og_sprite_radius_px + size_buff_px
-	$Sprite2D.scale = (desired_sprite_radius_px / og_sprite_radius_px) * _original_sprite_scale
+			size_buff_px = min(40, size_buff_px)
+	var desired_collider_radius_px: float = _original_collision_shape.radius + size_buff_px
+	var current_radius_px: float = $CharacterBody2D/CollisionShape2D.shape.radius
+	var diff := desired_collider_radius_px - current_radius_px
+	var interpolated_radius_px: float = current_radius_px + sign(diff) * min(abs(diff), 5.0)
+	var expanded_collider := CircleShape2D.new()
+	expanded_collider.radius = interpolated_radius_px
+	if _item_root.is_safe_to_place(expanded_collider, global_position, [$CharacterBody2D]):
+		$CharacterBody2D/CollisionShape2D.shape = expanded_collider
+		var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
+		$Sprite2D.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_sprite_scale
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
