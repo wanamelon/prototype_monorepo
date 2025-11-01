@@ -5,6 +5,7 @@ signal match_finished()
 
 const TICK_DELTA: float = 1.0 / 60.0
 
+var _audio_player: ThrottlingAudioPlayer
 var _game_board: GameBoard
 var _match_state: MatchState
 var _physics_calculator: StatefulPhysicsCalculator
@@ -13,10 +14,12 @@ func _init(item_defs: Array[ItemDef], game_board: GameBoard, points: int):
 	_game_board = game_board
 	_physics_calculator = StatefulPhysicsCalculator.new()
 	add_child(_physics_calculator)
+	_audio_player = ThrottlingAudioPlayer.instance()
+	add_child(_audio_player)
 	var items: Array[Item] = []
 	for item_def in item_defs:
 		var item := _item_for_id(item_def.item_id)
-		item._inject(_physics_calculator, self)
+		item._inject(_physics_calculator, self, _audio_player)
 		add_child(item)
 		items.append(item)
 	_match_state = MatchState.new(0, points, items, [] as Array[ItemEvent])
@@ -83,7 +86,7 @@ func _apply_events(events: Array[ItemEvent]):
 			var spawn := event as SpawnEvent
 			var new_item: Item = spawn.factory.call()
 			_game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
-			new_item._inject(_physics_calculator, self)
+			new_item._inject(_physics_calculator, self, _audio_player)
 			_match_state.items.append(new_item)
 		elif event is DespawnEvent:
 			_match_state.items.erase(event.target)
@@ -174,12 +177,14 @@ class Item extends Node2D:
 	
 	var _physics_calculator: StatefulPhysicsCalculator
 	var _item_root: ItemSystem
+	var _audio_player: ThrottlingAudioPlayer
 	var status_effects: Array[StatusEffect] = []
 	var _new_events: Array[ItemEvent] = []
 	
-	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D):
+	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D, audio_player: ThrottlingAudioPlayer):
 		_physics_calculator = physics_calculator
 		_item_root = item_root
+		_audio_player = audio_player
 	
 	# Business logic spawn setup: What bodies/display nodes to register...
 	func spawn():

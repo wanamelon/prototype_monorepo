@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0rfqip0qdyim"]
+
+[ext_resource type="Script" uid="uid://xvjoe2x4yw5k" path="res://source/item/throttling_audio_player.gd" id="1_by30w"]
+[ext_resource type="AudioStream" uid="uid://dqqfhtkp0rm3" path="res://assets/audio/bubble-pop-406640.ogg" id="2_by30w"]
+
+[node name="ThrottlingAudioPlayer" type="Node2D"]
+script = ExtResource("1_by30w")
+
+[node name="AddSizeBuff" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_by30w")
