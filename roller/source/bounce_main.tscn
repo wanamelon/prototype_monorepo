@@ -45,7 +45,7 @@ metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 
 [sub_resource type="Resource" id="Resource_3yruk"]
 script = ExtResource("2_0panw")
-item_id = 10
+item_id = 9
 metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_to078"]
