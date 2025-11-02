@@ -280,11 +280,11 @@ class AddStatusEffect extends ItemEvent:
 
 class BounceEvent extends ItemEvent:
 	var roller: Roller
-	var collided_item: Item # CAN BE NULL!
+	var collided_item: ItemRef
 	
 	func _init(roller: Roller, collided_item: Item):
 		self.roller = roller
-		self.collided_item = collided_item
+		self.collided_item = ItemRef.from(collided_item)
 
 class FreshOverlapEvent extends ItemEvent:
 	var first
@@ -352,8 +352,10 @@ class ItemRef extends RefCounted:
 			return ItemRef.new(item.get_instance_id(), item.tags.duplicate())
 		elif item is ItemRef:
 			return item
+		elif item == null:
+			return ItemRef.NONE
 		else:
-			assert(false, "Input item %s must be Item or ItemRef!" % item)
+			assert(false, "Input item %s must be Item, ItemRef, or null!" % item)
 			return ItemRef.NONE
 
 @abstract
