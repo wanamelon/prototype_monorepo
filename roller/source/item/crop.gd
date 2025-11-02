@@ -21,6 +21,7 @@ var level: int = 1
 static func instance(mean_level: float = 1.0, level_std: float = 1.0) -> Crop:
 	var crop: Crop = CROP_SCENE.instantiate()
 	crop.level = clampi(int(round(Utils.RNG.randfn(mean_level, level_std))), 1, MAX_LEVEL)
+	crop.tags = [Tag.CROP]
 	return crop
 
 func activate(state: MatchState):
@@ -35,26 +36,20 @@ func _try_level_up_on_tick(state: MatchState):
 		_add_event(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self), self))
 
 func _level_down_if_hit(state: MatchState):
-	for event in state.last_tick_events:
-		if event is ItemSystem.FreshOverlapEvent:
-			var overlap := event as ItemSystem.FreshOverlapEvent
-			# TODO: should not depend on first/second order bruh
-			if overlap.first is Roller and overlap.second == self:
-				var roller := overlap.first as Roller
-				_add_event(ItemSystem.LevelChangeEvent.new(
-					-roller.compute_damage_per_hit(), ItemSystem.SpecificItem.new(self), overlap.first))
+	for overlap: ItemSystem.FreshOverlapEvent in Utils.filter(state.last_tick_events, func (e): return e is ItemSystem.FreshOverlapEvent):
+		# TODO: should not depend on first/second order bruh
+		if overlap.first.has_all_tags(Tag.ROLLER) and overlap.second.matches(self):
+			_add_event(ItemSystem.LevelChangeEvent.new(-overlap.damage, ItemSystem.SpecificItem.new(self), overlap.first))
 
 func _apply_level_changes(state: MatchState):
 	var total_positive_level_change: int = 0
 	var total_negative_level_change: int = 0
-	for event in state.last_tick_events:
-		if event is ItemSystem.LevelChangeEvent:
-			var level_change := event as ItemSystem.LevelChangeEvent
-			if (level_change.target is ItemSystem.SpecificItem and level_change.target.target.matches(self)):
-				if level_change.levels >= 0:
-					total_positive_level_change += level_change.levels
-				else:
-					total_negative_level_change += level_change.levels
+	for level_change: LevelChangeEvent in Utils.filter(state.last_tick_events, func(e): return e is LevelChangeEvent):
+		if (level_change.target is ItemSystem.SpecificItem and level_change.target.target.matches(self)):
+			if level_change.levels >= 0:
+				total_positive_level_change += level_change.levels
+			else:
+				total_negative_level_change += level_change.levels
 	if total_positive_level_change > 0:
 		$LevelUpAudioPlayer.play()
 	if total_negative_level_change < 0:

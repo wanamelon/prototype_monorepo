@@ -287,12 +287,15 @@ class BounceEvent extends ItemEvent:
 		self.collided_item = ItemRef.from(collided_item)
 
 class FreshOverlapEvent extends ItemEvent:
-	var first
-	var second
+	var first: ItemRef
+	var second: ItemRef
+	var damage: int = 1
 	
 	func _init(first, second):
-		self.first = first
-		self.second = second
+		self.first = ItemRef.from(first)
+		self.second = ItemRef.from(second)
+		if first is Roller:
+			self.damage = first.compute_damage_per_hit()
 
 class GivePointsEvent extends ItemEvent:
 	var points: int
@@ -321,7 +324,7 @@ class LevelChangeEvent extends ItemEvent:
 	var levels: int
 	var target: ItemTarget
 	var source: ItemRef
-	func _init(levels: int, target: ItemTarget, source: Item):
+	func _init(levels: int, target: ItemTarget, source):
 		self.levels = levels
 		self.target = target
 		self.source = ItemRef.from(source)
