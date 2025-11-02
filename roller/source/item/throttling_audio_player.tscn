@@ -1,9 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b0rfqip0qdyim"]
+[gd_scene load_steps=9 format=3 uid="uid://b0rfqip0qdyim"]
 
 [ext_resource type="Script" uid="uid://xvjoe2x4yw5k" path="res://source/item/throttling_audio_player.gd" id="1_by30w"]
 [ext_resource type="AudioStream" uid="uid://dqqfhtkp0rm3" path="res://assets/audio/bubble-pop-406640.ogg" id="2_by30w"]
 [ext_resource type="AudioStream" uid="uid://dqqyk4o7rd7bu" path="res://assets/audio/retro-coin-4-236671.mp3" id="3_hlvhs"]
 [ext_resource type="AudioStream" uid="uid://eu8fhjq8x8oj" path="res://assets/audio/whoosh-short.ogg" id="4_1v4ny"]
+[ext_resource type="AudioStream" uid="uid://lq1tdvpynlb3" path="res://assets/audio/level_up.mp3" id="5_afarc"]
+[ext_resource type="AudioStream" uid="uid://dwfd2dplrtomh" path="res://assets/audio/damage.mp3" id="6_rbjls"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1v4ny"]
 random_pitch = 1.02
@@ -27,3 +29,11 @@ stream = SubResource("AudioStreamRandomizer_1v4ny")
 
 [node name="AddSpeedBuff" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_y0uju")
+
+[node name="CropLevelUp" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_afarc")
+volume_db = -10.0
+pitch_scale = 1.5
+
+[node name="CropLevelDown" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_rbjls")

@@ -42,45 +42,24 @@ func _level_down_if_hit(state: MatchState):
 			_add_event(ItemSystem.LevelChangeEvent.new(-overlap.damage, ItemSystem.SpecificItem.new(self), overlap.first))
 
 func _apply_level_changes(state: MatchState):
-	var total_positive_level_change: int = 0
-	var total_negative_level_change: int = 0
-	for level_change: LevelChangeEvent in Utils.filter(state.last_tick_events, func(e): return e is LevelChangeEvent):
+	var total_positive_change: int = 0
+	var negative_changes: Array[ItemSystem.LevelChangeEvent] = []
+	for level_change: ItemSystem.LevelChangeEvent in Utils.filter(state.last_tick_events, func(e): return e is ItemSystem.LevelChangeEvent):
 		if (level_change.target is ItemSystem.SpecificItem and level_change.target.target.matches(self)):
 			if level_change.levels >= 0:
-				total_positive_level_change += level_change.levels
+				total_positive_change += level_change.levels
+				_audio_player.play_crop_level_up()
 			else:
-				total_negative_level_change += level_change.levels
-	if total_positive_level_change > 0:
-		$LevelUpAudioPlayer.play()
-	if total_negative_level_change < 0:
-		$LevelDownAudioPlayer.play()
-	var level_changes_canceled_out: int = min(abs(total_positive_level_change), abs(total_negative_level_change))
-	for i in range(level_changes_canceled_out):
-		_add_event(ItemSystem.GivePointsEvent.new(_compute_point_value()))
-	var net_level_change := total_positive_level_change + total_negative_level_change
-	if net_level_change > 0:
-		level = min(MAX_LEVEL, level + net_level_change)
-	else:
-		for i in range(abs(net_level_change)):
+				negative_changes.append(level_change)
+				_audio_player.play_crop_level_down()
+	level = min(MAX_LEVEL, level + total_positive_change)
+	for negative_change in negative_changes:
+		for i in range(abs(negative_change.levels)):
 			_add_event(ItemSystem.GivePointsEvent.new(_compute_point_value()))
 			level -= 1
 			if level <= 0:
-				_add_event(ItemSystem.DespawnEvent.new(self, _find_largest_damage_source(state)))
-				break
-
-func _find_largest_damage_source(state: MatchState) -> ItemRef:
-	var damage_per_source := {}
-	var max_damage = 0
-	var max_item = null
-	for level_change: LevelChangeEvent in Utils.filter(state.last_tick_events, func(e): return e is LevelChangeEvent):
-		if (level_change.target is ItemSystem.SpecificItem and level_change.target.target.matches(self)):
-			if level_change.levels < 0:
-				var source_key := level_change.source.instance_id
-				damage_per_source[source_key] = damage_per_source.get(source_key, 0) + abs(level_change.levels)
-				if damage_per_source[source_key] > max_damage:
-					max_damage = damage_per_source[source_key]
-					max_item = level_change.source
-	return max_item
+				_add_event(ItemSystem.DespawnEvent.new(self, negative_change.source))
+				return
 
 func _compute_point_value():
 	return 2 ** (level - 1)
