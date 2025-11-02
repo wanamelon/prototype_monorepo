@@ -1077,6 +1077,7 @@ Clean up (if level <= 0, queue free())
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: Status effects last longer
+[ ] Items: Crop code could be a lot simpler!
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Design: Item system design more generic
 [ ] Design: Clean up unused code in item system and related

@@ -313,18 +313,18 @@ class SpawnEvent extends ItemEvent:
 class DespawnEvent extends ItemEvent:
 	var target: ItemRef
 	var source: ItemRef
-	func _init(target: Item, source: Item):
+	func _init(target, source):
 		self.target = ItemRef.from(target)
 		self.source = ItemRef.from(source)
 
 class LevelChangeEvent extends ItemEvent:
 	var levels: int
 	var target: ItemTarget
-	var source: Item
+	var source: ItemRef
 	func _init(levels: int, target: ItemTarget, source: Item):
 		self.levels = levels
 		self.target = target
-		self.source = source
+		self.source = ItemRef.from(source)
 
 class ItemRef extends RefCounted:
 	static var NONE: ItemRef = ItemRef.new(-1, [])

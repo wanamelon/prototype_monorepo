@@ -73,20 +73,18 @@ func _apply_level_changes(state: MatchState):
 				_add_event(ItemSystem.DespawnEvent.new(self, _find_largest_damage_source(state)))
 				break
 
-func _find_largest_damage_source(state: MatchState) -> Item:
+func _find_largest_damage_source(state: MatchState) -> ItemRef:
 	var damage_per_source := {}
-	for event in state.last_tick_events:
-		if event is ItemSystem.LevelChangeEvent:
-			var level_change := event as ItemSystem.LevelChangeEvent
-			if (level_change.target is ItemSystem.SpecificItem and level_change.target.target == self):
-				if level_change.levels < 0:
-					damage_per_source[level_change.source] = damage_per_source.get(level_change.source, 0) + abs(level_change.levels)
 	var max_damage = 0
 	var max_item = null
-	for source in damage_per_source:
-		if damage_per_source[source] > max_damage:
-			max_item = source
-			max_damage = damage_per_source[source]
+	for level_change: LevelChangeEvent in Utils.filter(state.last_tick_events, func(e): return e is LevelChangeEvent):
+		if (level_change.target is ItemSystem.SpecificItem and level_change.target.target == self): # TODO: itemref!
+			if level_change.levels < 0:
+				var source_key := level_change.source.instance_id
+				damage_per_source[source_key] = damage_per_source.get(source_key, 0) + abs(level_change.levels)
+				if damage_per_source[source_key] > max_damage:
+					max_damage = damage_per_source[source_key]
+					max_item = level_change.source
 	return max_item
 
 func _compute_point_value():
