@@ -1,10 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0rfqip0qdyim"]
+[gd_scene load_steps=7 format=3 uid="uid://b0rfqip0qdyim"]
 
 [ext_resource type="Script" uid="uid://xvjoe2x4yw5k" path="res://source/item/throttling_audio_player.gd" id="1_by30w"]
 [ext_resource type="AudioStream" uid="uid://dqqfhtkp0rm3" path="res://assets/audio/bubble-pop-406640.ogg" id="2_by30w"]
+[ext_resource type="AudioStream" uid="uid://dqqyk4o7rd7bu" path="res://assets/audio/retro-coin-4-236671.mp3" id="3_hlvhs"]
+[ext_resource type="AudioStream" uid="uid://eu8fhjq8x8oj" path="res://assets/audio/whoosh-short.ogg" id="4_1v4ny"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1v4ny"]
+random_pitch = 1.02
+streams_count = 1
+stream_0/stream = ExtResource("3_hlvhs")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_y0uju"]
+random_pitch = 1.1
+random_volume_offset_db = 0.5
+streams_count = 1
+stream_0/stream = ExtResource("4_1v4ny")
 
 [node name="ThrottlingAudioPlayer" type="Node2D"]
 script = ExtResource("1_by30w")
 
 [node name="AddSizeBuff" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_by30w")
+
+[node name="GainPoints" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_1v4ny")
+
+[node name="AddSpeedBuff" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_y0uju")

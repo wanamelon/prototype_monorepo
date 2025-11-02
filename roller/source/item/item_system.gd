@@ -35,7 +35,7 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 		ItemDef.ItemId.BOUNCE_OFF_EVERYTHING:
 			return BounceOffEverything.new()
 		ItemDef.ItemId.SPEED_BUFF_ON_DESTROY:
-			return SpeedBuffOnDestroy.instance()
+			return SpeedBuffOnDestroy.new()
 		ItemDef.ItemId.INCREASE_SIZE:
 			return SizeBuffOnDestroy.new()
 		ItemDef.ItemId.SPAWN_RANDOM_TILE_OBJECT:
@@ -44,6 +44,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return SpawnBouncePillar.new()
 		ItemDef.ItemId.MORE_DAMAGE:
 			return MoreDamage.new()
+		ItemDef.ItemId.SNAIL_TRAIL_OF_LEVEL_UP_SLIME:
+			return LeaveSlimeTrail.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0
@@ -58,9 +60,9 @@ func _physics_process(__):
 	for item: Item in _match_state.items:
 		item.activate(_match_state)
 		events.append_array(item.flush_events())
+	_advance_status_effect_timers()
 	_apply_events(events)
 	_check_end_condition()
-	_advance_status_effect_timers()
 	_match_state.last_tick_events = events
 	_match_state.tick += 1
 
@@ -87,19 +89,37 @@ func _apply_events(events: Array[ItemEvent]):
 			# TODO: respect targeting config
 			var spawn := event as SpawnEvent
 			var new_item: Item = spawn.factory.call()
-			_game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
-			new_item._inject(_physics_calculator, self, _audio_player)
-			_match_state.items.append(new_item)
+			var was_placed: bool = false
+			if spawn.targeting_config is AnyFreeCell:
+				was_placed = _game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
+			elif spawn.targeting_config is SpecificPosition:
+				new_item.position = (spawn.targeting_config as SpecificPosition).position
+				add_child(new_item)
+				was_placed = true
+			if was_placed:
+				new_item._inject(_physics_calculator, self, _audio_player)
+				_match_state.items.append(new_item)
 		elif event is DespawnEvent:
-			_match_state.items.erase(event.target)
-			event.target.queue_free()
+			var item_to_remove: Item = Utils.filter(_match_state.items, event.target.matches)[0]
+			_match_state.items.erase(item_to_remove)
+			item_to_remove.queue_free()
 		elif event is GivePointsEvent:
 			var give_points_event := event as GivePointsEvent
 			_match_state.points += give_points_event.points
 			score_changed.emit(_match_state.points)
+			_audio_player.play_gain_points(give_points_event.points)
 		elif event is AddStatusEffect:
 			var add_effect := event as AddStatusEffect
-			event.target.status_effects.append(event.effect)
+			var item_to_apply_to := _item_for_ref(add_effect.target)
+			if item_to_apply_to != null:
+				item_to_apply_to.status_effects.append(add_effect.effect)
+
+func _item_for_ref(ref: ItemRef) -> Item:
+	var matching_items = Utils.filter(_match_state.items, ref.matches)
+	if matching_items.size() == 1:
+		return matching_items[0]
+	else:
+		return null
 
 func get_score() -> int:
 	return _match_state.points
@@ -183,6 +203,7 @@ class Item extends Node2D:
 	var _audio_player: ThrottlingAudioPlayer
 	var status_effects: Array[StatusEffect] = []
 	var _new_events: Array[ItemEvent] = []
+	var tags: Array[String] = []
 	
 	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D, audio_player: ThrottlingAudioPlayer):
 		_physics_calculator = physics_calculator
@@ -243,11 +264,11 @@ class StatusEffect extends RefCounted:
 
 class AddStatusEffect extends ItemEvent:
 	var effect: StatusEffect
-	var target: Item
+	var target: ItemRef
 	
-	func _init(effect: StatusEffect, target: Item):
+	func _init(effect: StatusEffect, target):
 		self.effect = effect
-		self.target = target
+		self.target = ItemRef.from(target)
 
 #class ItemDestroyed extends ItemEvent:
 #	var destroyer: Item
@@ -281,38 +302,77 @@ class GivePointsEvent extends ItemEvent:
 class SpawnEvent extends ItemEvent:
 	# Later: Make this more declarative?
 	var factory: Callable
-	var targeting_config: TargetingConfig
+	var targeting_config: LocationTarget
 	var spawn_chance: float
 	
-	func _init(factory: Callable, targeting_config: TargetingConfig, spawn_chance: float):
+	func _init(factory: Callable, targeting_config: LocationTarget, spawn_chance: float):
 		self.factory = factory
 		self.targeting_config = targeting_config
 		self.spawn_chance = spawn_chance
 
 class DespawnEvent extends ItemEvent:
-	var target: Item
-	var source: Item
+	var target: ItemRef
+	var source: ItemRef
 	func _init(target: Item, source: Item):
-		self.target = target
-		self.source = source
+		self.target = ItemRef.from(target)
+		self.source = ItemRef.from(source)
 
 class LevelChangeEvent extends ItemEvent:
 	var levels: int
-	var target: TargetingConfig
+	var target: ItemTarget
 	var source: Item
-	func _init(levels: int, target: TargetingConfig, source: Item):
+	func _init(levels: int, target: ItemTarget, source: Item):
 		self.levels = levels
 		self.target = target
 		self.source = source
 
+class ItemRef extends RefCounted:
+	static var NONE: ItemRef = ItemRef.new(-1, [])
+	
+	var instance_id: int
+	var tags: Array[String]
+	
+	func _init(instance_id: int, tags: Array[String]):
+		self.instance_id = instance_id
+		self.tags = tags
+	
+	func matches(item: Item) -> bool:
+		return item.get_instance_id() == instance_id
+	
+	func has_all_tags(...query_tags: Array):
+		var query_tags_in_self = Utils.filter(query_tags, func (t): return t in tags)
+		return query_tags_in_self.size() == query_tags.size()
+	
+	func has_any_tags(...query_tags: Array):
+		var query_tags_in_self = Utils.filter(query_tags, func (t): return t in tags)
+		return not query_tags_in_self.is_empty()
+	
+	static func from(item) -> ItemRef:
+		if item is Item:
+			return ItemRef.new(item.get_instance_id(), item.tags.duplicate())
+		elif item is ItemRef:
+			return item
+		else:
+			assert(false, "Input item %s must be Item or ItemRef!" % item)
+			return ItemRef.NONE
+
 @abstract
-class TargetingConfig extends RefCounted:
+class LocationTarget extends RefCounted:
 	pass
 
-class AnyFreeCell extends TargetingConfig:
+class AnyFreeCell extends LocationTarget:
 	pass
 
-class SpecificItem extends TargetingConfig:
+class SpecificPosition extends LocationTarget:
+	var position: Vector2
+	func _init(position: Vector2):
+		self.position = position
+
+@abstract
+class ItemTarget extends RefCounted:
+	pass
+
+class SpecificItem extends ItemTarget:
 	var target: Item
 	func _init(target: Item):
 		self.target = target

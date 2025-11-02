@@ -65,7 +65,8 @@ func _spawn_item_in_random_cell(item: Node2D, spawn_chance: float):
 		if item.has_method("can_place") and not item.can_place(loc, get_world_2d()):
 			continue
 		_spawn_item(item, spawn_cell)
-		break
+		return true
+	return false
 
 # TODO: Fix race condition spawning multiple in one frame!
 func _spawn_bounce_pillar(spawn_chance: float):

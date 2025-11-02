@@ -5,3 +5,10 @@ static func instance() -> ThrottlingAudioPlayer:
 
 func play_add_size_buff():
 	$AddSizeBuff.play()
+
+func play_add_speed_buff():
+	$AddSpeedBuff.play()
+
+func play_gain_points(points: int):
+	$GainPoints.pitch_scale = 1.2 - min(0.9, 0.9 * (log(points) / log(1e6)))
+	$GainPoints.play()

@@ -1,25 +1,5 @@
 class_name Roller extends ItemSystem.Item
 
-"""
-To start, a bare minimum one which just does the existing functionalities
-
-[X] basic wiring item spawn
-[X] move around
-[X] Stamina system
-[X] fix progress bar gone?
-[X] signal for round end (stamina gone)
-[X] eliminate refs to old player_ball
-[X] generate bounces events
-[X] spawn the ball in a sane place
-[X] decide how to wire item destroyed event
-[X] speed buff on kill
-[X] add grow on kill
-[X] bouncing mode sprite
-[X] stamina as status effect?
-[X] spawn bounce pillar
-[ ] more damage item?
-"""
-
 const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 
 @onready var _original_collision_shape := $CharacterBody2D/CollisionShape2D.shape as CircleShape2D
@@ -37,6 +17,7 @@ static func instance() -> Roller:
 	var roller: Roller = ROLLER_SCENE.instantiate()
 	var near_diagonal_launch_angle = 45 + (90 * Utils.RNG.randi_range(0, 4)) + Utils.RNG.randf_range(-20, 20)
 	roller._velocity = (Vector2(1, 0) * roller._speed).rotated(deg_to_rad(near_diagonal_launch_angle))
+	roller.tags = [Tag.ROLLER]
 	return roller
 
 func _ready():
@@ -90,7 +71,7 @@ func _apply_size_buffs():
 	for effect in status_effects:
 		if effect.id == ItemSystem.StatusEffectId.SIZE_BUFF:
 			size_buff_px += effect.intensity * min(1, effect.duration_sec)
-			size_buff_px = min(40, size_buff_px)
+			size_buff_px = min(25, size_buff_px)
 	var desired_collider_radius_px: float = _original_collision_shape.radius + size_buff_px
 	var current_radius_px: float = $CharacterBody2D/CollisionShape2D.shape.radius
 	var diff := desired_collider_radius_px - current_radius_px
@@ -104,5 +85,3 @@ func _apply_size_buffs():
 
 func _process(delta):
 	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
-	# TODO: Wire this somehow?
-	#$BouncingModeSprite.visible = should_bounce_off_everything()

@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://hdtvuwvrmcik"]
+
+[ext_resource type="Script" uid="uid://bf317df78milv" path="res://source/item/slime_trail.gd" id="1_qi14d"]
+[ext_resource type="Texture2D" uid="uid://l2oi3tc3ijut" path="res://assets/rolling_ball/hole_start.png" id="2_fors1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7eiht"]
+radius = 80.0
+
+[node name="SlimeTrail" type="Node2D"]
+script = ExtResource("1_qi14d")
+
+[node name="SpecialHitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SpecialHitbox"]
+shape = SubResource("CircleShape2D_7eiht")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.39215687)
+scale = Vector2(3, 3)
+texture = ExtResource("2_fors1")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true

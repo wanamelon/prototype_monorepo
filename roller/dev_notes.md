@@ -756,9 +756,26 @@ migrating to new system
 [ ] pass events back via a signal / private instance method (no need for return array)
 [ ] move game board to new system
 [ ] crop sounds -> shared audio player node?
-[ ] figure out less boilerplate overlap event
-[ ] implement grow from snail trail
+[ ] reduce boilerplate/general unreliability in overlap event
+[ ] kill off spawn chance shenanigans
+[ ] solve trying to call methods on freed item instances in events
 [ ] clean up old crop code
+[X] basic wiring item spawn
+[X] move around
+[X] Stamina system
+[X] fix progress bar gone?
+[X] signal for round end (stamina gone)
+[X] eliminate refs to old player_ball
+[X] generate bounces events
+[X] spawn the ball in a sane place
+[X] decide how to wire item destroyed event
+[X] speed buff on kill
+[X] add grow on kill
+[X] bouncing mode sprite
+[X] stamina as status effect?
+[X] spawn bounce pillar
+[X] more damage item?
+[X] implement grow from snail trail
 [X] ball: plan out the migration
 [X] make that bouncy more generic
 [X] BOUNCE: destroying static bodies when gone
@@ -774,6 +791,101 @@ migrating to new system
 [X] downlevel on hit
 [X] despawn on level zero
 
+---
+
+solve trying to call methods on freed item instances in events
+new item system is "working" but not fully robust and battle tested
+the deferred event system, while a massive win over computing dependencies
+
+it's also not super ergonomic to filter/cast events manually - lots of sad boilerplate
+nice thing is it's all isolated, so now comes the juicy reduction refactoring phase! pattern brain gooo (i am prml)
+
+ok we're thinking of too many problems at once. if I actually break it down - what ends up impacting our players?
+ideally, we react to physics events right away. This will feel snappier, I also think it's more intuitive!
+Same goes for applying spawns/despawns/other events - this should be same frame!
+
+our system is not broken. Nor is it super complex right now! Like I can easily imagine adding 20 weird items without
+issue!
+
+as a general rule, keeping events as pure data is the most predictable.
+when we have object references and stuff, it's like we're letting the other parts of the system do sad things
+like null dereferences or calling methods on that object which feels antithetical to our design
+
+---
+
+solving despawn null ref issue
+we still need the info of which item types! enum a bit nicer than making N classes! tags an extra generification ha
+make these refs item obj ids (or some identifier) instead
+
+---
+
+Solving make overlaps simpler
+we are dependent on order of first/second item (bad)
+eliminate item references
+easy way to distinguish what "kind" of overlap it is. We'll have many items (roller, slime trail now, later more)
+
+Different classes for each type? aka roller -> X overlaps?
+
+- Roller has special logic for fresh overlap, so maybe yes
+- At the same time, that's maybe annoying to filter, and feels less generic
+- If I want to react to any overlap, do I need to specify multiple classes to filter? (tag system can solve this?)
+
+wait take a step back. Overlaps even need to be events?
+it's trivial for each item to figure out its own overlaps
+and what we want to react to is usually not a direct overlap, but the resultant event yeah?
+having overlap=event is perhaps most generic way
+
+player generating "hits" feels better to me tbh
+one problem: what about "level up on hit"? hmm that could work
+likely nice as a physics event, so we can instant-react in same tick?
+
+why don't we just expose multiple phases for reaction? like item.activate1, activate2...
+then this is just the ordering problem again. There's a fundamental tradeoff between the simple approach
+and the one which reacts the fastest to events. I spot a mental trap here. Let's go with simple until it's an issue
+like...we can literally just 8x the tick speed and the problem magically "goes away"
+of course that comes with its own problems but eh
+actually having a few distinct phases feels ok to me. like a pre phase, main, and post
+where pre-phase generates events likely to be used for the main, including physics etc.
+and post-phase is more about applying events at a per-item level, such as level down despawning
+like yeah it is basically not that different from looping 3x, but it's a bit more explicit
+this allows us to easily avoid duplicate triggers. within the code for one item, easy to see we handle only once
+
+```
+trigger_events = last_tick_events.copy()
+trigger_events.append(..call pre-phase...)
+new_events = call main phase (trigger_events)
+new_events.append( call post phase (new events, trigger_events) )
+```
+
+hmm but what about event interceptions, is that needed?
+one example is events with a targeting config - we want to "resolve" that to a list of specific items/positions
+because that's more useful for triggering. like "added status effect to item X" vs. "added status effect to all items
+with tag"
+if you want to trigger off of added status effects for adjacent items, for example
+
+I think that could be done in a parallel system to the items, just at the end with like spawn despawn etc.
+One idea was the items could resolve the targeting and always spit out a list, but for things that have path dependency
+like you can't spawn 2 things in the same cell, that could be annoying? I mean there are workarounds, but it's cleaner
+IMO for the item to shoot out a targetingConfig and something else resolves all these
+
+there is something elegant about events being contained to one tick
+at the same time, I think that's a false "ideal" - real world complex systems often do have a lag between reactions
+consider a rube goldberg machine, or kubernetes with its operator loops.
+each item basically just moves the state more towards the desired state, incrementally
+
+---
+
+I like to have some general heuristics for what *should* be an event
+we're using these to represent "do this thing" AND "thing was done"
+there's no point in event unless something needs to react to it
+which is why internal state changes like "velocity changed" aren't events yet
+
+like yeah sadly no great heuristic yet. We need more problems to reveal the true shape
+the loose guideline is only "does anything else in system need to react?"
+
+I guess it is a bit hairy if we can change state via direct calls + events
+
+events are basically signals but more data driven so we can intercept
 
 ---
 
@@ -965,13 +1077,13 @@ Clean up (if level <= 0, queue free())
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: Status effects last longer
-[ ] Items: Count overlap while bounce as hit also?
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
 [ ] Design: Item system design more generic
 [ ] Design: Clean up unused code in item system and related
-[ ] Design: Basic framework for status effects (dedupe)
-[ ] Design: Migrate player ball to item system
-[ ] Design: Migrate crop to item system
+[X] Items: Count overlap while bounce as hit also?
+[X] Design: Basic framework for status effects (dedupe)
+[X] Design: Migrate player ball to item system
+[X] Design: Migrate crop to item system
 [X] Design: Implement for add stamina
 [X] Design: Rough sketch of architecture
 [X] Bug fix: only 2 lives not 3?
@@ -1005,6 +1117,295 @@ Clean up (if level <= 0, queue free())
 [X] Ball: Get points when hit crop
 [X] Ball: stamina system
 [X] Ball: game quota, win/lose
+
+# Item system challenge items!
+
+> Items: coin level up time is decreased
+
+Simple enough - a status effect -> levelUpFactor
+levelUpFactor used in level up probability expression
+
+> Items: higher base spawn level of coins
+
+hmm, a bit trickier:
+
+- status effect on spawner? too narrow, what about ones spawned by other items
+- could be status effect on any item which spawns crop, but how to know?
+- a central status effect paramvar, everything references. could work! bit more lift
+    - I like this the most. Simple but job done!
+- an interceptor in the spawn handling code? doesn't feel very generic, but requires no wiring
+- give items capacity to intercept events in a final stage. maybe they're given a mutable list, and each modifies it...
+    - but spawning is done via lambdas right now. we will need it to be pure data in order to be interceptable
+    - this is a pretty ok generic solution, but requires extending our overall system
+- coin itself handles? wouldn't exactly work, we need a status effect applied instantly right...
+
+> Items: temporarily do ZERO damage
+
+- status effect and/or paramvar effect?
+    - how does this interact with "more damage" status effect? do we need ordering?
+    - or maybe that can be implicit in the damage equation. EnableFactor (1 or 0) * ( base + moreDamageEffects )?
+- Event interceptor fits nicely. Hits have an "intensity" -> we just set that to zero
+    - but then we need an interceptor after the pre-step event calc phase (i.e. physics phase), seems a bit much?
+    - let's imagine there's no multi-stage, only two methods. then yeah this is clean enough
+
+Central paramvar approach still feels nice to me?
+It can even be done using the same framework tbh. Like the variable holder can be an item with status effects
+and each variable a property obj with tags
+
+---
+
+status effect/item modifier - can it be done more centrally? similar to paramvars
+for solving the problem of impacting "everything" from one place - ex: reduce ALL cooldowns
+and also not having to keep track of which items we already added some effect to
+could have something like a global cooldown factor defaults to 1.
+but we can subtract from it
+
+this might not fully replace item status effects though.
+also it's a bit less flexible by design. per-item effects work nicely with tags
+ex: reduce cooldowns for all bible-related items
+
+I guess what I'm really worried about is how to do the tagging
+and how to do exactly-once application semantics, even for items added AFTER the initial apply
+
+I think these are pointing me towards: central system, but item-level config
+an item would still just have state variables with tags, and not have to care about how many status effects etc.
+from the item logic's POV, I just see my "desired" speed/size, and can move my state to reflect that (velocity etc)
+for any special status effects, can be handled by a totally separate item, such as creating a bubble shield (fictional!)
+all our current status effects can be done that way methink
+
+just make it config: AddStatusEffect { ... effectId, addNewEveryFrame }
+then status effect system just checks if one with the id already exists
+and the status effect itself can have `isOneShot` and track if it's been applied
+
+addNewEveryFrame is super easy, just modify the duration = 0, and add sfx after counting down timers
+we don't even need an effectId, hell we don't need a param, just a named constant or a static factory
+oh wait, but then how do we do both:
+
+- updating the effect in place (maybe we change its intensity function)
+- also one-shot
+
+Those are intrinsically not compatible. The behavior *should* be that we respect oneshot, and any further
+addStatusEffect will fail, updated or not. But for this, we can't use the elegant system and will need an ID
+or else each source item will need to track ids it's applied to (nightmarish, sad, bad)
+adding a trigger UUID is not that hard
+
+example:
+
+- not applyOnce, but oneShot: stamina instant boost (like "heal hp")
+- applyOnce, not oneshot: dynamic speed boost based on remaining hp (aka an intensity function, which can vary)
+- both: bump level of every spawned crop exactly one time a bit after it spawns
+- neither: a typical temp buff like add speed on kill, or add size on hit
+
+> Items: the lower your stamina, the higher your speed
+
+fascinating. I dunno actually haha
+
+- add one-frame status effects for speed based on stamina remaining for each roller?
+    - pretty good, simple, easy
+    - but it does feel a tiny bit hacky - it achieves the goal very indirectly
+    - broadly the issue then is how to dynamically adjust some property on an item based on conditions
+    - nice thing: if something increases the intensity of THIS item, then the next status effects it applies will
+      reflect
+- a custom status effect which adds to speed based on a multiple?
+    - maybe can be generic: an expression var for intensity? but based upon what...property name substitution maybe?
+    - more elegant and direct
+    - what if we want to modify that custom status effect? like, increase the factor? hmm
+        - use a shared unique id, and use computeIfAbsent semantics + mutate the effect? hmm...that works!
+
+probably both fine. it's not super conclusive? Former feels easier (no EL), but EL not THAT hard
+it could even be a lambda function(targetItem, statusFxState) -> float intensity, not an EL
+in fact that seems like a generally nice thing we'd want to do for attenuating effect by duration, anyhow
+an expression is cool for visibility, but isn't terrifically important. and it's less flexible/more boiler
+
+ok yeah then the above 2 choices aren't total dichotomies. the real difference is:
+
+- keep one status effect, and computeIfAbsent
+- new status effect each frame
+
+easy to see latter is simpler
+
+> Item: force trigger another
+
+- ForceTrigger(ItemRef) event -> every item handles it optionally
+    - simple, but boilerplate
+    - can we somehow reduce the boiler? I.e. separate the action into a private method, then it's quite simple nah?
+- Break items into TriggerGroups with triggers/actions
+    - TriggerGroups can opt-in to allowing force trigger
+    - does this break for cases where the trigger is used to compute values the action uses?
+    - for example, passing the source of a despawn -> downstream ppl. hmm yeah
+    - but it's a a possible major refactor!
+- Expose actions as lambdas (with names / opt in flag etc.) - and handle force triggers via their own way
+    - Not all that generic. I think the wider problem is "runtime modification of trigger conditions"
+- Turn a forceTrigger event into exactly the conditions that would cause a trigger normally
+    - This seems very jank and overly complex
+- Triggers/actions as pure config, which we can modify at runtime
+    - Definitely the most generic way. This allows us to basically reprogram an item on the fly which is cool
+    - however, that's maybe not necessary? I think status effects + a bit of smart design get us 90% of the way
+    - but without the work of fully generifying triggers (maybe that's simpler than I thought?)
+
+> Item: Kaboom
+
+There's a bomb, when it blows up it sets the ball's direction and gives it a short speed buff, and obliterate self
+and also counts as a hit on adjacent cells
+
+the novel problems:
+First: changing ball direction?
+
+- new event type?
+- directly modify ball dir? big nono, very sad no I not no pls no
+- trigger blow up off bounce - that way ball definitely gets blasted?
+    - that does not solve impacting OTHER balls
+      Partial to an "ImpulseEvent" - anything can react to this!
+
+Second:
+
+AOE could be a modifiable. Maybe even a random number of cells?
+EASILY solved - itemParam with some tags, ye hwee
+
+> Items: when killing a coin, may level up the lowest value coin = highest value
+
+Pretty easy! Trigger despawn with tag crop, find lowest and highest value existing crop,
+then a level up event on the lowest crop
+
+> Items: Future: Mark price equal to adjacent items on spawn. Make 10x Delta value on expire
+
+> Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
+
+I suppose we'll need a spawner for this too. Maybe generify the spawner actually
+There's gonna be a ton of things that need spawners...
+At the same time, an item is fine and not THAT much boilerplate.
+We can even define it as an inner class to avoid needing more files...
+
+> Items: Dominoes - hit N ascending count values in row gives value = N x last (each time)
+
+Maintains some state per roller. Each time there's a hit on a crop, we track the value in some array
+we take the last value of the array, looking backwards to find current combo length
+then we iterate through the new events, looking for the next value, give points
+If we can find then ext, then keep going...
+Sort events in same frame to maximize value to player?
+
+This is the kind of state I think doesn't make sense to force trigger...
+like how would we do that? maybe just give the points again but like...
+
+> Items: Status effects last longer
+
+- Event interception (when?)
+- Special thing in status effect system (change delta, or add time on create?)
+- ParamVar multiplier
+- Yet another status effect?
+- status effects on status effects (ugh yucky!)
+
+> Items: Count overlap while bounce as hit also?
+
+Pretty easy - an item looks for when player overlaps stuff -> it's a hit!
+maybe with some throttling to not be tremendously overwhelming haha
+
+> Items: Mini ball which briefly hits other coins (can trigger events)
+
+easy enough - spawn a bilbo balbo belbo bulbo ballbo
+Would rather not replicate all the roller code
+so maybe it shouldn't have speed buffs?
+
+One thing - do we want to replicate hitting and overlap code? That also feels annoying
+I imagine we'll want many types of projectiles
+It might be good to extract shared logic for these, eventually:
+
+- Motion
+- Safe-spawning / safe enabling
+- What counts as a "new hit"
+- Producing overlap events / being overlapped
+- Reacting to impulses
+
+> Every 3 spins, all symbols are considered adjacent.
+
+Generally, something making restrictive but powerful triggers not so restrictive
+
+This one, I'm genuinely not sure.
+
+- Adjacency checks delegate to some central object, which we can change to return true always or be more lenient?
+- Make adjacency an event, and manufacture events (so many events ahhh!! not really a perf concern, just logically...)
+
+What about something which "triggers adjacent items" or whatnot. We'd need to return the full list of items or
+more items which match a wider AOE, something like...
+
+And uh it would be nice to do this more granularly than "100% of items"
+So in that central approach, we can maybe check if the caller matches certain tags or whatnot
+
+> The conditional effects of essences must happen 2 times for them to be destroyed.
+
+
+
+> Re roll the board (en masse despawn)
+
+Trivial
+
+> Randomize triggers for all items?
+
+Ok that's a little extreme. Feels like quite a pickle when you have unique triggers like for me
+In Nubby, there's only like a handful of triggers which makes it a bit simpler: Pop, halve, double, etc.
+They are quite context agnostic - so a trigger is literally just an enum with no extra data (or so I believe)
+
+Still, it's doable. We'd want to separate trigger and action code
+And we'll also need to make sure actions don't require trigger context to perform.
+I.e. killing a crop -> speed buff on the ball that killed it, this doesn't work. We don't know which ball (if force
+trigger)
+the action should instead apply a status to maybe the nearest ball (even under regular trigger)
+or we can define special defaults for the force trigger case. feels not very generic though.
+like what if we aren't force triggering but just broadening the conditions for regular trigger hnng...
+
+But all that work for what amounts to a cheap laugh isn't a great feeling
+It would need to be a more interesting item, like: when I possess this, any item triggering off of
+a crop being destroyed will now also have a chance to trigger on a level down
+that's achievable already by something like "when I see level down, create a fake kill event"
+
+> Changing probability distributions
+
+Don't need to be too fancy. Just modifying chances fits decently into status effects
+
+Ah ok maybe we can stick with dicts for now. It's just...super easy yeah, and we can dupe
+A status effect could look at all these + its own state (duration, base duration, etc.)
+Rather than doing properties which require a bit more thought
+
+- speed
+  - 
+- stamina
+  - 
+- size
+  - 
+
+hmm but is it bad to have properties?
+
+```
+ItemParam
+    name: "roller_speed"
+    baseValue: 15.0 # using a float, we can represent float, int, and bool (0 vs other)
+    tags: ["physical", "speed"]
+    validator: callable(value) -> validatedValue, ex: clamp
+    value():
+
+status effects just make it go up or down I guess
+
+Roller:
+    stamina: ItemParam
+    speed: ItemParam
+    damage: ItemParam
+```
+
+> Dud item, added as a challenge on later levels, or as a negative effect
+
+Pretty darn easy. We already have bounce pillar. We can make an item like that but with infinite HP
+
+> Items: Drop stuff in middle of round (with some limit)?
+
+Will require a new system somewhat.
+Could be drag and drop. While deciding, ideally match should slow down.
+Feels doable by adjusting delta? but lots of things trigger based on tick, not delta!
+
+> Items with across-round state, like "only usable 5 times"
+
+> More options / cheaper cost in store
+
+> Transform common item -> super rare one
 
 # Looking at some competitors in this genre
 
