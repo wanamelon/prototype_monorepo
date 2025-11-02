@@ -373,9 +373,9 @@ class ItemTarget extends RefCounted:
 	pass
 
 class SpecificItem extends ItemTarget:
-	var target: Item
-	func _init(target: Item):
-		self.target = target
+	var target: ItemRef
+	func _init(target):
+		self.target = ItemRef.from(target)
 
 class CollisionResult extends RefCounted:
 	var collision: KinematicCollision2D
