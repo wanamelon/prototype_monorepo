@@ -9,7 +9,7 @@ var _damage: int = 1
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
-var _stamina_seconds: float = 5
+var _stamina_seconds: float = 1
 var _max_stamina := _stamina_seconds
 var finished := false
 

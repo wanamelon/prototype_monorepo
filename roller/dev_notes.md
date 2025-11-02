@@ -1079,8 +1079,8 @@ Clean up (if level <= 0, queue free())
 [ ] Items: Status effects last longer
 [ ] Items: Crop code could be a lot simpler!
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
-[ ] Design: Item system design more generic
-[ ] Design: Clean up unused code in item system and related
+[X] Design: Item system design more generic
+[X] Design: Clean up unused code in item system and related
 [X] Items: Count overlap while bounce as hit also?
 [X] Design: Basic framework for status effects (dedupe)
 [X] Design: Migrate player ball to item system

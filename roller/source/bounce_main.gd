@@ -32,8 +32,8 @@ func _on_player_finish():
 		stage_setup()
 
 func stage_setup():
+	$GameBoard.clear()
 	$ProgressDisplay/LivesLabel.text = str(_lives_remaining) + " Lives Left"
-	$GameBoard.generate_grid_items(round)
 	var current_score := 0 if _item_system == null else _item_system.get_score()
 	_item_system = ItemSystem.new(item_configs, $GameBoard, current_score)
 	_item_system.score_changed.connect(_on_score_changed)
