@@ -1,7 +1,7 @@
 class_name SlimeTrail extends ItemSystem.Item
 
-var _level_up_chance_per_second: float = 0.5
-var _duration_sec: float = 1.0
+var _level_up_chance_per_second: float = 0.25
+var _duration_sec: float = 0.7
 
 static func instance() -> SlimeTrail:
 	return load("res://source/item/slime_trail.tscn").instantiate()
