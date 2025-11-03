@@ -14,6 +14,7 @@ enum ItemId {
 	SPAWN_CROPS_ON_START,
 	ROLLER,
 	MINI_BALL,
+	STATUS_EFFECTS_LAST_LONGER,
 }
 
 @export var item_id: ItemId

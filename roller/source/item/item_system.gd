@@ -48,6 +48,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return LeaveSlimeTrail.new()
 		ItemDef.ItemId.MINI_BALL:
 			return MiniBall.Spawner.new()
+		ItemDef.ItemId.STATUS_EFFECTS_LAST_LONGER:
+			return StatusEffectsLastLonger.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0
@@ -61,7 +63,9 @@ func _physics_process(__):
 	events.append_array(compute_hits(_match_state))
 	for item: Item in _match_state.items:
 		item.activate(_match_state)
-		events.append_array(item.flush_events())
+		events.append_array(item._flush_events())
+	for item: Item in _match_state.items:
+		item.intercept_events(events)
 	_advance_status_effect_timers()
 	_apply_events(events)
 	_check_end_condition()
@@ -208,28 +212,21 @@ class Item extends Node2D:
 		_item_root = item_root
 		_audio_player = audio_player
 	
-	# Business logic spawn setup: What bodies/display nodes to register...
-	func spawn():
-		pass
-	
-	# Generate physics events (collisions + overlaps)
-	func advance_physics(tick_delta: float) -> Array[ItemEvent]:
-		return []
-	
 	# The core of the logic! Evaluate triggers and perform actions
-	@abstract func activate(state: MatchState) -> void
+	func activate(state: MatchState) -> void: pass # To be overridden
+	
+	# Modifies event array in place - ex: increase status effect duration!
+	func intercept_events(events: Array[ItemEvent]) -> void: pass # To be overridden
+	
+	func tags() -> Array[String]: return [] as Array[String]
 	
 	func _add_event(event: ItemEvent) -> void:
 		_new_events.append(event)
 	
-	func flush_events() -> Array[ItemEvent]:
+	func _flush_events() -> Array[ItemEvent]:
 		var copy = _new_events.duplicate()
 		_new_events.clear()
 		return copy
-	
-	func tags() -> Array[String]:
-		var typed_array: Array[String] = []
-		return typed_array
 	
 	func has_all_tags(...query_tags: Array):
 		var query_tags_in_self = Utils.filter(query_tags, func (t): return t in tags())

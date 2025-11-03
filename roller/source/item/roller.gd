@@ -8,10 +8,10 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 @onready var _original_hitbox_radius: float = $Hitbox/CollisionShape2D.shape.radius
 # TODO: belong inside character body?
 var _damage: int = 1
-var _speed: float = 1400.0
+var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
-var _stamina_seconds: float = 55
+var _stamina_seconds: float = 5
 var _max_stamina := _stamina_seconds
 var finished := false
 

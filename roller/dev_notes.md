@@ -1098,23 +1098,41 @@ And the size buff should be limited at a bit under 64 haha
 also, bounce off everything is maybe just a little crazy. we can tune that down so it's only
 bounce off like 3 random ones.
 
+### Status effects last longer
+
+- Event interception (when?)
+- Special thing in status effect system (change delta, or add time on create?)
+- ParamVar multiplier
+- Yet another status effect?
+- status effects on status effects (ugh yucky!)
+
+AEUGH what is pragmatism??? hmmm...
+the ugliest solution we just add a check inside the status effect system
+if we have that item, boom status effects are somewhat longer
+
+I prefer some kind of "event interceptor" hook we expose on items
+can broadly see that being useful ok FRICK it's happening hnng
+we need to call this before actually applying the status effect in the same tick
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers
 [ ] auto-add source trace (like stack trace) for ALL events
-[ ] Tags as method, not field (ez to override), also "hasAny/hasAll"
-[ ] Bug fix: stuck between colliders at high speeds
 [ ] Item stacking (ex: more slime trail item -> increase level up chance, NOT)
-[ ] Items: coin level up time is decreased
 [ ] Items: temporarily do ZERO damage
 [ ] Items: when killing a coin, may level up the lowest value coin = highest value
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
-[ ] Items: higher base spawn level of coins
 [ ] Items: the lower your stamina, the higher your speed
-[ ] Items: reduce all cooldowns
-[ ] Items: Status effects last longer
-[ ] Items: Mini ball which briefly hits other coins (can trigger events)
+[ ] Player stamina bar useless invisible at higher speeds
+[ ] La bomba
+[ ] Items: coin level up time is decreased
+[ ] Items: reduce all cooldowns by some amount
+[ ] Items: higher base spawn level of coins
+[X] Items: Status effects last longer
+[X] Bug fix: stuck between colliders at high speeds
+[X] Tags as method, not field (ez to override), also "hasAny/hasAll"
+[X] Items: Mini ball which briefly hits other coins (can trigger events)
 [X] ~~Item IS itemref? nah queue free~~
 [X] Items: Crop code could be a lot simpler!
 [X] Design: Item system design more generic
@@ -1325,14 +1343,6 @@ Sort events in same frame to maximize value to player?
 
 This is the kind of state I think doesn't make sense to force trigger...
 like how would we do that? maybe just give the points again but like...
-
-> Items: Status effects last longer
-
-- Event interception (when?)
-- Special thing in status effect system (change delta, or add time on create?)
-- ParamVar multiplier
-- Yet another status effect?
-- status effects on status effects (ugh yucky!)
 
 > Items: Count overlap while bounce as hit also?
 
