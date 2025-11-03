@@ -1114,21 +1114,39 @@ I prefer some kind of "event interceptor" hook we expose on items
 can broadly see that being useful ok FRICK it's happening hnng
 we need to call this before actually applying the status effect in the same tick
 
+### Items: higher base spawn level of coins
+
+hmm, a bit trickier:
+
+- status effect on spawner? too narrow, what about ones spawned by other items
+- could be status effect on any item which spawns crop, but how to know?
+- a central status effect paramvar, everything references. could work! bit more lift
+    - I like this the most. Simple but job done!
+- an interceptor in the spawn handling code? doesn't feel very generic, but requires no wiring
+- give items capacity to intercept events in a final stage. maybe they're given a mutable list, and each modifies it...
+    - but spawning is done via lambdas right now. we will need it to be pure data in order to be interceptable
+    - this is a pretty ok generic solution, but requires extending our overall system
+- coin itself handles? wouldn't exactly work, we need a status effect applied instantly right...
+
+ah indeed, just a status effect is good. we can make it more generic shortly no?
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers
 [ ] auto-add source trace (like stack trace) for ALL events
 [ ] Item stacking (ex: more slime trail item -> increase level up chance, NOT)
+[ ] Rollers/etc should not bounce off each other (it's too buggy!)
 [ ] Items: temporarily do ZERO damage
 [ ] Items: when killing a coin, may level up the lowest value coin = highest value
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
 [ ] Items: the lower your stamina, the higher your speed
 [ ] Player stamina bar useless invisible at higher speeds
-[ ] La bomba
-[ ] Items: coin level up time is decreased
+[ ] Items: crop level up time is decreased
 [ ] Items: reduce all cooldowns by some amount
+[ ] Bomb impacts nearby crops etc.
 [ ] Items: higher base spawn level of coins
+[X] La bomba
 [X] Items: Status effects last longer
 [X] Bug fix: stuck between colliders at high speeds
 [X] Tags as method, not field (ez to override), also "hasAny/hasAll"
@@ -1181,20 +1199,6 @@ we need to call this before actually applying the status effect in the same tick
 
 Simple enough - a status effect -> levelUpFactor
 levelUpFactor used in level up probability expression
-
-> Items: higher base spawn level of coins
-
-hmm, a bit trickier:
-
-- status effect on spawner? too narrow, what about ones spawned by other items
-- could be status effect on any item which spawns crop, but how to know?
-- a central status effect paramvar, everything references. could work! bit more lift
-    - I like this the most. Simple but job done!
-- an interceptor in the spawn handling code? doesn't feel very generic, but requires no wiring
-- give items capacity to intercept events in a final stage. maybe they're given a mutable list, and each modifies it...
-    - but spawning is done via lambdas right now. we will need it to be pure data in order to be interceptable
-    - this is a pretty ok generic solution, but requires extending our overall system
-- coin itself handles? wouldn't exactly work, we need a status effect applied instantly right...
 
 > Items: temporarily do ZERO damage
 

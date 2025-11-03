@@ -50,6 +50,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return MiniBall.Spawner.new()
 		ItemDef.ItemId.STATUS_EFFECTS_LAST_LONGER:
 			return StatusEffectsLastLonger.new()
+		ItemDef.ItemId.EXPLOSIVE_BARREL:
+			return ExplosiveBarrel.Spawner.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0
@@ -268,6 +270,15 @@ class StatusEffect extends RefCounted:
 		self.id = id
 		self.intensity = intensity
 		self.duration_sec = duration_sec
+
+class Impulse extends ItemEvent:
+	var force: Vector2 
+	var duration: float
+	var target: ItemRef
+	func _init(force: Vector2, duration: float, target):
+		self.force = force
+		self.duration = duration
+		self.target = ItemRef.from(target)
 
 class AddStatusEffect extends ItemEvent:
 	var effect: StatusEffect

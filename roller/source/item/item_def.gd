@@ -15,6 +15,7 @@ enum ItemId {
 	ROLLER,
 	MINI_BALL,
 	STATUS_EFFECTS_LAST_LONGER,
+	EXPLOSIVE_BARREL,
 }
 
 @export var item_id: ItemId

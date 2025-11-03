@@ -22,6 +22,9 @@ func activate(state: MatchState):
 	if _life_sec <= 0:
 		_add_event(ItemSystem.DespawnEvent.new(self, self))
 
+func tags():
+	return [Tag.PROJECTILE] as Array[String]
+
 class Spawner extends ItemSystem.Item:
 	var _points_given_counter: int = 0
 	func activate(state: MatchState):

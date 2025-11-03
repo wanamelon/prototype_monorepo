@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b0rfqip0qdyim"]
+[gd_scene load_steps=17 format=3 uid="uid://b0rfqip0qdyim"]
 
 [ext_resource type="Script" uid="uid://xvjoe2x4yw5k" path="res://source/item/throttling_audio_player.gd" id="1_by30w"]
 [ext_resource type="AudioStream" uid="uid://dqqfhtkp0rm3" path="res://assets/audio/bubble-pop-406640.ogg" id="2_by30w"]
@@ -11,6 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://css8sm1fubtar" path="res://assets/audio/impactSoft_heavy_000.ogg" id="9_5kp0x"]
 [ext_resource type="AudioStream" uid="uid://wwwnmvva1qka" path="res://assets/audio/impactSoft_heavy_001.ogg" id="10_vgns4"]
 [ext_resource type="AudioStream" uid="uid://bsvxnotkbfkop" path="res://assets/audio/impactSoft_heavy_002.ogg" id="11_bj00k"]
+[ext_resource type="AudioStream" uid="uid://dfxqjhb20pykd" path="res://assets/audio/explosion-rubble.ogg" id="12_vgns4"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_1v4ny"]
 random_pitch = 1.02
@@ -62,3 +63,8 @@ volume_db = 10.0
 [node name="BounceAudioPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = SubResource("AudioStreamRandomizer_7tsm0")
 volume_db = 10.0
+
+[node name="BarrelExplode" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_vgns4")
+volume_db = 0.68
+pitch_scale = 1.63

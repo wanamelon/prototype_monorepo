@@ -22,7 +22,7 @@ static func instance() -> Roller:
 	return roller
 
 func tags():
-	return [Tag.ROLLER] as Array[String]
+	return [Tag.ROLLER, Tag.PROJECTILE] as Array[String]
 
 func _ready():
 	$CharacterBody2D.position = position
@@ -35,6 +35,12 @@ func compute_damage_per_hit() -> int:
 	return damage_with_buffs
 
 func activate(state: MatchState):
+	for impulse: Impulse in Utils.filter(state.last_tick_events, func(i): return (i is Impulse and i.target.matches(self))):
+		var speed_sum := impulse.force.length() + _velocity.length()
+		var new_vel : Vector2 = (_velocity + impulse.force).normalized() * speed_sum
+		_velocity = new_vel
+		_add_event(ItemSystem.AddStatusEffect.new(
+			ItemSystem.StatusEffect.new(ItemSystem.StatusEffectId.SPEED_BUFF, impulse.force.length(), 1.5), self))
 	var collision_result: KinematicCollision2D = $CharacterBody2D.move_and_collide(_velocity * state.delta)
 	position = $CharacterBody2D.position
 	if collision_result:

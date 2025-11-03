@@ -24,3 +24,6 @@ func play_spawn_mini_ball():
 
 func play_bounce():
 	$BounceAudioPlayer.play()
+
+func play_barrel_explode():
+	$BarrelExplode.play()
