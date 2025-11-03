@@ -1064,20 +1064,46 @@ Clean up (if level <= 0, queue free())
 
 ---
 
+# Item impls round 2 yeee
+
+### Mini ball hitting coins
+
+We just want a basic one. It's not a second roller
+Idea is: every 20 give points, we spawn a miniball which can hit and kill crops, bounce off stuff etc.
+item interactions will be interesting. Anything using bounce event we must switch perhaps...oh wait we're good!
+
+Ok, firstly this FreshOverlap thing is overrated. It should just be "hit" and
+explicitly have an aggressor and a receiver
+how to have the mini ball also do hits (and maybe bounces)? hmm good q...
+should it collide with the player / walls? walls easy, player eh
+speed buff -> players, not miniball?
+
+walls on different layer okie dokie
+
+let's set up basic skellington...
+
+extract ProjectileBody
+defined as collisionBody which can bounce and hit
+is NOT an item, just regular old Godot composition
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers
+[ ] auto-add source trace (like stack trace) for ALL events
+[ ] Tags as method, not field (ez to override), also "hasAny/hasAll"
 [ ] Bug fix: stuck between colliders at high speeds
+[ ] Item stacking (ex: more slime trail item -> increase level up chance, NOT)
 [ ] Items: coin level up time is decreased
-[ ] Items: higher base spawn level of coins
 [ ] Items: temporarily do ZERO damage
-[ ] Items: the lower your stamina, the higher your speed
 [ ] Items: when killing a coin, may level up the lowest value coin = highest value
-[ ] Items: Future: Mark price equal to adjacent items on spawn. Make 10x Delta value on expire
-[ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
+[ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
+[ ] Items: higher base spawn level of coins
+[ ] Items: the lower your stamina, the higher your speed
+[ ] Items: reduce all cooldowns
 [ ] Items: Status effects last longer
 [ ] Items: Mini ball which briefly hits other coins (can trigger events)
+[X] ~~Item IS itemref? nah queue free~~
 [X] Items: Crop code could be a lot simpler!
 [X] Design: Item system design more generic
 [X] Design: Clean up unused code in item system and related

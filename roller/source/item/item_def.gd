@@ -13,6 +13,7 @@ enum ItemId {
 	MORE_DAMAGE,
 	SPAWN_CROPS_ON_START,
 	ROLLER,
+	MINI_BALL,
 }
 
 @export var item_id: ItemId

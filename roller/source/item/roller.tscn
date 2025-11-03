@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3 uid="uid://bxtcvhm6hhujx"]
 
 [ext_resource type="Script" uid="uid://bkagi0loig0n2" path="res://source/item/roller.gd" id="1_2o2xb"]
-[ext_resource type="Texture2D" uid="uid://crkxiobtsaim" path="res://assets/rolling_ball/hole_large_end.png" id="2_id712"]
+[ext_resource type="Texture2D" uid="uid://cmvt10slodjoe" path="res://assets/dotted_circle.png" id="2_fwkh7"]
 [ext_resource type="Texture2D" uid="uid://d4fypba2jshml" path="res://assets/smiling_coin_0.png" id="3_q2tw8"]
 [ext_resource type="AudioStream" uid="uid://css8sm1fubtar" path="res://assets/audio/impactSoft_heavy_000.ogg" id="5_h55r4"]
 [ext_resource type="AudioStream" uid="uid://wwwnmvva1qka" path="res://assets/audio/impactSoft_heavy_001.ogg" id="6_hfsey"]
@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://dqqyk4o7rd7bu" path="res://assets/audio/retro-coin-4-236671.mp3" id="8_dc72x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ovsfe"]
-radius = 48.0
+radius = 36.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_55t47"]
 streams_count = 3
@@ -22,34 +22,22 @@ random_pitch = 1.02
 streams_count = 1
 stream_0/stream = ExtResource("8_dc72x")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ldloj"]
-radius = 50.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_fwkh7"]
+radius = 40.0
 
 [node name="Roller" type="Node2D"]
 script = ExtResource("1_2o2xb")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 top_level = true
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 shape = SubResource("CircleShape2D_ovsfe")
 
-[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -60.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(1.5, 1.5)
-fill_mode = 4
-texture_progress = ExtResource("2_id712")
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.75, 0.75)
+scale = Vector2(0.57, 0.57)
 texture = ExtResource("3_q2tw8")
 
 [node name="BounceAudioPlayer" type="AudioStreamPlayer2D" parent="."]
@@ -62,4 +50,32 @@ stream = SubResource("AudioStreamRandomizer_ldloj")
 [node name="Hitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-shape = SubResource("CircleShape2D_ldloj")
+shape = SubResource("CircleShape2D_fwkh7")
+
+[node name="Progress" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Progress"]
+modulate = Color(0.9926731, 0.6537879, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+pivot_offset = Vector2(64, 64)
+value = 50.0
+fill_mode = 4
+texture_progress = ExtResource("2_fwkh7")

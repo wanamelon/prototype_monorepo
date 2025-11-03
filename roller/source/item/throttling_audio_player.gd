@@ -18,3 +18,9 @@ func play_crop_level_up():
 
 func play_crop_level_down():
 	$CropLevelDown.play()
+
+func play_spawn_mini_ball():
+	$SpawnMiniBall.play()
+
+func play_bounce():
+	$BounceAudioPlayer.play()

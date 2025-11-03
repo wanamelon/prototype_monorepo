@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://d0ow8h07t4ip3"]
+
+[ext_resource type="Script" uid="uid://cqt5wfqf26c6x" path="res://source/item/mini_ball.gd" id="1_gq3tp"]
+[ext_resource type="Texture2D" uid="uid://otw4mq54uv2d" path="res://assets/rolling_ball/ball_blue_small_alt.png" id="2_4qfmu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hu2rn"]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_w6fd0"]
+radius = 50.0
+
+[node name="MiniBall" type="Node2D"]
+script = ExtResource("1_gq3tp")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+top_level = true
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CircleShape2D_hu2rn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_4qfmu")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_w6fd0")

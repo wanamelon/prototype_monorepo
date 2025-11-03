@@ -9,5 +9,5 @@ func activate(state: MatchState):
 		if despawn.source.has_all_tags(Tag.ROLLER) and Utils.RNG.randf() < 1.5:
 			if bounce_pillar_count < 4:
 				_add_event(ItemSystem.SpawnEvent.new(
-					BouncePillar.instance, ItemSystem.AnyFreeCell.new(), 1.0))
+					BouncePillar.instance, ItemSystem.AnyFreeCell.new()))
 				bounce_pillar_count += 1

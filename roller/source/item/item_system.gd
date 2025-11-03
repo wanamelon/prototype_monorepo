@@ -46,6 +46,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 			return MoreDamage.new()
 		ItemDef.ItemId.SNAIL_TRAIL_OF_LEVEL_UP_SLIME:
 			return LeaveSlimeTrail.new()
+		ItemDef.ItemId.MINI_BALL:
+			return MiniBall.Spawner.new()
 		ItemDef.ItemId.ROLLER:
 			var roller := Roller.instance()
 			roller.position = Vector2(1920, 1080) / 2.0
@@ -56,7 +58,7 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 
 func _physics_process(__):
 	var events: Array[ItemEvent] = []
-	events.append_array(compute_overlaps(_match_state))
+	events.append_array(compute_hits(_match_state))
 	for item: Item in _match_state.items:
 		item.activate(_match_state)
 		events.append_array(item.flush_events())
@@ -91,7 +93,7 @@ func _apply_events(events: Array[ItemEvent]):
 			var new_item: Item = spawn.factory.call()
 			var was_placed: bool = false
 			if spawn.targeting_config is AnyFreeCell:
-				was_placed = _game_board._spawn_item_in_random_cell(new_item, spawn.spawn_chance)
+				was_placed = _game_board._spawn_item_in_random_cell(new_item, 1.0)
 			elif spawn.targeting_config is SpecificPosition:
 				new_item.position = (spawn.targeting_config as SpecificPosition).position
 				add_child(new_item)
@@ -159,8 +161,8 @@ static func stable_overlap_key(first: Object, second: Object):
 	uids.sort()
 	return uids
 
-func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
-	var overlaps: Array[ItemEvent] = []
+func compute_hits(match_state: MatchState) -> Array[ItemEvent]:
+	var hits: Array[ItemEvent] = []
 	var hitbox_to_item = {}
 	for item in match_state.items:
 		for child in item.get_children():
@@ -176,10 +178,10 @@ func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
 				var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
 				if (last_overlap_state.last_hit_phase != roller._bounce_count 
 						and match_state.tick > last_overlap_state.last_hit_tick + 10):
-					overlaps.append(FreshOverlapEvent.new(roller, overlapped_item))
+					hits.append(HitEvent.new(roller, overlapped_item))
 					last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
 						roller._bounce_count, match_state.tick)
-	return overlaps
+	return hits
 
 func is_safe_to_place(shape: Shape2D, global_pos: Vector2, excluded=[]):
 	var query = PhysicsShapeQueryParameters2D.new()
@@ -200,7 +202,6 @@ class Item extends Node2D:
 	var _audio_player: ThrottlingAudioPlayer
 	var status_effects: Array[StatusEffect] = []
 	var _new_events: Array[ItemEvent] = []
-	var tags: Array[String] = []
 	
 	func _inject(physics_calculator: StatefulPhysicsCalculator, item_root: Node2D, audio_player: ThrottlingAudioPlayer):
 		_physics_calculator = physics_calculator
@@ -225,6 +226,18 @@ class Item extends Node2D:
 		var copy = _new_events.duplicate()
 		_new_events.clear()
 		return copy
+	
+	func tags() -> Array[String]:
+		var typed_array: Array[String] = []
+		return typed_array
+	
+	func has_all_tags(...query_tags: Array):
+		var query_tags_in_self = Utils.filter(query_tags, func (t): return t in tags())
+		return query_tags_in_self.size() == query_tags.size()
+	
+	func has_any_tags(...query_tags: Array):
+		var query_tags_in_self = Utils.filter(query_tags, func (t): return t in tags())
+		return not query_tags_in_self.is_empty()
 
 @abstract
 class Location extends RefCounted:
@@ -276,23 +289,21 @@ class AddStatusEffect extends ItemEvent:
 #		self.victim = victim
 
 class BounceEvent extends ItemEvent:
-	var roller: Roller
 	var collided_item: ItemRef
 	
-	func _init(roller: Roller, collided_item: Item):
-		self.roller = roller
+	func _init(collided_item: Item):
 		self.collided_item = ItemRef.from(collided_item)
 
-class FreshOverlapEvent extends ItemEvent:
-	var first: ItemRef
-	var second: ItemRef
+class HitEvent extends ItemEvent:
+	var aggressor: ItemRef
+	var receiver: ItemRef
 	var damage: int = 1
 	
-	func _init(first, second):
-		self.first = ItemRef.from(first)
-		self.second = ItemRef.from(second)
-		if first is Roller:
-			self.damage = first.compute_damage_per_hit()
+	func _init(aggressor, receiver):
+		self.aggressor = ItemRef.from(aggressor)
+		self.receiver = ItemRef.from(receiver)
+		if aggressor is Roller: # TODO: fix hackiness
+			self.damage = aggressor.compute_damage_per_hit()
 
 class GivePointsEvent extends ItemEvent:
 	var points: int
@@ -303,12 +314,10 @@ class SpawnEvent extends ItemEvent:
 	# Later: Make this more declarative?
 	var factory: Callable
 	var targeting_config: LocationTarget
-	var spawn_chance: float
 	
-	func _init(factory: Callable, targeting_config: LocationTarget, spawn_chance: float):
+	func _init(factory: Callable, targeting_config: LocationTarget):
 		self.factory = factory
 		self.targeting_config = targeting_config
-		self.spawn_chance = spawn_chance
 
 class DespawnEvent extends ItemEvent:
 	var target: ItemRef
@@ -349,7 +358,7 @@ class ItemRef extends RefCounted:
 	
 	static func from(item) -> ItemRef:
 		if item is Item:
-			return ItemRef.new(item.get_instance_id(), item.tags.duplicate())
+			return ItemRef.new(item.get_instance_id(), item.tags())
 		elif item is ItemRef:
 			return item
 		elif item == null:

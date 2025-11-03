@@ -15,14 +15,15 @@ const LEVEL_COLORS := [
 	Color.MEDIUM_VIOLET_RED,
 	Color.DARK_VIOLET
 ]
-var rng := RandomNumberGenerator.new()
 var level: int = 1
 
 static func instance(mean_level: float = 1.0, level_std: float = 1.0) -> Crop:
 	var crop: Crop = CROP_SCENE.instantiate()
 	crop.level = clampi(int(round(Utils.RNG.randfn(mean_level, level_std))), 1, MAX_LEVEL)
-	crop.tags = [Tag.CROP]
 	return crop
+
+func tags():
+	return [Tag.CROP] as Array[String]
 
 func activate(state: MatchState):
 	_try_level_up_on_tick(state)
@@ -32,14 +33,14 @@ func activate(state: MatchState):
 func _try_level_up_on_tick(state: MatchState):
 	var expected_seconds_until_growth: float = 4.0 + 8 * log(level)
 	var growth_probability_per_second := 1.0 / expected_seconds_until_growth
-	if rng.randf() < (state.delta * growth_probability_per_second):
+	if Utils.RNG.randf() < (state.delta * growth_probability_per_second):
 		_add_event(ItemSystem.LevelChangeEvent.new(1, ItemSystem.SpecificItem.new(self), self))
 
 func _level_down_if_hit(state: MatchState):
-	for overlap: ItemSystem.FreshOverlapEvent in Utils.filter(state.last_tick_events, func (e): return e is ItemSystem.FreshOverlapEvent):
+	for hit: ItemSystem.HitEvent in Utils.filter(state.last_tick_events, func (e): return e is ItemSystem.HitEvent):
 		# TODO: should not depend on first/second order bruh
-		if overlap.first.has_all_tags(Tag.ROLLER) and overlap.second.matches(self):
-			_add_event(ItemSystem.LevelChangeEvent.new(-overlap.damage, ItemSystem.SpecificItem.new(self), overlap.first))
+		if hit.aggressor.has_all_tags(Tag.ROLLER) and hit.receiver.matches(self):
+			_add_event(ItemSystem.LevelChangeEvent.new(-hit.damage, ItemSystem.SpecificItem.new(self), hit.aggressor))
 
 func _apply_level_changes(state: MatchState):
 	var total_positive_change: int = 0

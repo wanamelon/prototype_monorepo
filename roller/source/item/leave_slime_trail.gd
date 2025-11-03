@@ -11,5 +11,5 @@ func activate(state: MatchState):
 			last_slimed_state.position = item.position
 			if last_slimed_state.distance_since_last_slimed > 50:
 				# TODO: spawn in right locus
-				_add_event(ItemSystem.SpawnEvent.new(SlimeTrail.instance, ItemSystem.SpecificPosition.new(item.position), 1.0))
+				_add_event(ItemSystem.SpawnEvent.new(SlimeTrail.instance, ItemSystem.SpecificPosition.new(item.position)))
 				last_slimed_state.distance_since_last_slimed = 0

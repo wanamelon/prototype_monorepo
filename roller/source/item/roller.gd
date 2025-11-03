@@ -4,6 +4,7 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 
 @onready var _original_collision_shape := $CharacterBody2D/CollisionShape2D.shape as CircleShape2D
 @onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
+@onready var _original_progress_scale: Vector2 = $Progress/TextureProgressBar.scale
 # TODO: belong inside character body?
 var _damage: int = 1
 var _speed: float = 400.0
@@ -17,8 +18,10 @@ static func instance() -> Roller:
 	var roller: Roller = ROLLER_SCENE.instantiate()
 	var near_diagonal_launch_angle = 45 + (90 * Utils.RNG.randi_range(0, 4)) + Utils.RNG.randf_range(-20, 20)
 	roller._velocity = (Vector2(1, 0) * roller._speed).rotated(deg_to_rad(near_diagonal_launch_angle))
-	roller.tags = [Tag.ROLLER]
 	return roller
+
+func tags():
+	return [Tag.ROLLER] as Array[String]
 
 func _ready():
 	$CharacterBody2D.position = position
@@ -38,7 +41,7 @@ func activate(state: MatchState):
 		_velocity = _velocity.rotated(deg_to_rad(Utils.RNG.randf_range(-5, 5)))
 		_bounce_count += 1
 		$BounceAudioPlayer.play()
-		_add_event(ItemSystem.BounceEvent.new(self, ItemSystem.find_parent_item(collision_result.get_collider())))
+		_add_event(ItemSystem.BounceEvent.new(ItemSystem.find_parent_item(collision_result.get_collider())))
 	if _stamina_seconds <= 0:
 		var damping_factor: float = 4 * _velocity.length() * state.delta
 		_velocity -= _velocity.normalized() * damping_factor
@@ -82,6 +85,7 @@ func _apply_size_buffs():
 		$CharacterBody2D/CollisionShape2D.shape = expanded_collider
 		var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
 		$Sprite2D.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_sprite_scale
+		$Progress/TextureProgressBar.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_progress_scale
 
 func _process(delta):
-	$TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
+	$Progress/TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
