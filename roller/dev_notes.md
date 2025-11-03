@@ -1095,6 +1095,9 @@ That's really weird no? If we bounce, it means definitely we're in the area...
 maybe my size buff is not counting hitbox? ahh yes perhaps...
 And the size buff should be limited at a bit under 64 haha
 
+also, bounce off everything is maybe just a little crazy. we can tune that down so it's only
+bounce off like 3 random ones.
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers
