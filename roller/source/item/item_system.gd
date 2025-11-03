@@ -167,21 +167,18 @@ func compute_overlaps(match_state: MatchState) -> Array[ItemEvent]:
 			if child.name.to_lower() == "hitbox":
 				assert(child is Area2D, "Hitboxes should be area2d!")
 				hitbox_to_item[child] = item
-#	var rollers = Utils.filter(match_state.items, func (i): i is Roller)
-	for item in match_state.items:
-		if item is Roller:
-			var roller := item as Roller 
-			var player_hitbox: Area2D = roller.get_node("Hitbox")
-			for overlapped in player_hitbox.get_overlapping_areas():
-				var overlapped_item: Item = hitbox_to_item.get(overlapped)
-				if overlapped_item != null:
-					var overlap_key = stable_overlap_key(roller, overlapped_item)
-					var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
-					if (last_overlap_state.last_hit_phase != roller._bounce_count 
-							and match_state.tick > last_overlap_state.last_hit_tick + 10):
-						overlaps.append(FreshOverlapEvent.new(roller, overlapped_item))
-						last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
-							roller._bounce_count, match_state.tick)
+	for roller: Roller in Utils.filter(match_state.items, func (i): return i is Roller): 
+		var player_hitbox: Area2D = roller.get_node("Hitbox")
+		for overlapped in player_hitbox.get_overlapping_areas():
+			var overlapped_item: Item = hitbox_to_item.get(overlapped)
+			if overlapped_item != null:
+				var overlap_key = stable_overlap_key(roller, overlapped_item)
+				var last_overlap_state = last_overlap_state_per_uid_pair.get(overlap_key, OverlapState.new(-1000, -1000))
+				if (last_overlap_state.last_hit_phase != roller._bounce_count 
+						and match_state.tick > last_overlap_state.last_hit_tick + 10):
+					overlaps.append(FreshOverlapEvent.new(roller, overlapped_item))
+					last_overlap_state_per_uid_pair[overlap_key] = OverlapState.new(
+						roller._bounce_count, match_state.tick)
 	return overlaps
 
 func is_safe_to_place(shape: Shape2D, global_pos: Vector2, excluded=[]):
