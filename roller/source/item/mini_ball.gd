@@ -2,6 +2,7 @@ class_name MiniBall extends ItemSystem.Item
 
 var _velocity: Vector2 = Vector2(0, 200).rotated(deg_to_rad(Utils.RNG.randf_range(0, 360)))
 var _bounce_count: int = 0
+var _life_sec: float = 5
 
 static func instance() -> MiniBall:
 	return load("res://source/item/mini_ball.tscn").instantiate()
@@ -17,6 +18,9 @@ func activate(state: MatchState):
 		_bounce_count += 1
 		_audio_player.play_bounce()
 		_add_event(ItemSystem.BounceEvent.new(ItemSystem.find_parent_item(collision_result.get_collider())))
+	_life_sec -= state.delta
+	if _life_sec <= 0:
+		_add_event(ItemSystem.DespawnEvent.new(self, self))
 
 class Spawner extends ItemSystem.Item:
 	var _points_given_counter: int = 0
