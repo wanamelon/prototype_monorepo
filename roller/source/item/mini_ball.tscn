@@ -14,7 +14,8 @@ script = ExtResource("1_gq3tp")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
 top_level = true
-collision_mask = 3
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
 shape = SubResource("CircleShape2D_hu2rn")
