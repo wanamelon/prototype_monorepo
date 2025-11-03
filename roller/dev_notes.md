@@ -1086,6 +1086,15 @@ extract ProjectileBody
 defined as collisionBody which can bounce and hit
 is NOT an item, just regular old Godot composition
 
+### Random bugfix - getting stuck!
+
+Ok, so the issue actually isn't collision madness as tempting as that is.
+the real problem I think is we aren't hitting the surrounding crops.
+my roller's stuck in a corner, clearly bouncing off crops around it, but not generating hits.
+That's really weird no? If we bounce, it means definitely we're in the area...
+maybe my size buff is not counting hitbox? ahh yes perhaps...
+And the size buff should be limited at a bit under 64 haha
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers

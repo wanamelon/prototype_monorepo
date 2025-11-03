@@ -11,6 +11,7 @@ script = ExtResource("1_geavp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_geavp")
+disabled = true
 
 [node name="Outline" type="Sprite2D" parent="."]
 modulate = Color(0.99, 0, 0, 0.27058825)

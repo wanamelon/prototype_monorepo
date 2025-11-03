@@ -5,12 +5,13 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 @onready var _original_collision_shape := $CharacterBody2D/CollisionShape2D.shape as CircleShape2D
 @onready var _original_sprite_scale: Vector2 = $Sprite2D.scale
 @onready var _original_progress_scale: Vector2 = $Progress/TextureProgressBar.scale
+@onready var _original_hitbox_radius: float = $Hitbox/CollisionShape2D.shape.radius
 # TODO: belong inside character body?
 var _damage: int = 1
-var _speed: float = 400.0
+var _speed: float = 1400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
-var _stamina_seconds: float = 5
+var _stamina_seconds: float = 55
 var _max_stamina := _stamina_seconds
 var finished := false
 
@@ -74,7 +75,7 @@ func _apply_size_buffs():
 	for effect in status_effects:
 		if effect.id == ItemSystem.StatusEffectId.SIZE_BUFF:
 			size_buff_px += effect.intensity * min(1, effect.duration_sec)
-			size_buff_px = min(25, size_buff_px)
+			size_buff_px = min((63.9 - _original_collision_shape.radius), size_buff_px)
 	var desired_collider_radius_px: float = _original_collision_shape.radius + size_buff_px
 	var current_radius_px: float = $CharacterBody2D/CollisionShape2D.shape.radius
 	var diff := desired_collider_radius_px - current_radius_px
@@ -83,6 +84,9 @@ func _apply_size_buffs():
 	expanded_collider.radius = interpolated_radius_px
 	if _item_root.is_safe_to_place(expanded_collider, global_position, [$CharacterBody2D]):
 		$CharacterBody2D/CollisionShape2D.shape = expanded_collider
+		var expanded_hitbox := CircleShape2D.new()
+		expanded_hitbox.radius = (interpolated_radius_px / _original_collision_shape.radius) * _original_hitbox_radius
+		$Hitbox/CollisionShape2D.shape = expanded_hitbox
 		var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
 		$Sprite2D.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_sprite_scale
 		$Progress/TextureProgressBar.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_progress_scale
