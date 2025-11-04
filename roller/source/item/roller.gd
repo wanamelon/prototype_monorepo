@@ -7,7 +7,7 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 @onready var _original_progress_scale: Vector2 = $Progress/TextureProgressBar.scale
 @onready var _original_hitbox_radius: float = $Hitbox/CollisionShape2D.shape.radius
 # TODO: belong inside character body?
-var _damage := ItemParam.create(1, Tags.of(Tag.P_DAMAGE))
+var _damage := ItemParam.create(1, Tags.of(Tag.P_DAMAGE), ItemParam.clamped(0, 8))
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2

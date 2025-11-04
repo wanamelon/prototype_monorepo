@@ -235,7 +235,7 @@ class Item extends Node2D:
 		for param in params():
 			param.reset()
 		for effect in status_effects:
-			effect.modifier.call(effect, self)
+			effect.param_modifier.call(effect, self)
 		for param in params():
 			param.constrain()
 	
@@ -275,12 +275,12 @@ class StatusEffect extends RefCounted:
 	var id: StatusEffectId
 	var intensity: float
 	var duration_sec: float
-	var modifier: Callable # func(statuseffect, item) -> void: modifies item's exposed ItemParams
-	func _init(id: StatusEffectId, intensity: float, duration_sec: float, modifier: Callable = func(s, i): return):
+	var param_modifier: Callable # func(statuseffect, item) -> void: modifies item's exposed ItemParams
+	func _init(id: StatusEffectId, intensity: float, duration_sec: float, param_modifier: Callable = func(s, i): return):
 		self.id = id
 		self.intensity = intensity
 		self.duration_sec = duration_sec
-		self.modifier = modifier
+		self.param_modifier = param_modifier
 
 class Impulse extends ItemEvent:
 	var force: Vector2 

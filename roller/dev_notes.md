@@ -1134,22 +1134,26 @@ ah indeed, just a status effect is good. we can make it more generic shortly no?
 
 [ ] Ball: damage numbers
 [ ] auto-add source trace (like stack trace) for ALL events
-[ ] Item stacking (ex: more slime trail item -> increase level up chance, NOT)
+[ ] Item stacking system (ex: more slime trail item -> increase level up chance, NOT)
 [ ] Rollers/etc should not bounce off each other (it's too buggy!)
 [ ] Items: temporarily do ZERO damage
 [ ] Items: when killing a coin, may level up the lowest value coin = highest value
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
-[ ] Add an inventory display
-[ ] Flesh out the shop mechanic
-[ ] Items: Consumables?
-[ ] Items: the lower your stamina, the higher your speed
+[ ] Items: Consumables (boost for one round)
 [ ] Player stamina bar useless invisible at higher speeds
+[ ] Add an inventory display
+[ ] block out a main UI design
+[ ] Flesh out the shop mechanic
+[ ] Items: the lower your stamina, the higher your speed
 [ ] Items: crop level up time is decreased
 [ ] Items: reduce all cooldowns by some amount
 [ ] Bomb impacts nearby crops etc.
 [ ] Items: higher base spawn level of coins
-[ ] Items: more generic status effect system
+[ ] break up ItemSystem megaclass
+[ ] extract ProjectileBody (share miniball and roller) + miniball does hits/bounces!
+[ ] Migrate all to generic status effects
+[X] Items: more generic status effect system
 [X] La bomba
 [X] Items: Status effects last longer
 [X] Bug fix: stuck between colliders at high speeds
