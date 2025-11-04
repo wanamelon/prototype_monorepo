@@ -62,6 +62,8 @@ func _item_for_id(item_id: ItemDef.ItemId) -> Item:
 
 func _physics_process(__):
 	var events: Array[ItemEvent] = []
+	for item: Item in _match_state.items:
+		item._apply_status_effects()
 	events.append_array(compute_hits(_match_state))
 	for item: Item in _match_state.items:
 		item.activate(_match_state)
@@ -216,11 +218,10 @@ class Item extends Node2D:
 	
 	# The core of the logic! Evaluate triggers and perform actions
 	func activate(state: MatchState) -> void: pass # To be overridden
-	
 	# Modifies event array in place - ex: increase status effect duration!
 	func intercept_events(events: Array[ItemEvent]) -> void: pass # To be overridden
-	
-	func tags() -> Array[String]: return [] as Array[String]
+	func tags() -> Array[String]: return [] as Array[String] # Override this!
+	func params() -> Array[ItemParam]: return [] as Array[ItemParam] # Override this!
 	
 	func _add_event(event: ItemEvent) -> void:
 		_new_events.append(event)
@@ -229,6 +230,14 @@ class Item extends Node2D:
 		var copy = _new_events.duplicate()
 		_new_events.clear()
 		return copy
+	
+	func _apply_status_effects() -> void:
+		for param in params():
+			param.reset()
+		for effect in status_effects:
+			effect.modifier.call(effect, self)
+		for param in params():
+			param.constrain()
 	
 	func has_all_tags(...query_tags: Array):
 		var query_tags_in_self = Utils.filter(query_tags, func (t): return t in tags())
@@ -266,10 +275,12 @@ class StatusEffect extends RefCounted:
 	var id: StatusEffectId
 	var intensity: float
 	var duration_sec: float
-	func _init(id: StatusEffectId, intensity: float, duration_sec: float):
+	var modifier: Callable # func(statuseffect, item) -> void: modifies item's exposed ItemParams
+	func _init(id: StatusEffectId, intensity: float, duration_sec: float, modifier: Callable = func(s, i): return):
 		self.id = id
 		self.intensity = intensity
 		self.duration_sec = duration_sec
+		self.modifier = modifier
 
 class Impulse extends ItemEvent:
 	var force: Vector2 

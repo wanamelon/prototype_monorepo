@@ -54,7 +54,7 @@ metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 
 [sub_resource type="Resource" id="Resource_gh64m"]
 script = ExtResource("2_0panw")
-item_id = 12
+item_id = 9
 metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_to078"]

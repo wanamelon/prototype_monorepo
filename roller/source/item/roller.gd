@@ -7,7 +7,7 @@ const ROLLER_SCENE: PackedScene = preload("res://source/item/roller.tscn")
 @onready var _original_progress_scale: Vector2 = $Progress/TextureProgressBar.scale
 @onready var _original_hitbox_radius: float = $Hitbox/CollisionShape2D.shape.radius
 # TODO: belong inside character body?
-var _damage: int = 1
+var _damage := ItemParam.create(1, Tags.of(Tag.P_DAMAGE))
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
@@ -24,15 +24,16 @@ static func instance() -> Roller:
 func tags():
 	return [Tag.ROLLER, Tag.PROJECTILE] as Array[String]
 
+func params():
+	return [_damage] as Array[ItemParam]
+
 func _ready():
 	$CharacterBody2D.position = position
 
 func compute_damage_per_hit() -> int:
-	var damage_with_buffs: int = _damage
-	for effect in status_effects:
-		if effect.id == ItemSystem.StatusEffectId.DAMAGE_BUFF:
-			damage_with_buffs += int(floor(effect.intensity))
-	return damage_with_buffs
+	var dmg = _damage.current.int()
+	print(dmg)
+	return dmg
 
 func activate(state: MatchState):
 	for impulse: Impulse in Utils.filter(state.last_tick_events, func(i): return (i is Impulse and i.target.matches(self))):

@@ -1140,12 +1140,16 @@ ah indeed, just a status effect is good. we can make it more generic shortly no?
 [ ] Items: when killing a coin, may level up the lowest value coin = highest value
 [ ] Items: Combo - hit N ascending count values in row gives value = N x last (each time)
 [ ] Items: PiggyBank. Every hit on adjacent adds its value to the bank, has interest. Boom after 10 hits
+[ ] Add an inventory display
+[ ] Flesh out the shop mechanic
+[ ] Items: Consumables?
 [ ] Items: the lower your stamina, the higher your speed
 [ ] Player stamina bar useless invisible at higher speeds
 [ ] Items: crop level up time is decreased
 [ ] Items: reduce all cooldowns by some amount
 [ ] Bomb impacts nearby crops etc.
 [ ] Items: higher base spawn level of coins
+[ ] Items: more generic status effect system
 [X] La bomba
 [X] Items: Status effects last longer
 [X] Bug fix: stuck between colliders at high speeds
@@ -1577,7 +1581,9 @@ More on differentiation
 - Lean into the mechanics we can achieve by having cards generate the board, not "be" the board
 - Offer some degree of control over positioning? Ex: we can have card slots correspond to board segments
 - We want to pick a thematic and art style which stands out. It need not be "beautiful" so much as eye catching
-- Some kind of challenge/curse system randomized per round
+- Some kind of challenge/curse system randomized per round (similar to Nubby's bosses)
+    - Perhaps also a challenge mode, or this is part of our run...
+- A competitive style mode - perhaps genetic algo or async multiplayer
 
 # Auto battle logic system
 
