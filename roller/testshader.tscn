@@ -1,13 +1,16 @@
-[gd_scene load_steps=21 format=3 uid="uid://by68qh7n60u5i"]
+[gd_scene load_steps=26 format=3 uid="uid://by68qh7n60u5i"]
 
 [ext_resource type="Shader" uid="uid://x6we5emvobwq" path="res://source/bounce_main.gdshader" id="1_y8gwg"]
 [ext_resource type="Texture2D" uid="uid://bjsbxg8x6oatl" path="res://assets/experiment2.png" id="2_y8gwg"]
 [ext_resource type="Shader" uid="uid://mbeacaokjhf2" path="res://squiggle_outline.gdshader" id="3_bth52"]
 [ext_resource type="Shader" uid="uid://cwyinkl7qpak6" path="res://wavy.gdshader" id="3_wfdcw"]
+[ext_resource type="Script" uid="uid://do54bpxli5vvx" path="res://sprite_2d_7.gd" id="4_dsvbx"]
 [ext_resource type="Shader" uid="uid://3gc5f2pma0wk" path="res://pixelmorph.gdshader" id="5_8fwt0"]
 [ext_resource type="Shader" uid="uid://b6ncwdtwmdpd1" path="res://outline.gdshader" id="5_kwlot"]
 [ext_resource type="Texture2D" uid="uid://b4sef7y7kxm14" path="res://assets/experiment1.png" id="6_dcc7d"]
 [ext_resource type="Texture2D" uid="uid://cr75udctm08s7" path="res://assets/experiment4.png" id="8_bth52"]
+[ext_resource type="Shader" uid="uid://p0voag5m0eq0" path="res://film.gdshader" id="9_yabfp"]
+[ext_resource type="Shader" uid="uid://bok5cfaveo8d1" path="res://vhs.gdshader" id="10_30qrj"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wfdcw"]
 noise_type = 2
@@ -43,8 +46,8 @@ shader_parameter/strength = 1.0
 shader_parameter/fps = 1.8
 shader_parameter/noise = SubResource("NoiseTexture2D_yabfp")
 shader_parameter/timeDelay = 0.0
-shader_parameter/intensityX = 2.0
-shader_parameter/intensityY = 2.0
+shader_parameter/intensityX = 0.0
+shader_parameter/intensityY = 0.0
 shader_parameter/seed = 42.0
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/thickness = 2
@@ -97,6 +100,30 @@ shader_parameter/pattern = 1
 shader_parameter/inside = false
 shader_parameter/add_margins = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78uiu"]
+shader = ExtResource("9_yabfp")
+shader_parameter/resolution = Vector2(960, 540)
+shader_parameter/scan_line_amount = 1.0
+shader_parameter/warp_amount = 0.1
+shader_parameter/noise_amount = 0.03
+shader_parameter/interference_amount = 0.2
+shader_parameter/grille_amount = 0.1
+shader_parameter/grille_size = 1.0
+shader_parameter/vignette_amount = 0.3250000154375
+shader_parameter/vignette_intensity = 0.2010000095475
+shader_parameter/aberation_amount = 0.5
+shader_parameter/roll_line_amount = 0.0
+shader_parameter/roll_speed = 1.0
+shader_parameter/scan_line_strength = -8.0
+shader_parameter/pixel_strength = -2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8ow1q"]
+shader = ExtResource("10_30qrj")
+shader_parameter/wiggle = 0.03
+shader_parameter/wiggle_speed = 25.0
+shader_parameter/smear = 0.2000000095
+shader_parameter/blur_samples = 3
+
 [node name="Node2D" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -113,6 +140,7 @@ material = SubResource("ShaderMaterial_dsvbx")
 position = Vector2(96, 96)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("8_bth52")
+script = ExtResource("4_dsvbx")
 
 [node name="Sprite2D8" type="Sprite2D" parent="."]
 visible = false
@@ -160,3 +188,33 @@ material = SubResource("ShaderMaterial_30qrj")
 position = Vector2(64, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("8_bth52")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Sprite2D9" type="Sprite2D" parent="Node2D"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_dsvbx")
+position = Vector2(96, 320)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("8_bth52")
+script = ExtResource("4_dsvbx")
+
+[node name="Sprite2D10" type="Sprite2D" parent="Node2D"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_dsvbx")
+position = Vector2(384, 320)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("8_bth52")
+script = ExtResource("4_dsvbx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_78uiu")
+offset_right = 1920.0
+offset_bottom = 1088.0
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_8ow1q")
+offset_right = 1920.0
+offset_bottom = 1088.0
