@@ -11,7 +11,7 @@ var _damage := ItemParam.create(1, Tags.of(Tag.P_DAMAGE), ItemParam.clamped(0, 8
 var _speed: float = 400.0
 var _bounce_count: int = 0
 var _velocity: Vector2
-var _stamina_seconds: float = 5
+var _stamina_seconds: float = 1.0
 var _max_stamina := _stamina_seconds
 var finished := false
 
@@ -31,9 +31,7 @@ func _ready():
 	$CharacterBody2D.position = position
 
 func compute_damage_per_hit() -> int:
-	var dmg = _damage.current.int()
-	print(dmg)
-	return dmg
+	return _damage.current.int()
 
 func activate(state: MatchState):
 	for impulse: Impulse in Utils.filter(state.last_tick_events, func(i): return (i is Impulse and i.target.matches(self))):
@@ -46,7 +44,7 @@ func activate(state: MatchState):
 	position = $CharacterBody2D.position
 	if collision_result:
 		_velocity = _velocity.bounce(collision_result.get_normal())
-		_velocity = _velocity.rotated(deg_to_rad(Utils.RNG.randf_range(-5, 5)))
+		#_velocity = _velocity.rotated(deg_to_rad(Utils.RNG.randf_range(-5, 5)))
 		_bounce_count += 1
 		$BounceAudioPlayer.play()
 		_add_event(ItemSystem.BounceEvent.new(ItemSystem.find_parent_item(collision_result.get_collider())))
@@ -93,10 +91,19 @@ func _apply_size_buffs():
 		$CharacterBody2D/CollisionShape2D.shape = expanded_collider
 		var expanded_hitbox := CircleShape2D.new()
 		expanded_hitbox.radius = (interpolated_radius_px / _original_collision_shape.radius) * _original_hitbox_radius
+		$SpriteHolder.scale = Vector2.ONE * interpolated_radius_px / _original_collision_shape.radius;
 		$Hitbox/CollisionShape2D.shape = expanded_hitbox
 		var og_sprite_radius_px: float = ($Sprite2D.texture.get_size().x / 2) * _original_sprite_scale.x
 		$Sprite2D.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_sprite_scale
 		$Progress/TextureProgressBar.scale = (interpolated_radius_px / og_sprite_radius_px) * _original_progress_scale
 
+var scroll_progress: float = 0.0
+
 func _process(delta):
 	$Progress/TextureProgressBar.value = 100.0 * _stamina_seconds / float(_max_stamina)
+	#var normalized_speed: float = _velocity.length() / 400
+	#$SpriteHolder/SpriteSquash.scale.y = clampf(1.0 - 0.2 * log(normalized_speed), 0.1, 1.0)
+	$SpriteHolder.rotation = Vector2(0, -1.0).angle_to(_velocity)
+	var shader_mat: ShaderMaterial = $SpriteHolder/Scroller.material
+	scroll_progress += delta * 1.5 * _velocity.length() / 400
+	shader_mat.set_shader_parameter("scroll_progress", scroll_progress)

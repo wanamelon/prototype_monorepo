@@ -1,9 +1,11 @@
-[gd_scene load_steps=26 format=3 uid="uid://by68qh7n60u5i"]
+[gd_scene load_steps=35 format=3 uid="uid://by68qh7n60u5i"]
 
 [ext_resource type="Shader" uid="uid://x6we5emvobwq" path="res://source/bounce_main.gdshader" id="1_y8gwg"]
 [ext_resource type="Texture2D" uid="uid://bjsbxg8x6oatl" path="res://assets/experiment2.png" id="2_y8gwg"]
+[ext_resource type="Shader" uid="uid://klf0u3odvcvw" path="res://scrolling.gdshader" id="3_8ow1q"]
 [ext_resource type="Shader" uid="uid://mbeacaokjhf2" path="res://squiggle_outline.gdshader" id="3_bth52"]
 [ext_resource type="Shader" uid="uid://cwyinkl7qpak6" path="res://wavy.gdshader" id="3_wfdcw"]
+[ext_resource type="Texture2D" uid="uid://5oyrj8evgn1y" path="res://assets/roller1.png" id="4_d43na"]
 [ext_resource type="Script" uid="uid://do54bpxli5vvx" path="res://sprite_2d_7.gd" id="4_dsvbx"]
 [ext_resource type="Shader" uid="uid://3gc5f2pma0wk" path="res://pixelmorph.gdshader" id="5_8fwt0"]
 [ext_resource type="Shader" uid="uid://b6ncwdtwmdpd1" path="res://outline.gdshader" id="5_kwlot"]
@@ -11,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://cr75udctm08s7" path="res://assets/experiment4.png" id="8_bth52"]
 [ext_resource type="Shader" uid="uid://p0voag5m0eq0" path="res://film.gdshader" id="9_yabfp"]
 [ext_resource type="Shader" uid="uid://bok5cfaveo8d1" path="res://vhs.gdshader" id="10_30qrj"]
+[ext_resource type="Texture2D" uid="uid://br665o4cpor2g" path="res://assets/faceless_roller.png" id="12_xix8j"]
+[ext_resource type="Shader" uid="uid://cl8f8tyilcbj8" path="res://spherescroll.gdshader" id="13_l6jti"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_wfdcw"]
 noise_type = 2
@@ -29,12 +33,18 @@ shader_parameter/fps = 3.0
 shader_parameter/noise = SubResource("NoiseTexture2D_3yruk")
 shader_parameter/snap = true
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xix8j"]
+shader = ExtResource("3_8ow1q")
+shader_parameter/is_manually_set_progress = true
+shader_parameter/scroll_speed = 0.5
+shader_parameter/scroll_progress = 0.0
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_bth52"]
 noise_type = 2
 frequency = 0.0002
 fractal_octaves = 4
 
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yabfp"]
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dsvbx"]
 noise = SubResource("FastNoiseLite_bth52")
 seamless = true
 seamless_blend_skirt = 1.0
@@ -43,15 +53,12 @@ seamless_blend_skirt = 1.0
 shader = ExtResource("3_bth52")
 shader_parameter/scale = Vector2(1, 1)
 shader_parameter/strength = 1.0
+shader_parameter/random_offset = 0.0
 shader_parameter/fps = 1.8
-shader_parameter/noise = SubResource("NoiseTexture2D_yabfp")
-shader_parameter/timeDelay = 0.0
-shader_parameter/intensityX = 0.0
-shader_parameter/intensityY = 0.0
-shader_parameter/seed = 42.0
+shader_parameter/noise = SubResource("NoiseTexture2D_dsvbx")
 shader_parameter/outline_color = Color(0, 0, 0, 1)
 shader_parameter/thickness = 2
-shader_parameter/manhattan_max = 4
+shader_parameter/manhattan_max = 3
 shader_parameter/pixel_snap_size = 2
 shader_parameter/should_snap = true
 
@@ -100,11 +107,37 @@ shader_parameter/pattern = 1
 shader_parameter/inside = false
 shader_parameter/add_margins = true
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1kb40"]
+noise_type = 2
+frequency = 0.0002
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_yabfp"]
+noise = SubResource("FastNoiseLite_1kb40")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mlthm"]
+shader = ExtResource("3_bth52")
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/strength = 1.0
+shader_parameter/random_offset = 0.0
+shader_parameter/fps = 1.8
+shader_parameter/noise = SubResource("NoiseTexture2D_yabfp")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/thickness = 2
+shader_parameter/manhattan_max = 4
+shader_parameter/pixel_snap_size = 2
+shader_parameter/should_snap = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_donxn"]
+shader = ExtResource("13_l6jti")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_78uiu"]
 shader = ExtResource("9_yabfp")
 shader_parameter/resolution = Vector2(960, 540)
 shader_parameter/scan_line_amount = 1.0
-shader_parameter/warp_amount = 0.1
+shader_parameter/warp_amount = 0.2000000095
 shader_parameter/noise_amount = 0.03
 shader_parameter/interference_amount = 0.2
 shader_parameter/grille_amount = 0.1
@@ -133,6 +166,14 @@ material = SubResource("ShaderMaterial_kwlot")
 position = Vector2(64, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("8_bth52")
+
+[node name="Sprite2D9" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_xix8j")
+position = Vector2(144, 112)
+scale = Vector2(1.5000002, 0.75)
+texture = ExtResource("4_d43na")
 
 [node name="Sprite2D7" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -189,9 +230,31 @@ position = Vector2(64, 64)
 scale = Vector2(2, 2)
 texture = ExtResource("8_bth52")
 
+[node name="SpriteHolder" type="Node2D" parent="."]
+position = Vector2(320, 96)
+
+[node name="SpriteSquash" type="Node2D" parent="SpriteHolder"]
+visible = false
+
+[node name="Outline" type="Sprite2D" parent="SpriteHolder"]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_mlthm")
+scale = Vector2(1.1, 1.1)
+texture = ExtResource("12_xix8j")
+script = ExtResource("4_dsvbx")
+jiggle_amplitude = 0.02
+
+[node name="Scroller" type="Sprite2D" parent="SpriteHolder"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_donxn")
+scale = Vector2(1.05, 0.525)
+texture = ExtResource("4_d43na")
+
 [node name="Node2D" type="Node2D" parent="."]
 
 [node name="Sprite2D9" type="Sprite2D" parent="Node2D"]
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_dsvbx")
 position = Vector2(96, 320)
@@ -200,6 +263,7 @@ texture = ExtResource("8_bth52")
 script = ExtResource("4_dsvbx")
 
 [node name="Sprite2D10" type="Sprite2D" parent="Node2D"]
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_dsvbx")
 position = Vector2(384, 320)

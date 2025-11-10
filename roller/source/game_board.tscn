@@ -1,8 +1,60 @@
-[gd_scene load_steps=8 format=4 uid="uid://cy54rx8phsksw"]
+[gd_scene load_steps=17 format=4 uid="uid://cy54rx8phsksw"]
 
 [ext_resource type="Script" uid="uid://ci17nfahybs17" path="res://source/game_board.gd" id="1_n8mxk"]
+[ext_resource type="Texture2D" uid="uid://dwjlrmmt11gj3" path="res://assets/tile1.png" id="2_chlw6"]
+[ext_resource type="Shader" uid="uid://mbeacaokjhf2" path="res://squiggle_outline.gdshader" id="2_ex7ss"]
 [ext_resource type="Texture2D" uid="uid://dn0v0p4iw3yfb" path="res://assets/rolling_ball/block_square_128.png" id="2_kt6qa"]
 [ext_resource type="AudioStream" uid="uid://dg2vyeme7usj8" path="res://assets/audio/put_item.ogg" id="3_n8mxk"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ex7ss"]
+noise_type = 2
+frequency = 0.0026
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qvy1b"]
+noise = SubResource("FastNoiseLite_ex7ss")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4y8lw"]
+shader = ExtResource("2_ex7ss")
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/strength = 1.0
+shader_parameter/random_offset = 0.0
+shader_parameter/fps = 0.5
+shader_parameter/noise = SubResource("NoiseTexture2D_qvy1b")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/thickness = 1
+shader_parameter/manhattan_max = 1
+shader_parameter/pixel_snap_size = 1
+shader_parameter/should_snap = true
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_chlw6"]
+noise_type = 2
+frequency = 0.001
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ex7ss"]
+noise = SubResource("FastNoiseLite_chlw6")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qvy1b"]
+shader = ExtResource("2_ex7ss")
+shader_parameter/scale = Vector2(1, 1)
+shader_parameter/strength = 0.1
+shader_parameter/random_offset = 0.485
+shader_parameter/fps = 0.33
+shader_parameter/noise = SubResource("NoiseTexture2D_ex7ss")
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/thickness = 3
+shader_parameter/manhattan_max = 6
+shader_parameter/pixel_snap_size = 1
+shader_parameter/should_snap = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ex7ss"]
+texture = ExtResource("2_chlw6")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_chlw6"]
 texture = ExtResource("2_kt6qa")
@@ -12,6 +64,7 @@ texture_region_size = Vector2i(128, 128)
 [sub_resource type="TileSet" id="TileSet_q2ks2"]
 tile_size = Vector2i(128, 128)
 sources/3 = SubResource("TileSetAtlasSource_chlw6")
+sources/0 = SubResource("TileSetAtlasSource_ex7ss")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_0panw"]
 
@@ -23,8 +76,18 @@ stream_0/stream = ExtResource("3_n8mxk")
 [node name="GameBoard" type="Node2D"]
 script = ExtResource("1_n8mxk")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+material = SubResource("ShaderMaterial_4y8lw")
+position = Vector2(384, 384)
+scale = Vector2(6.5, 6.5)
+texture = ExtResource("2_chlw6")
+
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAAAAAAAAwAAAAAAAAAAAAEAAwAAAAAAAAABAAEAAwAAAAAAAAABAAAAAwAAAAAAAAACAAAAAwAAAAAAAAACAAEAAwAAAAAAAAADAAAAAwAAAAAAAAADAAEAAwAAAAAAAAAAAAIAAwAAAAAAAAABAAIAAwAAAAAAAAACAAIAAwAAAAAAAAADAAIAAwAAAAAAAAADAAMAAwAAAAAAAAACAAMAAwAAAAAAAAABAAMAAwAAAAAAAAAAAAMAAwAAAAAAAAAEAAAAAwAAAAAAAAAFAAAAAwAAAAAAAAAFAAEAAwAAAAAAAAAEAAEAAwAAAAAAAAAEAAIAAwAAAAAAAAAEAAMAAwAAAAAAAAAFAAMAAwAAAAAAAAAFAAIAAwAAAAAAAAAFAAQAAwAAAAAAAAAEAAQAAwAAAAAAAAADAAQAAwAAAAAAAAACAAQAAwAAAAAAAAABAAQAAwAAAAAAAAAAAAQAAwAAAAAAAAAAAAUAAwAAAAAAAAABAAUAAwAAAAAAAAACAAUAAwAAAAAAAAADAAUAAwAAAAAAAAAEAAUAAwAAAAAAAAAFAAUAAwAAAAAAAAA=")
+texture_filter = 1
+material = SubResource("ShaderMaterial_qvy1b")
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAACAAMAAAAAAAAAAAABAAMAAAAAAAAAAAAAAAMAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAFAAIAAAAAAAAAAAAFAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAADAAQAAAAAAAAAAAACAAQAAAAAAAAAAAABAAQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_q2ks2")
 
 [node name="TileObjects" type="Node2D" parent="."]

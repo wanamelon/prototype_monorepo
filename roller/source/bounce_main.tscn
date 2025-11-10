@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cdewixren54n7"]
+[gd_scene load_steps=21 format=3 uid="uid://cdewixren54n7"]
 
 [ext_resource type="Script" uid="uid://ctlovqr0sahr0" path="res://source/bounce_main.gd" id="1_ovsfe"]
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="1_p5ard"]
@@ -7,9 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cy54rx8phsksw" path="res://source/game_board.tscn" id="4_vx23h"]
 [ext_resource type="Texture2D" uid="uid://ccdy67xn8m374" path="res://assets/rolling_ball/block_locked_square.png" id="6_0panw"]
 [ext_resource type="AudioStream" uid="uid://dcab5uj33b1kn" path="res://assets/audio/failure-drum-sound-effect-1-46093.mp3" id="7_k3n88"]
-[ext_resource type="Shader" uid="uid://x6we5emvobwq" path="res://source/bounce_main.gdshader" id="8_ovsfe"]
-[ext_resource type="Texture2D" uid="uid://b4sef7y7kxm14" path="res://assets/experiment1.png" id="9_a5fj5"]
-[ext_resource type="Shader" uid="uid://udiitvaubgng" path="res://source/bounce_main2.gdshader" id="10_3yruk"]
+[ext_resource type="Shader" uid="uid://0aqp30pbwbf" path="res://source/warp.gdshader" id="10_3yruk"]
 
 [sub_resource type="Resource" id="Resource_k3n88"]
 script = ExtResource("2_0panw")
@@ -64,25 +62,9 @@ metadata/_custom_type_script = "uid://ckw8rr21jqg1f"
 shader = ExtResource("1_p5ard")
 shader_parameter/saturation = 0.30000001425
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_a5fj5"]
-frequency = 0.0004
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3yruk"]
-noise = SubResource("FastNoiseLite_a5fj5")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_a5fj5"]
-shader = ExtResource("8_ovsfe")
-shader_parameter/scale = Vector2(1, 1)
-shader_parameter/strength = 1.0
-shader_parameter/pixelation = 0.01
-shader_parameter/fps = 6.0
-shader_parameter/noise = SubResource("NoiseTexture2D_3yruk")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q2ks2"]
 shader = ExtResource("10_3yruk")
-shader_parameter/scale = Vector2(1, 1)
-shader_parameter/strength = 1.0
-shader_parameter/fps = 6.0
+shader_parameter/warp_amount = 1.0
 
 [node name="BounceMain" type="Node2D"]
 script = ExtResource("1_ovsfe")
@@ -198,16 +180,10 @@ columns = 4
 stream = ExtResource("7_k3n88")
 volume_db = 10.0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture_filter = 1
-material = SubResource("ShaderMaterial_a5fj5")
-position = Vector2(384, 192)
-scale = Vector2(2, 2)
-texture = ExtResource("9_a5fj5")
-
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-visible = false
-texture_filter = 1
+[node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_q2ks2")
-position = Vector2(352, 160)
-texture = ExtResource("9_a5fj5")
+offset_left = 562.0
+offset_top = 184.0
+offset_right = 1363.0
+offset_bottom = 970.0
+mouse_filter = 2
