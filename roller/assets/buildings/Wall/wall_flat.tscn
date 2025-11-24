@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/wall_flat_cobblestone.png" id="1_7gugw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lkiym"]
+resource_name = "stones"
+albedo_texture = ExtResource("1_7gugw")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_g3io3"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"format": 34359742465,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAQAAAAIAAwACAAAAAgADAAAA"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAPwAAgD8AAACAAAAAPwAAAAAAAACAAAAAvwAAAAAAAACAAAAAvwAAgD8AAACA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6iwj2"]
+resource_name = "wall_flat_Mesh wall_flat"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"attribute_data": PackedByteArray("AAAAAAAAAAAAAAAAAACAPwAAgL8AAIA/AACAvwAAAAAAAAAAAACAPwAAAAAAAAAAAACAvwAAgD8AAIC/AAAAAA=="),
+"format": 34359742487,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABwAGAAUA"),
+"material": SubResource("StandardMaterial3D_lkiym"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAPwAAgD8AAACAAAAAPwAAAAAAAACAAAAAvwAAAAAAAACAAAAAvwAAgD8AAACAAAAAPwAAAAAAAACAAAAAPwAAgD8AAACAAAAAvwAAAAAAAACAAAAAvwAAgD8AAACA/3//f////7//f/9/////v/9//3////+//3//f////7//////////P/////////8//////////z//////////Pw==")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_g3io3")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eos2f"]
+points = PackedVector3Array(0.5, 1, 0, 0.5, 0, 0, -0.5, 1, 0, -0.5, 0, 0)
+
+[node name="wall_flat" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_6iwj2")
+
+[node name="wall_flat_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall_flat_col"]
+shape = SubResource("ConvexPolygonShape3D_eos2f")

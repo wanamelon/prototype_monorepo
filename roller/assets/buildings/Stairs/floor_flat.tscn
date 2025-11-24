@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/floor_flat_cobblestoneAlternative.png" id="1_tsesp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m1pna"]
+resource_name = "bricks"
+albedo_texture = ExtResource("1_tsesp")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_aly16"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 2, 0, 3, 0, 0, 0),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1kjss"]
+resource_name = "floor_flat_Mesh floor_flat"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"attribute_data": PackedByteArray(255, 255, 255, 255, 255, 127, 255, 255, 255, 127, 255, 191, 255, 255, 255, 191),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 2, 0, 3, 0, 0, 0),
+"material": SubResource("StandardMaterial3D_m1pna"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(2, 4, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 0, 0, 255, 191, 255, 255, 0, 0, 0, 0, 255, 191, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_aly16")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7hrqn"]
+points = PackedVector3Array(-0.5, 0, -0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0, 0.5)
+
+[node name="floor_flat" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_1kjss")
+
+[node name="floor_flat_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="floor_flat_col"]
+shape = SubResource("ConvexPolygonShape3D_7hrqn")

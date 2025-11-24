@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/overhang_fence_planks.png" id="1_l8ixc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nk22d"]
+resource_name = "planks"
+albedo_texture = ExtResource("1_l8ixc")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2a8wv"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.15, 1, 0.3, 0.3),
+"format": 34896613377,
+"index_count": 156,
+"index_data": PackedByteArray("AgAMAA0ADAACAA0AAAANAAIADQAAAAIAAAABAAIAAQAAAAIAAQAAAAMAAAABAAMAAQAEAAIABAABAAIADgABAAQAAQAOAAQADwAOAAQADgAPAAQABQACAAQAAgAFAAQABgAEAAUABAAGAAUABQAQAAYAEAAFAAYAEQAGABAABgARABAAEQASAAYAEgARAAYABgATABIAEwAGABIABwADAAEAAwAHAAEAAwAUABUAFAADABUACAAVAAMAFQAIAAMABwAIAAMACAAHAAMACQAIAAcACAAJAAcAFgAJAAcACQAWAAcAFwAJABYACQAXABYACAAKAAkACgAIAAkACwAJAAoACQALAAoAGAAKAAsACgAYAAsAGQALABgACwAZABgAGgALABkACwAaABkAGwAaABkAGgAbABkA"),
+"lods": [0.09202983, PackedByteArray("AAABAAIAAQAAAAIAAAABAAMAAQAAAAMAAQAEAAIABAABAAIAAgAFAAQABQACAAQABgAEAAUABAAGAAUABwADAAEAAwAHAAEACAAHAAMABwAIAAMACAAJAAcACQAIAAcACAAKAAkACgAIAAkACwAJAAoACQALAAoA")],
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("Zeb/f///AABl5lTV//8AAP///3///wAAmRn/f///AAD//1TV//8AAP///39VVQAA//9U1VVVAACZGVTV//8AAAAA/3///wAAAABU1f//AAAAAP9/VVUAAAAAVNVVVQAA//8AAP//AABl5gAA//8AAGXm/////wAA////////AAD//wAAVVUAAP//AAAAAAAA/////wAAAAD/////VVUAAJkZAAD//wAAAAAAAP//AACZGf////8AAAAA/////wAAAAAAAFVVAAAAAAAAAAAAAAAA//9VVQAAAAD//wAAAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ci134"]
+resource_name = "overhang_fence_Mesh overhang_fence"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.15, 1, 0.3, 0.3),
+"attribute_data": PackedByteArray("12Ji9tdiyvwTYGL2E2DK/NdiyvzXYmL2E2Bi9hNgyvwAAPB2VQKIcVUC8HYAAIhxVQKIcQAA8HZVAvB2AACIcVZ6+XZmffl2Zn3Er1Z6xK9mffl2Vnr5dmZ9xK9WesSvZn2SoWZ9xK9WesSvVnqSoWZ9xK9mfZKhVnrEr1Z6kqFmfZKhZn3Er1Z6xK9WepKhZn3Er2Z9kqFWesSvVnqSoRNgxuzXYsbs12L+/xNg//8TYMbs12LG7Ndi/v8TYP//VQIMfwAADH9VAtRuAADUblUCDH8AAAx/VQLUbgAA1G5PfTDsT33M9U99NPyLejDsi3po/099aP9Pfcz1T30w7E99NPyLejDsi3po/099aP9PfTDsT33M9U99NPyLejDsT31o/4t6aP9Pfcz1T30w7E99NPyLejDsT31o/4t6aP8="),
+"format": 34896613399,
+"index_count": 156,
+"index_data": PackedByteArray("AgAoACkAKQAAAAIAAAABAAIAAQADAAIAAQAqAAMAKgArAAMALAAGAC0ABQAtAAYABAAFAAYABwAEAAYALgAEAAcALwAuAAcACgAwADEAMQAIAAoACAAJAAoACAALAAkACwAyAAkACwAzADIANAAOADUADQA1AA4ADAANAA4ADwANAAwANgAPAAwANwAPADYAEAARABIAEgATABAAFAAVABYAFwAWABUAGAAZABoAGgAbABgAHAAdAB4AHwAeAB0AOAA5ADoAOgA7ADgAPAA7ADoAOgA9ADwAPgA/AEAAQQBAAD8AQQBCAEAAQwBAAEIAIAAhACIAIgAjACAAJAAlACYAJwAmACUARABFAEYARgBHAEQARgBIAEcASABJAEcASgBLAEwATQBMAEsATgBMAE0ATwBOAE0A"),
+"lods": [0.09202983, PackedByteArray("AAABAAIAAQADAAIABAAFAAYABwAEAAYACAAJAAoACAALAAkADAANAA4ADwANAAwAEAARABIAEgATABAAFAAVABYAFwAWABUAGAAZABoAGgAbABgAHAAdAB4AHwAeAB0AIAAhACIAIgAjACAAJAAlACYAJwAmACUA")],
+"material": SubResource("StandardMaterial3D_nk22d"),
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(10.966338, 4.7344604, 0, 0),
+"vertex_count": 80,
+"vertex_data": PackedByteArray("Zeb/f/////9l5lTV/////////3////////9U1f////9l5lTV//8AAGXm/3///wAA////f///AAD//1TV//8AAAAA/3///wCAmRlU1f//AICZGf9///8AgAAAVNX//wCAmRlU1f//AAAAAP9///8AAJkZ/3///wAAAABU1f//AABl5lTV////v2Xm/3////+/mRn/f////7+ZGVTV////v2Xm/3///wAAZeZU1f//AACZGf9///8AAJkZVNX//wAA////f1VVVNX///9///9U1f//VNX//1TV//9U1VVVVNX///9///+qKv///39VVaoq//9U1f//qir//1TVVVWqKgAA/39VVVTVAAD/f///VNUAAFTV//9U1QAAVNVVVVTVAAD/f///qioAAP9/VVWqKgAAVNX//6oqAABU1VVVqir//wAA/////2XmAAD/////Zeb/////////////////////AAD//wAAZeYAAP//AABl5v////8AAP///////wAAmRkAAP//AIAAAAAA//8AgJkZ/////wCAAAD/////AICZGQAA//8AAAAAAAD//wAAmRn/////AAAAAP////8AAP//AABVVf//////f1VVVNX//1TVVVX/////AAAAAP///////wAA////////VVX//////39VVVTV//8AAFVV/z///1TVVVX/P///AAAAAP8//////wAA/z//////VVX/PwAAAABVVf//AAD/f1VVVNUAAFTVVVX//wAAAAAAAP//AAD//1VV//8AAP//AAD//wAA/39VVVTVAAAAAFVV/z8AAFTVVVX/PwAAAAAAAP8/AAD//1VV/z8AAP//AAD/P/9//3//f/9//3//f/9//3//f////3////9//v//f/7//3////9/////f////3///////3////9/////f////3//f/9//3//f/9//3//f/9//z//v/8//7//P/+//z//v6qqVFWqqlRVqqpUVaqqVFVUVaqqVFWqqlRVqqpUVaqqqqpUVaqqVFWqqlRVqqpUVVRVqqpUVaqqVFWqqlRVqqr/f/9//3//f/9//3//f/9//3/+//9//v//f/7//3/+//9/////f////3////9///////9/////f////3////9//7//f6qqVFX/v/9//7//f/+//3//v/9/VFWqqv9//v//f/7//3/+//9//v//f/7//7//f6qqVFX/v/9//7//f/+//3//v/9/VFWqqv9//v//f/7//3/+//9//v//f/7/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_2a8wv")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qd0nu"]
+points = PackedVector3Array(0.5, 0.3, 0.15, 0.5, 0, 0.15, 0.5, 0.3, -0.15, -0.5, 0.3, 0.15, 0.5, 0, -0.15, -0.5, 0, 0.15, -0.5, 0.3, -0.15, -0.5, 0, -0.15)
+
+[node name="overhang_fence" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_ci134")
+
+[node name="overhang_fence_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="overhang_fence_col"]
+shape = SubResource("ConvexPolygonShape3D_qd0nu")

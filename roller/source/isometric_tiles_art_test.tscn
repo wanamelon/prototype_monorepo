@@ -22,20 +22,24 @@
 [ext_resource type="Shader" uid="uid://0aqp30pbwbf" path="res://source/warp.gdshader" id="14_v4wb8"]
 [ext_resource type="PackedScene" uid="uid://6ikiphhb501" path="res://assets/models/tomato.tscn" id="17_86bhk"]
 [ext_resource type="PackedScene" uid="uid://dlppjlsn7vkrm" path="res://assets/models/cabbage.tscn" id="18_ficl0"]
+[ext_resource type="PackedScene" uid="uid://8g3au2ojbyk" path="res://assets/buildings/Wall/wallFortified.tscn" id="19_ebdn1"]
 [ext_resource type="PackedScene" uid="uid://drnatv2euq8g8" path="res://assets/models/frog.tscn" id="20_ohida"]
+[ext_resource type="PackedScene" path="res://assets/buildings/Wall/wall.tscn" id="20_ukqea"]
+[ext_resource type="PackedScene" path="res://assets/buildings/Wall/wall_low.tscn" id="21_p8bwy"]
+[ext_resource type="PackedScene" path="res://assets/buildings/Details/fence.tscn" id="21_tpudk"]
 [ext_resource type="AudioStream" uid="uid://d1dq611qpy5cb" path="res://assets/audio/animals_slug_or_worm_squish_002.mp3" id="22_so743"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pp5ci"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ficl0"]
 render_priority = 0
 shader = ExtResource("1_pp5ci")
-shader_parameter/outline_color = Color(0, 0, 0, 1)
-shader_parameter/outline_width = 5.0
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 8.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8dhpf"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ebdn1"]
 render_priority = 0
-next_pass = SubResource("ShaderMaterial_pp5ci")
+next_pass = SubResource("ShaderMaterial_ficl0")
 shader = ExtResource("1_o7hg6")
-shader_parameter/albedo = Color(0.38471663, 0.82, 0.073799975, 1)
+shader_parameter/albedo = Color(1, 0.39, 0.46116674, 1)
 shader_parameter/point_size = 0.0
 shader_parameter/roughness = 0.0
 shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
@@ -49,13 +53,6 @@ shader_parameter/uv2_offset = Vector3(0, 0, 0)
 shader_parameter/color_gradient = ExtResource("2_yg5p2")
 shader_parameter/fresnel_gradient = ExtResource("3_abh8n")
 
-[sub_resource type="SphereMesh" id="SphereMesh_v0h54"]
-radial_segments = 12
-rings = 6
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_co8ap"]
-albedo_color = Color(0.08840001, 0.52, 0.16033326, 1)
-
 [sub_resource type="SphereMesh" id="SphereMesh_nkiw2"]
 radial_segments = 12
 rings = 6
@@ -67,6 +64,23 @@ roughness = 0.0
 [sub_resource type="SphereMesh" id="SphereMesh_co8ap"]
 radial_segments = 12
 rings = 6
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yg5p2"]
+render_priority = 0
+shader = ExtResource("1_o7hg6")
+shader_parameter/albedo = Color(1, 0.39, 0.46116674, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_yg5p2")
+shader_parameter/fresnel_gradient = ExtResource("3_abh8n")
 
 [sub_resource type="SphereMesh" id="SphereMesh_o7hg6"]
 height = 0.5
@@ -82,54 +96,6 @@ roughness = 0.0
 [sub_resource type="BoxMesh" id="BoxMesh_h6gsi"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_co8ap"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o7hg6"]
-albedo_texture = ExtResource("1_h6gsi")
-uv1_scale = Vector3(50, 50, 50)
-uv1_triplanar = true
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_yg5p2"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ficl0"]
-render_priority = 0
-shader = ExtResource("1_pp5ci")
-shader_parameter/outline_color = Color(1, 1, 1, 1)
-shader_parameter/outline_width = 8.0
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ebdn1"]
-render_priority = 0
-next_pass = SubResource("ShaderMaterial_ficl0")
-shader = ExtResource("1_o7hg6")
-shader_parameter/albedo = Color(0.47058824, 1, 0.09019608, 1)
-shader_parameter/point_size = 0.0
-shader_parameter/roughness = 0.0
-shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
-shader_parameter/specular = 0.0
-shader_parameter/metallic = 0.0
-shader_parameter/normal_scale = 1.000000807500001
-shader_parameter/uv1_scale = Vector3(0, 0, 0)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(0, 0, 0)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/color_gradient = ExtResource("2_yg5p2")
-shader_parameter/fresnel_gradient = ExtResource("3_abh8n")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yg5p2"]
-render_priority = 0
-shader = ExtResource("1_o7hg6")
-shader_parameter/albedo = Color(0.46916664, 1, 0.089999974, 1)
-shader_parameter/point_size = 0.0
-shader_parameter/roughness = 0.0
-shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
-shader_parameter/specular = 0.0
-shader_parameter/metallic = 0.0
-shader_parameter/normal_scale = 1.000000807500001
-shader_parameter/uv1_scale = Vector3(0, 0, 0)
-shader_parameter/uv1_offset = Vector3(0, 0, 0)
-shader_parameter/uv2_scale = Vector3(0, 0, 0)
-shader_parameter/uv2_offset = Vector3(0, 0, 0)
-shader_parameter/color_gradient = ExtResource("2_yg5p2")
-shader_parameter/fresnel_gradient = ExtResource("3_abh8n")
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_o7hg6"]
 radial_segments = 6
@@ -160,6 +126,13 @@ rings = 6
 albedo_color = Color(1.9614621, 0, 0, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_v0h54"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o7hg6"]
+albedo_texture = ExtResource("1_h6gsi")
+uv1_scale = Vector3(50, 50, 50)
+uv1_triplanar = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_yg5p2"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v4wb8"]
 render_priority = 0
@@ -262,82 +235,6 @@ stream_0/stream = ExtResource("22_so743")
 [node name="IsometricTilesArtTest" type="Node3D"]
 script = ExtResource("1_n5k2i")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0.60617924, 0.7739146, -1.1524273)
-visible = false
-material_override = SubResource("ShaderMaterial_8dhpf")
-mesh = SubResource("SphereMesh_v0h54")
-skeleton = NodePath("../Player")
-
-[node name="Player" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -1, 0.609908, -1)
-visible = false
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("SphereMesh_nkiw2")
-
-[node name="Eye" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0.427519, 0.216, -0.1)
-material_override = SubResource("StandardMaterial3D_h6gsi")
-mesh = SubResource("SphereMesh_co8ap")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player/Eye"]
-transform = Transform3D(1.0892949, -0.15309042, 0, 0.15309042, 1.0892949, 0, 0, 0, 1.1, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("SphereMesh_o7hg6")
-skeleton = NodePath("../../..")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Player/Eye"]
-transform = Transform3D(-1.0892949, -0.1530905, 0, 0.1530905, -1.0892949, 0, 0, 0, 1.1, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("SphereMesh_o7hg6")
-skeleton = NodePath("../../..")
-
-[node name="pupil" type="MeshInstance3D" parent="Player/Eye"]
-transform = Transform3D(0.10449655, 0, 0, 0, 0.37286562, 0, 0, 0, 0.37286562, 0.44800252, 0, 0)
-material_override = SubResource("StandardMaterial3D_nkiw2")
-mesh = SubResource("SphereMesh_co8ap")
-skeleton = NodePath("../..")
-
-[node name="Eye2" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0.427519, 0.216, 0.1)
-material_override = SubResource("StandardMaterial3D_h6gsi")
-mesh = SubResource("SphereMesh_co8ap")
-skeleton = NodePath("../..")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Player/Eye2"]
-transform = Transform3D(1.0892949, -0.15309042, 0, 0.15309042, 1.0892949, 0, 0, 0, 1.1, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("SphereMesh_o7hg6")
-skeleton = NodePath("../../..")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Player/Eye2"]
-transform = Transform3D(-1.0892949, -0.1530905, 0, 0.1530905, -1.0892949, 0, 0, 0, 1.1, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("SphereMesh_o7hg6")
-skeleton = NodePath("../../..")
-
-[node name="pupil" type="MeshInstance3D" parent="Player/Eye2"]
-transform = Transform3D(0.104, 0, 0, 0, 0.37, 0, 0, 0, 0.37, 0.44800252, 0, 0)
-material_override = SubResource("StandardMaterial3D_nkiw2")
-mesh = SubResource("SphereMesh_co8ap")
-skeleton = NodePath("../..")
-
-[node name="Nose" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(0.14261632, -0.14559177, 0, 0.1442083, 0.14398453, 0, 0, 0, 0.21658939, 0.48057264, -0.01649028, 0)
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("BoxMesh_h6gsi")
-
-[node name="Nose2" type="MeshInstance3D" parent="Player"]
-transform = Transform3D(0.21446651, 0, 0, 0, 0.1525969, 0, 0, 0, 0.4004287, 0.52639115, -0.09317547, 0)
-material_override = SubResource("StandardMaterial3D_co8ap")
-mesh = SubResource("BoxMesh_co8ap")
-
-[node name="Floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_o7hg6")
-mesh = SubResource("PlaneMesh_yg5p2")
-
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.7071067, -0.4055798, 0.579228, 0, 0.81915206, 0.57357645, -0.7071067, -0.4055798, 0.579228, 10, 10.87, 10)
 projection = 1
@@ -347,7 +244,7 @@ size = 12.0
 transform = Transform3D(-0.2588191, 0.96455234, 0.051495403, -0.6830127, -0.22044972, 0.6963445, 0.6830127, 0.14505516, 0.715858, 0, 20, 0)
 
 [node name="RollerModel" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.51087666, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.511, -1)
 
 [node name="Player" type="MeshInstance3D" parent="RollerModel"]
 transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.13957953, 0)
@@ -430,6 +327,12 @@ material_override = SubResource("ShaderMaterial_abh8n")
 mesh = SubResource("SphereMesh_gcksa")
 skeleton = NodePath("../..")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="RollerModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46339035, 0)
+light_color = Color(1, 0.79700005, 0.13, 1)
+light_energy = 1.5
+light_volumetric_fog_energy = 11.993
+
 [node name="Zone" type="MeshInstance3D" parent="."]
 transform = Transform3D(5.0171237, 0, 5.03988, 0, 1, 0, -5.0171237, 0, 5.03988, -0.979, 0.004, -0.979)
 visible = false
@@ -473,7 +376,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 3)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 5)
 
 [node name="Watermelon" parent="Placed" instance=ExtResource("8_gcksa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 5)
 
 [node name="Watermelon2" parent="Placed" instance=ExtResource("8_gcksa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -3)
@@ -488,7 +391,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
 transform = Transform3D(0.5, 0, -0.8660255, 0, 1, 0, 0.8660255, 0, 0.5, -7, 0, 1)
 
 [node name="Pumpkin2" parent="Placed" instance=ExtResource("9_2p102")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
 
 [node name="Pumpkin3" parent="Placed" instance=ExtResource("9_2p102")]
 transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -3, 0, -1)
@@ -500,13 +403,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.0048990548, -1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.0048990548, -5)
 
 [node name="Barrel4" parent="Placed" instance=ExtResource("10_2p102")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0.0048990548, -9)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, 0.0048990548, -5)
 
 [node name="Barrel2" parent="Placed" instance=ExtResource("10_2p102")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, 0.0048990548, 5)
 
 [node name="Cheese" parent="Placed" instance=ExtResource("12_1bs3g")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 3)
 
 [node name="Cheese3" parent="Placed" instance=ExtResource("12_1bs3g")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -3)
@@ -515,10 +418,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -3)
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, 3)
 
 [node name="Corn" parent="Placed" instance=ExtResource("13_oqo54")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 1)
 
 [node name="Corn3" parent="Placed" instance=ExtResource("13_oqo54")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
 
 [node name="Corn2" parent="Placed" instance=ExtResource("13_oqo54")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.0000002, 0, -5)
@@ -533,7 +436,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 1)
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, -5)
 
 [node name="Frog" parent="Placed" instance=ExtResource("20_ohida")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, 0, 1)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, 3)
 
 [node name="Frog2" parent="Placed" instance=ExtResource("20_ohida")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -1)
@@ -559,30 +462,414 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0
 [node name="Cabbage3" parent="Placed" instance=ExtResource("18_ficl0")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, 0, -1)
 
-[node name="Outlines" type="MeshInstance3D" parent="."]
+[node name="Map" type="Node3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="Map"]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_o7hg6")
+mesh = SubResource("PlaneMesh_yg5p2")
+skeleton = NodePath("../..")
+
+[node name="walls" type="Node3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 5)
+visible = false
+
+[node name="wallFortified" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, 2.0710678, 0, 3.5857866)
+skeleton = NodePath("../..")
+
+[node name="wallFortified2" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, 0.65685415, 0, 2.171573)
+skeleton = NodePath("../..")
+
+[node name="wallFortified3" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, -0.7573595, 0, 0.75735927)
+skeleton = NodePath("../..")
+
+[node name="wallFortified4" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, -2.1715727, 0, -0.6568543)
+skeleton = NodePath("../..")
+
+[node name="wallFortified5" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, -3.5857859, 0, -2.0710678)
+skeleton = NodePath("../..")
+
+[node name="wallFortified6" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, -4.999999, 0, -3.4852812)
+skeleton = NodePath("../..")
+
+[node name="wallFortified7" parent="Map/walls" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.4142135, 0, 1.4142135, 0, 2, 0, -1.4142135, 0, 1.4142135, -6.4142127, 0, -4.8994946)
+skeleton = NodePath("../..")
+
+[node name="walls2" type="Node3D" parent="Map"]
+visible = false
+
+[node name="wallFortified" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(0, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, 0, -7, 0, 5)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified2" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(0, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, 0, -9, 0, 3)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified3" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(0, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, 0, -11, 0, 1)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified4" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(0, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, 0, -13, 0, -1)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified5" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(0, 0, 1.9999999, 0, 2, 0, -1.9999999, 0, 0, -11, 0, -3)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified6" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -9, 0, -5)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified7" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -7, 0, -7)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified8" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -5, 0, -9)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified9" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -3, 0, -11)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified10" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -1, 0, -13)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified11" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -5, 0, 7)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified12" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, 3, 0, 7)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified22" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, 1, 0, 9)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified23" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -3, 0, 9)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified24" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, -1, 0, 11)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified13" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, 5, 0, 5)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified14" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, 7, 0, 3)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified15" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(1.9999998, 0, -8.742276e-08, 0, 2, 0, 8.742276e-08, 0, 1.9999998, 9, 0, 1)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified16" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(-1.7484552e-07, 0, -1.9999998, 0, 2, 0, 1.9999998, 0, -1.7484552e-07, 1.0000002, 0, -11)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified17" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(-1.7484552e-07, 0, -1.9999998, 0, 2, 0, 1.9999998, 0, -1.7484552e-07, 3, 0, -9)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified18" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(-1.7484552e-07, 0, -1.9999998, 0, 2, 0, 1.9999998, 0, -1.7484552e-07, 5, 0, -7)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified19" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(-1.7484552e-07, 0, -1.9999998, 0, 2, 0, 1.9999998, 0, -1.7484552e-07, 7, 0, -5)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified20" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(-1.7484552e-07, 0, -1.9999998, 0, 2, 0, 1.9999998, 0, -1.7484552e-07, 9, 0, -3)
+skeleton = NodePath("../../..")
+
+[node name="wallFortified21" parent="Map/walls2" instance=ExtResource("19_ebdn1")]
+transform = Transform3D(-1.7484552e-07, 0, -1.9999998, 0, 2, 0, 1.9999998, 0, -1.7484552e-07, 11, 0, -1)
+skeleton = NodePath("../../..")
+
+[node name="walls3" type="Node3D" parent="Map"]
+
+[node name="wall" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 5)
+skeleton = NodePath("../..")
+
+[node name="wall14" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall2" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 3)
+skeleton = NodePath("../..")
+
+[node name="wall3" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 1)
+skeleton = NodePath("../..")
+
+[node name="wall4" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -1)
+skeleton = NodePath("../..")
+
+[node name="wall5" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -3)
+skeleton = NodePath("../..")
+
+[node name="wall6" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -5)
+skeleton = NodePath("../..")
+
+[node name="wall13" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall7" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -5, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall8" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -3, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall9" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -1, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall10" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 1, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall11" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 3, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall12" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 5, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall15" parent="Map/walls3" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 7, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="walls5" type="Node3D" parent="Map"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1.9644967, 0)
+
+[node name="wall" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 5)
+skeleton = NodePath("../..")
+
+[node name="wall2" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 3)
+skeleton = NodePath("../..")
+
+[node name="wall3" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 1)
+skeleton = NodePath("../..")
+
+[node name="wall4" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -1)
+skeleton = NodePath("../..")
+
+[node name="wall5" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -3)
+skeleton = NodePath("../..")
+
+[node name="wall6" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -5)
+skeleton = NodePath("../..")
+
+[node name="wall13" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall7" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -5, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall8" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -3, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall9" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, -1, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall10" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 1, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall11" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 3, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall12" parent="Map/walls5" instance=ExtResource("20_ukqea")]
+transform = Transform3D(-8.742278e-08, 0, -2, 0, 2, 0, 2, 0, -8.742278e-08, 5, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="walls4" type="Node3D" parent="Map"]
+visible = false
+
+[node name="wall_low" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low15" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, -1.7320508, 1.0000001, 0, -1.0000001, -1.7320508, -7.0062356, 1.503219, 6.8783298)
+skeleton = NodePath("../..")
+
+[node name="wall_low2" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -5, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low3" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low4" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low5" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low6" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low7" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5, 0, 7)
+skeleton = NodePath("../..")
+
+[node name="wall_low8" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, 5)
+skeleton = NodePath("../..")
+
+[node name="wall_low9" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, 3)
+skeleton = NodePath("../..")
+
+[node name="wall_low10" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, 1)
+skeleton = NodePath("../..")
+
+[node name="wall_low11" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, -1)
+skeleton = NodePath("../..")
+
+[node name="wall_low12" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, -3)
+skeleton = NodePath("../..")
+
+[node name="wall_low13" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, -5)
+skeleton = NodePath("../..")
+
+[node name="wall_low14" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 7, 0, -7)
+skeleton = NodePath("../..")
+
+[node name="wall_low16" parent="Map/walls4" instance=ExtResource("21_p8bwy")]
+transform = Transform3D(-7.603173e-08, 0.98715526, 1.7394035, 4.3149925e-08, 1.7394035, -0.98715526, -2, 0, -8.742278e-08, 6.3803716, 0.6500504, -7.0137525)
+skeleton = NodePath("../..")
+
+[node name="Fence" type="Node3D" parent="Map"]
+
+[node name="fence" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -5, 0, 6)
+skeleton = NodePath("../..")
+
+[node name="fence2" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -3, 0, 6)
+skeleton = NodePath("../..")
+
+[node name="fence3" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1, 0, 6)
+skeleton = NodePath("../..")
+
+[node name="fence4" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 1, 0, 6)
+skeleton = NodePath("../..")
+
+[node name="fence5" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 3, 0, 6)
+skeleton = NodePath("../..")
+
+[node name="fence6" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5, 0, 6)
+skeleton = NodePath("../..")
+
+[node name="fence7" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 6, 0, 5)
+skeleton = NodePath("../..")
+
+[node name="fence8" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 6, 0, 3)
+skeleton = NodePath("../..")
+
+[node name="fence9" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 6, 0, 1)
+skeleton = NodePath("../..")
+
+[node name="fence10" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 6, 0, -1)
+skeleton = NodePath("../..")
+
+[node name="fence11" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 6, 0, -3)
+skeleton = NodePath("../..")
+
+[node name="fence12" parent="Map/Fence" instance=ExtResource("21_tpudk")]
+transform = Transform3D(-8.742278e-08, 0, 2, 0, 2, 0, -2, 0, -8.742278e-08, 6, 0, -5)
+skeleton = NodePath("../..")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Outlines" type="MeshInstance3D" parent="Control"]
 material_override = SubResource("ShaderMaterial_v4wb8")
 mesh = SubResource("QuadMesh_8dhpf")
+skeleton = NodePath("../..")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="Control"]
 visible = false
 material = SubResource("ShaderMaterial_b8gcp")
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1088.0
 
-[node name="ColorRect3" type="ColorRect" parent="."]
+[node name="ColorRect3" type="ColorRect" parent="Control"]
 material = SubResource("ShaderMaterial_nrkv8")
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1088.0
 
-[node name="ColorRect4" type="ColorRect" parent="."]
+[node name="ColorRect4" type="ColorRect" parent="Control"]
 visible = false
 material = SubResource("ShaderMaterial_oqo54")
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1088.0
 
-[node name="ColorRect2" type="ColorRect" parent="."]
+[node name="ColorRect2" type="ColorRect" parent="Control"]
 visible = false
 material = SubResource("ShaderMaterial_1bs3g")
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1088.0
 

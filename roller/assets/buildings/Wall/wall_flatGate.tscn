@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/wall_flatGate_cobblestone.png" id="1_d5ftv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_grrhx"]
+resource_name = "stones"
+albedo_texture = ExtResource("1_d5ftv")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1kn5i"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"format": 34359742465,
+"index_count": 66,
+"index_data": PackedByteArray("AQACAAYAAgABAAYACgAGAAEABgAKAAEABAAKAAEACgAEAAEABwAEAAEABAAHAAEACwAHAAEABwALAAEAAQAAAAsAAAABAAsACwAAAAgAAAALAAgACAAAAAUAAAAIAAUABQAAAAwAAAAFAAwAAAAJAAwACQAAAAwAAwAMAAkADAADAAkA"),
+"lods": [0.01777838, PackedByteArray("AQACAAYAAgABAAYABAAGAAEABgAEAAEABwAEAAEABAAHAAEAAQAAAAcAAAABAAcABwAAAAgAAAAHAAgACAAAAAUAAAAIAAUAAAAJAAUACQAAAAUAAwAFAAkABQADAAkA"), 0.14538062, PackedByteArray("AgAEAAEABAACAAEAAQAAAAQAAAABAAQABAAAAAUAAAAEAAUAAAADAAUAAwAAAAUA"), 0.19359481, PackedByteArray("AAABAAIAAQAAAAIAAgAAAAMAAAACAAMA")],
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 13,
+"vertex_data": PackedByteArray("AAAAvwAAgD8AAACAAAAAPwAAgD8AAACAAAAAPwAAAAAAAACAAACAvgAAAAAAAACA2LNdPgAAID8AAACA2LNdvgAAID8AAACAAACAPgAAAAAAAACAAAAAPvZsNz8AAACAAAAAvvZsNz8AAACAAAAAvwAAAAAAAACAAACAPgAAAD8AAACAAAAAAAAAQD8AAACAAACAvgAAAD8AAACA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8hwou"]
+resource_name = "wall_flatGate_Mesh wall_flatGate"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"attribute_data": PackedByteArray("AACAvwAAAAAAAAAAAAAAAAAAAAAAAIA/AABAvwAAgD8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgD8AAEC/AACAPxQmkb4AAMA+9mw3vwAAwD4UJpG+AADAPvZsN78AAMA+AACAvgAAgD8AAMC+FCaRPgAAIL8UJpE+AACAvwAAgD8AAIC+AACAPwAAwL4UJpE+AAAgvxQmkT4AAIC/AACAPwAAgL4AAAA/AAAAvwAAgD4AAEC/AAAAPwAAgL4AAAA/AAAAvwAAgD4AAEC/AAAAPw=="),
+"format": 34359742487,
+"index_count": 66,
+"index_data": PackedByteArray("AQACAAwADAAUAAEAFAAIAAEACAANAAEADQAVAAEAAAABABUAAAAVAA4AAAAOAAkAAAAJABYADwAAABYAFgADAA8ABgAEABAAFwAQAAQACgAXAAQAEQAKAAQAGAARAAQABAAFABgAGAAFABIAEgAFAAsACwAFABkABQATABkABwAZABMA"),
+"lods": [0.01777838, PackedByteArray("AQACAAwADAAIAAEACAANAAEAAAABAA0AAAANAA4AAAAOAAkADwAAAAkACQADAA8ABgAEABAACgAQAAQAEQAKAAQABAAFABEAEQAFABIAEgAFAAsABQATAAsABwALABMA"), 0.14538062, PackedByteArray("AgAIAAEAAAABAAgAAAAIAAkAAwAAAAkACgAGAAQABAAFAAoACgAFAAsABQAHAAsA"), 0.19359481, PackedByteArray("AAABAAIAAAACAAMABAAFAAYABgAFAAcA")],
+"material": SubResource("StandardMaterial3D_grrhx"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 26,
+"vertex_data": PackedByteArray("AAAAvwAAgD8AAACAAAAAPwAAgD8AAACAAAAAPwAAAAAAAACAAACAvgAAAAAAAACAAAAAPwAAgD8AAACAAAAAvwAAgD8AAACAAAAAPwAAAAAAAACAAACAvgAAAAAAAACA2LNdPgAAID8AAACA2LNdvgAAID8AAACA2LNdPgAAID8AAACA2LNdvgAAID8AAACAAACAPgAAAAAAAACAAAAAPvZsNz8AAACAAAAAvvZsNz8AAACAAAAAvwAAAAAAAACAAACAPgAAAAAAAACAAAAAPvZsNz8AAACAAAAAvvZsNz8AAACAAAAAvwAAAAAAAACAAACAPgAAAD8AAACAAAAAAAAAQD8AAACAAACAvgAAAD8AAACAAACAPgAAAD8AAACAAAAAAAAAQD8AAACAAACAvgAAAD8AAACA/3//f////7//f/9/////v/9//3////+//3//f////7//////////P/////////8//////////z//////////P/9//3////+//3//f////7//////////P/////////8//3//f////7//f/9/////v/9//3////+//3//f////7//////////P/////////8//////////z//////////P/9//3////+//3//f////7//f/9/////v/////////8//////////z//////////Pw==")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_1kn5i")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_hbstj"]
+points = PackedVector3Array(0.5, 1, 0, 0.5, 0, 0, -0.5, 1, 0, -0.5, 0, 0)
+
+[node name="wall_flatGate" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_8hwou")
+
+[node name="wall_flatGate_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall_flatGate_col"]
+shape = SubResource("ConvexPolygonShape3D_hbstj")

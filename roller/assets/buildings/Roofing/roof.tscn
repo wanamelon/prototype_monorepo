@@ -1,0 +1,147 @@
+[gd_scene load_steps=12 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_planks.png" id="1_h3p22"]
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_roof.png" id="2_8k5lf"]
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_cobblestoneAlternative.png" id="3_ejsx5"]
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_cobblestone.png" id="4_x2ivs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tjdmc"]
+resource_name = "planks"
+albedo_texture = ExtResource("1_h3p22")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ra4aj"]
+resource_name = "roof"
+albedo_texture = ExtResource("2_8k5lf")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fyown"]
+resource_name = "bricks"
+albedo_texture = ExtResource("3_ejsx5")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ssn5v"]
+resource_name = "stones"
+albedo_texture = ExtResource("4_x2ivs")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rd7ju"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"format": 34896613377,
+"index_count": 72,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAwAEAAIAAgAFAAAAAAAFAAYABgAHAAAACAADAAEAAAAHAAkAAQAKAAgACgALAAgACAALAAwACQANAAAACQAOAA0ADwAOAAkAEAAPAAkACQARABAACAAMABIAEwAQABEAEQAUABMAEgAQABMAEgAVAAgAEwAWABIAFwAVABIAEgAWABcA"),
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AACZGQAAAAAAAJkZ//8AAAAAAAD//wAAmRmOE///AACZGQAA//8AAAAAAAAAAAAAmRkAAAAAAACZGY4TAAAAAP9/WuD//wAA/39a4AAAAAAyc/////8AAP9//////wAAzIz/////AAAyc///AAAAAP9///8AAAAAzIz//wAAAAD//5kZAAAAAGXmjhMAAAAA//+ZGf//AAD//wAAAAAAAGXmAAAAAAAAZeaOE///AAD//wAA//8AAGXmAAD//wAA")
+}, {
+"aabb": AABB(-0.5, 0.1, -0.5, 1, 0.9, 1),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAwAEAAIAAgAFAAAABQAGAAAABgAHAAAACAAHAAYABgAJAAgA"),
+"name": "roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray("/3//////AAAyc/////8AADJz//8AAAAAAAAAAP//AAAAAAAAAAAAAP9///8AAAAAzIz//wAAAADMjP////8AAP//AAD//wAA//8AAAAAAAA=")
+}, {
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAAAwAFAAQABQAGAAQABQAHAAYA"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("mRkAAAAAAAAAAAAAAAAAAAAAAAD//wAAmRkAAP//AABl5gAAAAAAAGXmAAD//wAA//8AAAAAAAD//wAA//8AAA==")
+}, {
+"aabb": AABB(-0.4, 0, -0.5, 0.8, 0.8763932, 1),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAABQAGAAcABwAIAAUACAAJAAUA"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray("//9QFv//AAD//wAA//8AAAAAAAD//wAAAABQFv//AAD/f/////8AAAAAUBYAAAAAAAAAAAAAAAD//wAAAAAAAP//UBYAAAAA/3///wAAAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3gktb"]
+resource_name = "roof_Mesh roof"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("vv/Yd77/mptQ+JqbUPjYd1D4//9Q+D3cvv893L7//v+Y+ITimPjk377/5N++/1TjmPhU45j45N++/+Tfvv+E4ln5htu+/z3c//+996L5dvp//CX7//+9977/PdxZ+Ybbovl2+n/8Jfv//733vv893Fn5htui+Xb6f/wl+77/VOO+/+TfmPjk35j4hOJZ+Ybbvv893P//vfei+Xb6f/wl+77/hOK+/+TfmPjk35j4VOM="),
+"format": 34896613399,
+"index_count": 72,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAEgAUABMAFQAWABcAFwAYABUAGAAZABUAGgAbABwAHAAdABoAHQAeABoAHwAgACEAIQAiAB8AIwAkACUAJQAmACMAJQAnACYAKAApACoAKgArACgA"),
+"material": SubResource("StandardMaterial3D_tjdmc"),
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(4.0079236, 8.325933, 0, 0),
+"vertex_count": 44,
+"vertex_data": PackedByteArray("AACZGQAAVNUAAJkZ//9U1QAAAAD//1TVAAAAAAAAVNX//wAAAABU1f//AAD//1TV//+ZGf//VNX//5kZAABU1ZkZjhP/////mRkAAP////8AAAAA/////wAAmRn///////+ZGf///////wAA/////2XmAAD/////ZeaOE////////5kZ//9J7WXmjhP//0nt/39a4P//Se3MjP////9J7f9//////0nt/39a4P//SW2ZGY4T//9JbQAAmRn//0ltMnP/////SW3/f/////9Jbf9/WuAAAAAAZeaOEwAAAAD//5kZAAAAAMyM//8AAAAA/3///wAAAAAAAJkZAAAAAAAAAAAAAAAAmRkAAAAAAACZGY4TAAAAAAAAmRkAAP//mRmOEwAA////f1rgAAD//zJz//8AAP///3///wAA//9l5o4TAAAAAGXmAAAAAAAA//8AAAAAAAD//5kZAAAAAFTVVNVU1VTVVNVU1VTVVNWqKqoqqiqqKqoqqiqqKqoq/3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9/v2e/579nv+e/Z7/nv2e/579nv+f/f/7//3/+//9//v//f/7/v+e/Z7/nv2e/579nv+e/Z7/nv2f/f/7//3/+//9//v//f/7/")
+}, {
+"aabb": AABB(-0.5, 0.1, -0.5, 1, 0.9, 1),
+"attribute_data": PackedByteArray("mYX0gpmFNoFwyzaBcMv0gnDLsYSZhbGEAACZf/9/mX//f8y/AADMv/9/////f8y////Mv/////8="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAABAAFAAAABgAHAAgACAAJAAYACgALAAwADAANAAoA"),
+"material": SubResource("StandardMaterial3D_ra4aj"),
+"name": "roof",
+"primitive": 3,
+"uv_scale": Vector4(2, 4.012461, 0, 0),
+"vertex_count": 14,
+"vertex_data": PackedByteArray("/3//////VNUyc/////9U1TJz//8AAFTV/3///wAAVNXMjP//AABU1cyM/////1TVMnP//wAAJsIyc/////8mwgAAAAD//ybCAAAAAAAAJsL//wAA//8mwsyM/////ybCzIz//wAAJsL//wAAAAAmwlTVqipU1aoqVNWqKlTVqipU1aoqVNWqKoaU8daGlPHWhpTx1oaU8dYMqYYUDKmGFAyphhQMqYYU")
+}, {
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"attribute_data": PackedByteArray("dvcAAP//AAD/////dvf//zKzAAAys///qqoAAKqq//8="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAAAwAFAAQABQAGAAQABQAHAAYA"),
+"material": SubResource("StandardMaterial3D_fyown"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(3, 1, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("mRkAAAAA//8AAAAAAAD//wAAAAD/////mRkAAP////9l5gAAAAD//2XmAAD///////8AAAAA/////wAA//////9//z//f/8//3//P/9//z//f/8//3//P/9//z//f/8/")
+}, {
+"aabb": AABB(-0.4, 0, -0.5, 0.8, 0.8763932, 1),
+"attribute_data": PackedByteArray("xnHXdMZx/38AAP9/AADXdOM4AAAAANd0AAD/f8Zx/3/Gcdd04zgAAA=="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAABQAGAAcABwAIAAUACAAJAAUA"),
+"material": SubResource("StandardMaterial3D_ssn5v"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(1.8, 1.7527864, 0, 0),
+"vertex_count": 10,
+"vertex_data": PackedByteArray("//9QFv//AID//wAA//8AgAAAAAD//wCAAABQFv//AID/f/////8AgAAAUBYAAAAAAAAAAAAAAAD//wAAAAAAAP//UBYAAAAA/3///wAAAAD/f////3////9/////f////3///////3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_rd7ju")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_d1pwf"]
+points = PackedVector3Array(0.04992169, 1, 0.5, 0.5, 0.09994127, 0.5, 0.04992169, 1, -0.5, -0.050019562, 1, 0.5, 0.5, 0, 0.5, 0.5, 0.09994127, -0.5, -0.050019562, 1, -0.5, -0.5, 0.09994127, 0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0.09994127, -0.5, -0.5, 0, -0.5)
+
+[node name="roof" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_3gktb")
+
+[node name="roof_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="roof_col"]
+shape = SubResource("ConvexPolygonShape3D_d1pwf")

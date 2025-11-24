@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/overhang_round_planks.png" id="1_rlnin"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t8dee"]
+resource_name = "planks"
+albedo_texture = ExtResource("1_rlnin")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_s0jqb"]
+_surfaces = [{
+"aabb": AABB(-0.75, 0, -0.75, 1.5, 0.1, 1.5),
+"format": 34896613377,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAQAAAAQAAgABAAMABAADAAEAAwAFAAIABQADAAQAAgAFAAoABAAKAAUAAgALAAAABAAAAAsACgAMAAIAAgAMAAsABAANAAoACwANAAQADAAKAAgADQAIAAoADAAHAAsADQALAAcACAAGAAwADAAGAAcADQAJAAgABwAJAA0ADgAGAAgABgAOAAcACQAPAAgACAAPAA4ADwAJAAcABwAOAA8A"),
+"lods": [0.22452977, PackedByteArray("AAABAAIAAgABAAMABAADAAEAAQAAAAQAAwAFAAIABQADAAQAAgAGAAAABQAGAAIABgAHAAAABgAFAAgABwAGAAgABAAJAAUAAAAJAAQACQAIAAUACQAAAAcACAAJAAcA")],
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("fSX//4HaAAAAAP///38AAH0l//99JQAAAAAAAP9/AAB9JQAAgdoAAH0lAAB9JQAAgdr//30lAACB2v//gdoAAIHaAAB9JQAAgdoAAIHaAAD/fwAAAAAAAP9//////wAA/3///wAAAAD/fwAA//8AAP//////fwAA//8AAP9/AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_lm55i"]
+resource_name = "overhang_round_Mesh overhang_round"
+_surfaces = [{
+"aabb": AABB(-0.75, 0, -0.75, 1.5, 0.1, 1.5),
+"attribute_data": PackedByteArray("lqPPkfygdYmWoxuBKLAbgSiwz5GXgVenl4Fssi2AbLItgFenLYCWyJeBlsgtgMDel4HA3i2A6vSXger0LYD//5eB//8rDxuBxhF1iSsPz5GaAs+RmgIbgd+pRZXfqaV9wrJ1iZeBgb0tgIG9LYCr05eBq9OXgdXpLYDV6eMIpX3jCEWVAAB1iQ=="),
+"format": 34896613399,
+"index_count": 84,
+"index_data": PackedByteArray("AAABAAIAAgAWAAAAAgAXABYAFwAEABYAFwADAAQAAwAYAAQABQAGAAcABwAIAAUABwAGABkAGQAaAAcAGgAZAAoACgAJABoAGwAJAAoACgAcABsACwAbABwAHAAMAAsACwAMAB0AHQAeAAsAHgAdAA4ADgANAB4ADwANAA4ADgAQAA8AEQASABMAEwAfABEAEwAgAB8AIAAVAB8AIAAUABUAFAAhABUA"),
+"lods": [0.22452977, PackedByteArray("AAABAAIAAgADAAAAAwAEAAAABQAGAAcABwAIAAUABgAJAAcACQAGAAoACwAJAAoACgAMAAsADAANAAsADQAMAA4ADwANAA4ADgAQAA8AEQASABMAEwAUABEAFAAVABEA")],
+"material": SubResource("StandardMaterial3D_t8dee"),
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(20.235323, 15.2242565, 0, 0),
+"vertex_count": 34,
+"vertex_data": PackedByteArray("fSX//4Ha/78AAP///3//v30l//99Jf+/gdr//30l/7+B2v//gdr/vwAA////f1TVfSX//4Ha/MV9JQAAgdr8xQAAAAD/f1TVgdoAAIHa/MWB2v//gdr8xYHaAAB9Jarpgdr//30lqul9JQAAfSWq6X0l//99JarpAAAAAP9/VNUAAP///39U1X0lAAB9Jf//AAAAAP9///99JQAAgdr//4HaAACB2v//gdoAAH0l////f///////v/9///8AAP+///////9//7//f///////v/9/AAD///+///8AAP9/VNX//////39U1f9///8AAP///38AAAAA////fwAAAAD///9/AAD///////8AAP9///////9//v//f////3////9//v//f1TVVNX/4v/i/+L/4lTVVNX/HP8c/xz/HAQ1BDUENQQ1+sr6yvrK+spU1VTVVNVU1f9//z//f/8//3//P/9//z//f/8/////f////3////9///////////+qKqoqqiqqKv+//7//v/+//3//P/9//z//f/8/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_s0jqb")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_i0kuc"]
+points = PackedVector3Array(-0.00014680624, 0, -0.75, -0.53034455, 0, -0.53034455, -0.00014680624, 0.1, -0.75, 0.53019774, 0, -0.53034455, -0.75, 0, -0.00014680624, -0.53034455, 0.1, -0.53034455, 0.53019774, 0.1, -0.53034455, 0.75, 0, -0.00014680624, -0.75, 0.1, -0.00014680624, -0.53034455, 0, 0.53019774, 0.75, 0.1, -0.00014680624, 0.53019774, 0, 0.53019774, -0.53034455, 0.1, 0.53019774, -0.00014680624, 0, 0.75, 0.53019774, 0.1, 0.53019774, -0.00014680624, 0.1, 0.75)
+
+[node name="overhang_round" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_lm55i")
+
+[node name="overhang_round_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="overhang_round_col"]
+shape = SubResource("ConvexPolygonShape3D_i0kuc")

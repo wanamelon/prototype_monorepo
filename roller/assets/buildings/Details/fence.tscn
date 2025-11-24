@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/fence_fence.png" id="1_rytg7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36ndt"]
+resource_name = "fence"
+transparency = 4
+albedo_texture = ExtResource("1_rytg7")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wloub"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -1.4438228e-15, 1, 0.5, 1e-05),
+"format": 34359742465,
+"index_count": 24,
+"index_data": PackedByteArray("BAACAAAAAgAEAAAAAAABAAQAAQAAAAQAAQAAAAUAAAABAAUABQADAAEAAwAFAAEA"),
+"lods": [0.20412415, PackedByteArray("AAABAAIAAQAAAAIAAAADAAEAAwAAAAEA")],
+"name": "fence",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAAAAAAAAACpE1CmAAAAAAAAAD8AAACAAAAAPwAAAACpE9CmAAAAvwAAAD8AAACAAAAAPwAAAD+pE1CmAAAAvwAAAACpE1Cm")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_x61i1"]
+resource_name = "fence_Mesh fence"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -1.4438228e-15, 1, 0.5, 1e-05),
+"attribute_data": PackedByteArray("+///PwAAgD/8//8/AACgNP7/P0AAAIA//f8/QAAA4DT8/z9AAACAP/z/f0AAAIA/+v//PwAA4DT8/z9AAACAP/r//z8AAOA0/f8/QAAA4DT//z9AAACgNP3/f0AAAOA0+f//PwAAgD/5//8/AACAPw=="),
+"format": 34359742487,
+"index_count": 24,
+"index_data": PackedByteArray("CgACAAAAAAABAAoABQALAAQAAwAEAAsABAADAAwABgAMAAMACQAHAA0ADQAIAAkA"),
+"lods": [0.20412415, PackedByteArray("AAABAAIAAwAEAAUABgAEAAMABwAIAAkA")],
+"material": SubResource("StandardMaterial3D_36ndt"),
+"name": "fence",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 14,
+"vertex_data": PackedByteArray("AAAAAAAAAACpE1CmAAAAAAAAAD8AAACAAAAAPwAAAACpE9CmAAAAAAAAAD8AAACAAAAAAAAAAACpE1CmAAAAPwAAAACpE9CmAAAAvwAAAD8AAACAAAAAAAAAAACpE1CmAAAAvwAAAD8AAACAAAAAAAAAAD8AAACAAAAAPwAAAD+pE1CmAAAAPwAAAD+pE1CmAAAAvwAAAACpE1CmAAAAvwAAAACpE1Cm/3//f////7//f/9/////v/9//3////+//////////z//////////P/////////8//////////z//f/9/////v/9//3////+//3//f////7//f/9/////v/////////8//////////z//f/9/////vw==")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_wloub")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_8u5jm"]
+points = PackedVector3Array(0.5, 0.5, -7.219114e-16, 0.5, 0, -1.4438228e-15, -0.5, 0.5, 0, 0, 0.5, 0, 0, 0, -7.219114e-16, -0.5, 0, -7.219114e-16)
+
+[node name="fence" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_x61i1")
+
+[node name="fence_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="fence_col"]
+shape = SubResource("ConvexPolygonShape3D_8u5jm")

@@ -94,7 +94,7 @@ radial_segments = 6
 rings = 4
 
 [node name="CSGSphere3D6" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
-transform = Transform3D(0.12117674, 0, 0, 0, 0.40260357, 0, 0, 0, 0.12117674, -0.22980899, 0.49718952, 0.4278)
+transform = Transform3D(0.106322296, 0.00030137974, 0.058132235, -0.0077741724, 0.3990604, 0.014031331, -0.05761014, -0.053294793, 0.105392426, -0.21691878, 0.4418099, 0.40819007)
 operation = 2
 radial_segments = 6
 rings = 4

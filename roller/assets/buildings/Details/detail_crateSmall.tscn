@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/detail_crateSmall_barrel.png" id="1_2nhek"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vp4fx"]
+resource_name = "barrel"
+albedo_texture = ExtResource("1_2nhek")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_53trw"]
+_surfaces = [{
+"aabb": AABB(-0.1, 0, -0.1, 0.2, 0.2, 0.2),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAwABAAAAAgAEAAAAAAAFAAMAAwAGAAIABwAFAAAAAwAFAAcAAAAEAAcABwAGAAMABwAEAAIAAgAGAAcA"),
+"name": "barrel",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAD//wAAAAAAAAAAAAAAAP//AAAAAAAAAAAAAP//AAD/////AAAAAAAA/////wAA//8AAP//AAD///////8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_be32e"]
+resource_name = "detail_crateSmall_Mesh detail_crateSmall"
+_surfaces = [{
+"aabb": AABB(-0.1, 0, -0.1, 0.2, 0.2, 0.2),
+"attribute_data": PackedByteArray("M/ATwTPw//+C4P//guATwSnw6L8p8PyAeOD8gHjg6L8z8BPBM/D//4Lg//+C4BPBKfDov3jg6L944PyAKfD8gE7w6/9O8ADB//8Awf7/6/944PyAKfD8gCnw6L944Oi/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQA"),
+"material": SubResource("StandardMaterial3D_vp4fx"),
+"name": "barrel",
+"primitive": 3,
+"uv_scale": Vector4(7.9803286, 1.9901394, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAD//wAA//8AAAAAAAD/////AAAAAP///////wAA/////wAAAACqKgAAAAAAAKoqAAAAAP//qir//wAA//+qKv///////wCA//8AAP//AIAAAAAA//8AgAAA/////wCA//8AAAAA/7///wAA////v/////////+//////wAA/7////////9U1QAA/////1TVAAD//wAAVNX/////AABU1QAA//8AAP+/AAD//////78AAAAA////vwAAAAAAAP+//3////9/////f////3///1VVVFVVVVRVVVVUVVVVVFX/f////3////9/////f////38AAP9/AAD/fwAA/38AAFTVqipU1aoqVNWqKlTVqir/f/7//3/+//9//v//f/7/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_53trw")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7w5su"]
+points = PackedVector3Array(0.1, 0.2, 0.1, 0.1, 0.2, -0.1, -0.1, 0.2, 0.1, 0.1, 0, 0.1, 0.1, 0, -0.1, -0.1, 0.2, -0.1, -0.1, 0, 0.1, -0.1, 0, -0.1)
+
+[node name="detail_crateSmall" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_be32e")
+
+[node name="detail_crateSmall_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="detail_crateSmall_col"]
+shape = SubResource("ConvexPolygonShape3D_7w5su")

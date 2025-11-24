@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/battlement_cobblestoneAlternative.png" id="1_g5ds7"]
+[ext_resource type="Texture2D" path="res://assets/medieval/battlement_cobblestone.png" id="2_66s47"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1tb7t"]
+resource_name = "bricks"
+albedo_texture = ExtResource("1_g5ds7")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cwrj1"]
+resource_name = "stones"
+albedo_texture = ExtResource("2_66s47")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_13e6j"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0.3, 1, 0.4, 0.3),
+"format": 34896613377,
+"index_count": 42,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQAGAAZABoAGgAbABgA"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("//8AAAAAAAAAAAAAAAAAAAAAAACpqgAA//8AAKmqAAD///////8AAGXm/////wAAZeb///9/AAD//////38AAJmZ/////wAAZmb/////AABmZv///38AAJmZ////fwAAmRn/////AAAAAP////8AAAAA////fwAAmRn///9/AABl5v+///8AAJmZ/7///wAAmZn/v/9/AABl5v+//38AAGZm/7///wAAmRn/v///AACZGf+//38AAGZm/7//fwAA////f/9/AAAAAP9//38AAAAA/38AAAAA////fwAAAAA=")
+}, {
+"aabb": AABB(-0.5, 0, 0.3, 1, 0.4, 0.3),
+"format": 34896613377,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAQAAAAQABQADAAIABgABAAQAAgAHAAUACAAFAAcACQAIAAcABQAIAAoACAALAAoABAAFAAwACgAMAAUABgAEAA0ADAANAAQADAAOAA0ADwAOAAwACgAQAAwADAARAA8AEgAKAAsACwATABIAEgATAAkAFAAPABEACgAVABAAFgAQABUAFQAXABYAGAAXABUAGQAQABYAFgAaABkAGQAaABgAFQAbABgAGAAbABkAEQAZABsAEQAbABIAHAAUABEAEQASABwADQAUABwAHAAGAA0AHQAcABIABgAcAB0AEgAJAB0AHQAHAAYABwAdAAkA"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 30,
+"vertex_data": PackedByteArray("AAD/fwAAAAAAAAAAAAAAAP//AAAAAAAA////fwAAAAAAAP9//38AAP///3//fwAAAAAAAKmqAAD//wAAqaoAAP//////fwAA////////AABl5v+//38AAGXm////fwAAmRn/v/9/AAAAAP///38AAJkZ////fwAAmRn/////AABmZv+//38AAJkZ/7///wAAZeb/v///AABl5v////8AAAAA/////wAAmZn/v/9/AABmZv///38AAJmZ////fwAAmZn/////AABmZv+///8AAGZm/////wAAmZn/v///AAAAAP9///8AAP///3///wAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_4aemd"]
+resource_name = "battlement_Mesh battlement"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0.3, 1, 0.4, 0.3),
+"attribute_data": PackedByteArray("AAC17f9/te3/f+b5AADm+f////8y8///MvPa9v//2vbMzP//MrP//zKz2vbMzNr2zIz///9/////f9r2zIza9jLz///MzP//zMza9jLz2vYys///zIz//8yM2vYys9r2///a9v9/2vb/f7Xt//+17Q=="),
+"format": 34896613399,
+"index_count": 42,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQAGAAZABoAGgAbABgA"),
+"material": SubResource("StandardMaterial3D_1tb7t"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(2, 4.2, 0, 0),
+"vertex_count": 28,
+"vertex_data": PackedByteArray("//8AAAAA//8AAAAAAAD//wAAAACpqv////8AAKmq////////////v2Xm//////+/Zeb///9//7///////3//v5mZ//////+/Zmb//////79mZv///3//v5mZ////f/+/mRn//////78AAP//////vwAA////f/+/mRn///9//79l5v+/////v5mZ/7////+/mZn/v/9//79l5v+//3//v2Zm/7////+/mRn/v////7+ZGf+//3//v2Zm/7//f/+/////f/9//78AAP9//3//vwAA/38AAP+/////fwAA/7//f/8//3//P/9//z//f/8/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/")
+}, {
+"aabb": AABB(-0.5, 0, 0.3, 1, 0.4, 0.3),
+"attribute_data": PackedByteArray("/3+C4P9/o/iPQaP4j0GC4P9/guCPQYLgwXly1P9/YsjBeWLIzUdy1I9BYsjNR2LIBWdy1IlactQFZ2LIiVpiyHA+YsjNR2LIzUeC4I9Bo/hwPoLgEjWj+BI1guClfwXlpX///zVB//81QQXlfIyj+P9/o/geg4LgfIyC4B6DYsjBeWLIwXmC4HA+YsjNR2LIzUdy1HA+ctSuRHLUUDty1FA7YsiuRGLIcD5iyM1HYsjNR3LUcD5y1HA+guAAAILgMThy1HA+YsgxOGLIPgZy1AAAYsg+BmLIdiVy1PkYctR2JWLI+RhiyK5EctRQO3LUUDtiyK5EYsg="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQABgAIAAcACQAGAAUABQAKAAkACgALAAkACQAMAAYACQANAAwADgAMAA0ADQAPAA4AEAARABIAEgATABAAEwAUABAAEwAVABQAFQAWABQAFwAYABkAGQAaABcAGwAcAB0AHQAeABsAHwAdABwAIAAfABwAHAAhACAAIgAjACQAJAAlACIAJgAnACgAKAApACYAKgArACwALAAtACoALgAvADAAMAAxAC4AMAAyADEAMwAwAC8ALwA0ADMANAA1ADMAMwA2ADAAMwA3ADYAOAA2ADcANwA5ADgAOgA7ADwAPAA9ADoA"),
+"material": SubResource("StandardMaterial3D_cwrj1"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(4.1, 2.1219532, 0, 0),
+"vertex_count": 62,
+"vertex_data": PackedByteArray("AAD/fwAA//8AAAAAAAD/////AAAAAP//////fwAA//////9///8AgAAA/3///wCAZeb/v///AID///////8AgGXm/////wCAmRn/v///AIAAAP////8AgJkZ/////wCAmZn/v///AIBmZv+///8AgJmZ/////wCAZmb/////AIAAAP///3//vwAA//////+/AAD/f////78AAAAAqar/vwAA/3//f/+/AAAAAAAA/78AAP9/AAD/v////3///+OS//8AAKmq45IAAAAAqarjkgAA/3///+OS//8AAAAA/7///wAAqar/v////3//f/+/////fwAA/7///////3//v/////////+/////f////79mZv///3//v2Zm//////+/Zmb/v////79mZv+//3//v5kZ/7//f/+/mRn/v////7+ZGf//////v5kZ////f/+/Zeb///9//79l5v//////v2Xm/7////+/Zeb/v/9//78AAP9//3///////3//f///mRn/v/9///8AAP///3///5kZ////f///Zeb/v/9//////////3///2Xm////f///Zmb/v/9///+Zmf+//3///2Zm////f///mZn///9///+Zmf+//3//v5mZ/7////+/mZn//////7+Zmf///3//v/9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f///AAD/fwAA/38AAP9/AAD/f/9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////fwAA/38AAP9/AAD/fwAA")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_13e6j")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_f2mlf"]
+points = PackedVector3Array(0.5, 0.4, 0.6, 0.5, 0.19996084, 0.6, 0.5, 0.4, 0.44997066, -0.5, 0.4, 0.6, 0.5, 0, 0.49998045, -0.5, 0.19996084, 0.6, 0.5, 0.19996084, 0.3, -0.5, 0.4, 0.44997066, 0.5, 0, 0.3, -0.5, 0, 0.49998045, -0.5, 0.19996084, 0.3, -0.5, 0, 0.3)
+
+[node name="battlement" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_4aemd")
+
+[node name="battlement_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="battlement_col"]
+shape = SubResource("ConvexPolygonShape3D_f2mlf")

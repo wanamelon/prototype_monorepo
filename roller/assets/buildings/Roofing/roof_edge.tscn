@@ -1,0 +1,147 @@
+[gd_scene load_steps=12 format=4]
+
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_edge_planks.png" id="1_rweb6"]
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_edge_roof.png" id="2_rfofb"]
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_edge_cobblestoneAlternative.png" id="3_ejsws"]
+[ext_resource type="Texture2D" path="res://assets/medieval/roof_edge_cobblestone.png" id="4_5jlwj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tf0rd"]
+resource_name = "planks"
+albedo_texture = ExtResource("1_rweb6")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6qv8a"]
+resource_name = "roof"
+albedo_texture = ExtResource("2_rfofb")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4vdx8"]
+resource_name = "bricks"
+albedo_texture = ExtResource("3_ejsws")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p4uuu"]
+resource_name = "stones"
+albedo_texture = ExtResource("4_5jlwj")
+metallic_specular = 0.2
+roughness = 0.8
+emission_enabled = true
+texture_filter = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tu78o"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"format": 34896613377,
+"index_count": 48,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAwAEAAIABQAEAAMAAgAGAAAAAAAGAAcABwAIAAAAAwAJAAUAAAAIAAoACgALAAAACgAMAAsADQAMAAoACQANAAoACgAOAAkABQAJAA4ADgAPAAUA"),
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("AACZGQAAAAAAAJkZ//8AAAAAAAD//wAA//+ZGf//AAD//wAA//8AAP//AAAAAAAAAAAAAAAAAACZGQAAAAAAAJkZjhMAAAAA//+ZGQAAAAD/f1rgAAAAADJz//8AAAAA/3///wAAAADMjP//AAAAAGXmjhMAAAAAZeYAAAAAAAA=")
+}, {
+"aabb": AABB(-0.5, 0.1, -0.5, 1, 0.9, 1),
+"format": 34896613377,
+"index_count": 27,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAQAEAAMABAABAAAAAgAFAAAAAAAGAAQABQAHAAAACAAGAAAAAAAHAAgA"),
+"name": "roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 9,
+"vertex_data": PackedByteArray("zIz///9/AAAyc////38AADJz//8AAAAAAAAAAAAAAAAAAAAA//8AAP9///8AAAAA//8AAP//AADMjP//AAAAAP//AAAAAAAA")
+}, {
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAAAwAFAAQA"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("mRkAAAAAAAAAAAAAAAAAAAAAAAD//wAA//8AAP//AABl5gAAAAAAAP//AAAAAAAA")
+}, {
+"aabb": AABB(-0.4, 0, -0.5, 0.8, 0.8763932, 1e-05),
+"format": 34896613377,
+"index_count": 9,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAA"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 5,
+"vertex_data": PackedByteArray("AABQFgAAAAAAAAAAAAAAAP//AAAAAAAA//9QFgAAAAD/f///AAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6daa7"]
+resource_name = "roof_edge_Mesh roof_edge"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("vv/Yd77/mptQ+JqbUPjYd1D4//9Q+D3cvv893L7//v///733vv893Fn5htui+Xb6f/wl+77/VOO+/+TfmPjk35j4hOJZ+Ybbvv893P//vfei+Xb6f/wl+77/hOK+/+TfmPjk35j4VOO+/1y/UPhcv1D4mpu+/5qb"),
+"format": 34896613399,
+"index_count": 48,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgACwAMAAgADQAOAA8ADwAQAA0AEQASABMAEwAUABEAEwAVABQAFgAXABgAGAAZABYAGgAbABwAHAAdABoA"),
+"material": SubResource("StandardMaterial3D_tf0rd"),
+"name": "planks",
+"primitive": 3,
+"uv_scale": Vector4(4.0079236, 8.325933, 0, 0),
+"vertex_count": 30,
+"vertex_data": PackedByteArray("AACZGQAAVNUAAJkZ//9U1QAAAAD//1TVAAAAAAAAVNX//wAAAABU1f//AAD//1TV//+ZGf//VNX//5kZAABU1f9/WuAAAAAAZeaOEwAAAAD//5kZAAAAAMyM//8AAAAA/3///wAAAAAAAJkZAAAAAAAAAAAAAAAAmRkAAAAAAACZGY4TAAAAAAAAmRkAAP//mRmOEwAA////f1rgAAD//zJz//8AAP///3///wAA//9l5o4TAAAAAGXmAAAAAAAA//8AAAAAAAD//5kZAAAAAP//mRn///+///8AAP///78AAAAA////vwAAmRn///+/VNVU1VTVVNVU1VTVVNVU1aoqqiqqKqoqqiqqKqoqqiq/Z7/nv2e/579nv+e/Z7/nv2e/5/9//v//f/7//3/+//9//v+/579nv+e/Z7/nv2e/579nv+e/Z/9//v//f/7//3/+//9//v//////////////////////")
+}, {
+"aabb": AABB(-0.5, 0.1, -0.5, 1, 0.9, 1),
+"attribute_data": PackedByteArray("haixhIWoNoFwyzaBcMv0gnDLsYT/P5l//3/MvwAAzL8AAJl///////9/////v8y////Mv3HFw3/S/Ou+wYHrviK5w38="),
+"format": 34896613399,
+"index_count": 27,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAABQAGAAcABwAIAAUACQAKAAsACwAMAAkADQAOAA8ADwAQAA0A"),
+"material": SubResource("StandardMaterial3D_6qv8a"),
+"name": "roof",
+"primitive": 3,
+"uv_scale": Vector4(2, 4.012461, 0, 0),
+"vertex_count": 17,
+"vertex_data": PackedByteArray("zIz///9/VNUyc////39U1TJz//8AAFTV/3///wAAVNXMjP//AABU1TJz////fybCAAAAAP//JsIAAAAAAAAmwjJz//8AACbC//8AAAAAJsL//wAA//8mwsyM////fybCzIz//wAAJsLMjP///3+olP//AAD//6iUAAAAAP//qJQyc////3+olFTVqipU1aoqVNWqKlTVqipU1aoqhpTx1oaU8daGlPHWhpTx1gyphhQMqYYUDKmGFAyphhT///9/////f////3////9/")
+}, {
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"attribute_data": PackedByteArray("dvcAAP//AAD/////qqr//zKzAACqqgAA"),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAAAwAFAAQA"),
+"material": SubResource("StandardMaterial3D_4vdx8"),
+"name": "bricks",
+"primitive": 3,
+"uv_scale": Vector4(3, 1, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("mRkAAAAA//8AAAAAAAD//wAAAAD///////8AAP////9l5gAAAAD/////AAAAAP///3//P/9//z//f/8//3//P/9//z//f/8/")
+}, {
+"aabb": AABB(-0.4, 0, -0.5, 0.8, 0.8763932, 1e-05),
+"attribute_data": PackedByteArray("AADXdAAA/3/Gcf9/xnHXdOM4AAA="),
+"format": 34896613399,
+"index_count": 9,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAwAEAAAA"),
+"material": SubResource("StandardMaterial3D_p4uuu"),
+"name": "stones",
+"primitive": 3,
+"uv_scale": Vector4(1.8, 1.7527864, 0, 0),
+"vertex_count": 5,
+"vertex_data": PackedByteArray("AABQFgAAAAAAAAAAAAAAAP//AAAAAAAA//9QFgAAAAD/f///AAAAAP///3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_tu78o")
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_77to7"]
+points = PackedVector3Array(0.04992169, 1, -9.787083e-05, 0.5, 0.09994127, 0.5, 0.04992169, 1, -0.5, -0.050019562, 1, -9.787083e-05, 0.5, 0.09994127, -0.5, -0.5, 0.09994127, 0.5, 0.5, 0, 0.5, -0.050019562, 1, -0.5, 0.5, 0, -0.5, -0.5, 0.09994127, -0.5, -0.5, 0, 0.5, -0.5, 0, -0.5)
+
+[node name="roof_edge" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_6daa7")
+
+[node name="roof_edge_col" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="roof_edge_col"]
+shape = SubResource("ConvexPolygonShape3D_77to7")
