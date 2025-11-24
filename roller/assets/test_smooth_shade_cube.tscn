@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://6jujp8kmc13b"]
+
+[ext_resource type="PackedScene" uid="uid://by0jpq5nrmrvg" path="res://assets/TestSmoothShadeCube.glb" id="1_ndl5r"]
+[ext_resource type="ArrayMesh" uid="uid://esf2b41x6ibs" path="res://assets/smooth_cube.tres" id="2_25r02"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_25r02"]
+albedo_color = Color(0.17850001, 0.51, 0.338725, 1)
+
+[node name="TestSmoothShadeCube" instance=ExtResource("1_ndl5r")]
+
+[node name="Cube" parent="." index="0"]
+material_override = SubResource("StandardMaterial3D_25r02")
+mesh = ExtResource("2_25r02")

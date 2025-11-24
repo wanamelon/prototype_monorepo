@@ -1,0 +1,85 @@
+[gd_scene load_steps=10 format=3 uid="uid://6ikiphhb501"]
+
+[ext_resource type="Shader" uid="uid://nmwj6xvyty6x" path="res://source/cel_shading.gdshader" id="1_8m6hf"]
+[ext_resource type="Texture2D" uid="uid://hiliptimqaf3" path="res://color_gradient.tres" id="2_cchsq"]
+[ext_resource type="Texture2D" uid="uid://cvsy11swl5s6d" path="res://fresnel_gradient.tres" id="3_7d0bj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_so743"]
+render_priority = 0
+shader = ExtResource("1_8m6hf")
+shader_parameter/albedo = Color(0.76, 0.37012002, 0.3268, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_cchsq")
+shader_parameter/fresnel_gradient = ExtResource("3_7d0bj")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_so743"]
+height = 1.5
+radial_segments = 8
+rings = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_86bhk"]
+render_priority = 0
+shader = ExtResource("1_8m6hf")
+shader_parameter/albedo = Color(0.18599997, 0.45, 0.162, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_cchsq")
+shader_parameter/fresnel_gradient = ExtResource("3_7d0bj")
+
+[sub_resource type="Curve" id="Curve_v4wb8"]
+_data = [Vector2(0.4356061, 0.2686212), 0.0, 0.0, 0, 0, Vector2(0.7916666, 0.49524564), 2.5252464, 4.738877, 0, 0]
+point_count = 2
+
+[sub_resource type="TubeTrailMesh" id="TubeTrailMesh_ficl0"]
+radial_steps = 4
+sections = 4
+section_rings = 1
+curve = SubResource("Curve_v4wb8")
+
+[sub_resource type="PrismMesh" id="PrismMesh_so743"]
+
+[node name="Tomato" type="Node3D"]
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1.0695027, 0.01626985, 0, -0.04327351, 0.40210852, 0, 0, 0, 1.0703778, -0.022168636, 0.22576737, 0)
+material_override = SubResource("ShaderMaterial_so743")
+mesh = SubResource("CapsuleMesh_so743")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.40375745, -0.010023773, 0.10278064, 0.010041729, 0.2530726, 0.027226264, -0.10360717, -0.014534549, 0.403175, -0.007673025, 0.60290724, 0.011429548)
+material_override = SubResource("ShaderMaterial_86bhk")
+mesh = SubResource("TubeTrailMesh_ficl0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.3329938, -0.1488812, -0.008591032, -0.0149664, 0.13997184, -0.033088073, 0.19094853, 0.2706038, 0.012388429, -0.09062356, 0.56884575, 0.14507163)
+material_override = SubResource("ShaderMaterial_86bhk")
+mesh = SubResource("PrismMesh_so743")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(-0.10553844, 0.34304893, 0.01513852, 1.9286594e-08, 0.16949826, -0.032812737, -0.39622527, -0.09137449, -0.0040322924, 0.124884844, 0.535311, -0.01954639)
+material_override = SubResource("ShaderMaterial_86bhk")
+mesh = SubResource("PrismMesh_so743")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(-0.35912728, -0.26199517, -0.013521469, 7.450581e-09, 0.26811907, -0.030093823, 0.3177177, -0.29614204, -0.015283772, -0.08116019, 0.54075164, -0.05365467)
+material_override = SubResource("ShaderMaterial_86bhk")
+mesh = SubResource("PrismMesh_so743")

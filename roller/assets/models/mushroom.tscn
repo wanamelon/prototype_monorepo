@@ -1,0 +1,159 @@
+[gd_scene load_steps=13 format=3 uid="uid://bvua3dnhaipiu"]
+
+[ext_resource type="Shader" uid="uid://nmwj6xvyty6x" path="res://source/cel_shading.gdshader" id="1_8fmfw"]
+[ext_resource type="Texture2D" uid="uid://hiliptimqaf3" path="res://color_gradient.tres" id="2_wb4jq"]
+[ext_resource type="Texture2D" uid="uid://cvsy11swl5s6d" path="res://fresnel_gradient.tres" id="3_iwhu8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o7hg6"]
+render_priority = 0
+shader = ExtResource("1_8fmfw")
+shader_parameter/albedo = Color(0.99998826, 0.91201, 0.8972191, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_wb4jq")
+shader_parameter/fresnel_gradient = ExtResource("3_iwhu8")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_co8ap"]
+top_radius = 0.4
+bottom_radius = 0.6
+radial_segments = 5
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q64m1"]
+render_priority = 0
+shader = ExtResource("1_8fmfw")
+shader_parameter/albedo = Color(0.67, 0.26799998, 0.2746999, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_wb4jq")
+shader_parameter/fresnel_gradient = ExtResource("3_iwhu8")
+
+[sub_resource type="SphereMesh" id="SphereMesh_abh8n"]
+radius = 0.4
+height = 0.2
+radial_segments = 8
+rings = 3
+is_hemisphere = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_q64m1"]
+radius = 0.4
+height = 0.2
+radial_segments = 6
+rings = 2
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8fmfw"]
+metallic_specular = 1.0
+roughness = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_wb4jq"]
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_iwhu8"]
+height = 0.5
+radial_segments = 12
+rings = 4
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e5ty5"]
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 1.0
+roughness = 0.0
+
+[node name="shroomholder" type="Node3D"]
+
+[node name="shroom" type="Node3D" parent="."]
+transform = Transform3D(0.875, 0, 0, 0, 0.464, 0, 0, 0, 0.875, 0, -0.15654814, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="shroom"]
+transform = Transform3D(0.7609846, 0, 0, 0, 0.31883612, 0, 0, 0, 0.7609846, 0, 0.6610442, 0)
+material_override = SubResource("ShaderMaterial_o7hg6")
+mesh = SubResource("CylinderMesh_co8ap")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="shroom"]
+transform = Transform3D(1.7908635, 0, 0, 0, 3.4369926, 0, 0, 0, 1.7908635, 0, 0.96181226, 0)
+material_override = SubResource("ShaderMaterial_q64m1")
+mesh = SubResource("SphereMesh_abh8n")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="shroom"]
+transform = Transform3D(0.32307774, -0.30530182, -0.0033908242, 0.154388, 0.6050504, -0.08043282, 0.03849725, 0.13569166, 0.3510214, -0.3337382, 1.4959114, 0.16431177)
+material_override = SubResource("ShaderMaterial_o7hg6")
+mesh = SubResource("SphereMesh_q64m1")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="shroom"]
+transform = Transform3D(0.29882747, -0.19672355, 6.535839e-09, 0.0676312, 0.37839353, 0.237397, -0.077026345, -0.43095896, 0.20844094, -0.08836672, 1.423302, -0.44350338)
+material_override = SubResource("ShaderMaterial_o7hg6")
+mesh = SubResource("SphereMesh_q64m1")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="shroom"]
+transform = Transform3D(0.47804615, 0.48384947, -0.19078209, -0.31493297, 0.7872183, -0.24708818, 0.02784991, 0.5967231, 0.48066226, 0.2827888, 1.364449, 0.37553614)
+material_override = SubResource("ShaderMaterial_o7hg6")
+mesh = SubResource("SphereMesh_q64m1")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="shroom"]
+transform = Transform3D(0.46458894, 0.2383957, 0.02935, -0.12746309, 0.87766737, 0.082169674, -0.0066733607, -0.16696608, 0.4738364, 0.1697383, 1.579489, -0.08434987)
+material_override = SubResource("ShaderMaterial_o7hg6")
+mesh = SubResource("SphereMesh_q64m1")
+
+[node name="Eye" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.228447, -0.06121219, 0.04080487, 0.062116563, 0.23182216, -8.276271e-10, -0.039414465, 0.010561074, 0.23650567, 0.47253096, 0.4406863, -0.1945185)
+material_override = SubResource("StandardMaterial3D_8fmfw")
+mesh = SubResource("SphereMesh_wb4jq")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Eye"]
+transform = Transform3D(1.0740254, -0.23763375, 0, 0.23763375, 1.0740254, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_q64m1")
+mesh = SubResource("SphereMesh_iwhu8")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Eye"]
+transform = Transform3D(-1.0424534, -0.35112828, 0, 0.35112828, -1.0424534, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_q64m1")
+mesh = SubResource("SphereMesh_iwhu8")
+skeleton = NodePath("../..")
+
+[node name="pupil" type="MeshInstance3D" parent="Eye"]
+transform = Transform3D(0.10449655, 0, 0, 0, 0.28881624, -0.07732866, 0, 0.07732866, 0.28881624, 0.46574625, -0.026315365, -0.007045767)
+material_override = SubResource("StandardMaterial3D_e5ty5")
+mesh = SubResource("SphereMesh_wb4jq")
+skeleton = NodePath("../../shroom")
+
+[node name="Eye2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2856862, -0.069834374, -0.05921618, 0.074999996, 0.28977773, 0.020096185, 0.052520372, -0.03394139, 0.29341027, 0.44507143, 0.4489727, 0.22605857)
+material_override = SubResource("StandardMaterial3D_8fmfw")
+mesh = SubResource("SphereMesh_wb4jq")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Eye2"]
+transform = Transform3D(1.0903144, -0.14565329, 0, 0.14565329, 1.0903144, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_q64m1")
+mesh = SubResource("SphereMesh_iwhu8")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Eye2"]
+transform = Transform3D(-1.0550065, -0.311386, 0, 0.311386, -1.0550065, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_q64m1")
+mesh = SubResource("SphereMesh_iwhu8")
+skeleton = NodePath("../..")
+
+[node name="pupil" type="MeshInstance3D" parent="Eye2"]
+transform = Transform3D(0.10449655, 0, 0, 0, 0.28152144, -0.07537553, 0, 0.07537553, 0.28152144, 0.45750573, -0.024944527, -0.0066787335)
+material_override = SubResource("StandardMaterial3D_e5ty5")
+mesh = SubResource("SphereMesh_wb4jq")
+skeleton = NodePath("../../shroom")

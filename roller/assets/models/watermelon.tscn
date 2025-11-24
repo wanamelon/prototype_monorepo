@@ -1,0 +1,102 @@
+[gd_scene load_steps=11 format=3 uid="uid://be1d0fqf810lk"]
+
+[ext_resource type="Shader" uid="uid://nmwj6xvyty6x" path="res://source/cel_shading.gdshader" id="1_hicvx"]
+[ext_resource type="Texture2D" uid="uid://hiliptimqaf3" path="res://color_gradient.tres" id="2_sff2t"]
+[ext_resource type="Texture2D" uid="uid://cvsy11swl5s6d" path="res://fresnel_gradient.tres" id="3_e0w2v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2p102"]
+render_priority = 0
+shader = ExtResource("1_hicvx")
+shader_parameter/albedo = Color(0.51852137, 0.6891793, 0.3987909, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_sff2t")
+shader_parameter/fresnel_gradient = ExtResource("3_e0w2v")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jgaut"]
+height = 1.2
+radial_segments = 5
+rings = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8gcp"]
+render_priority = 0
+shader = ExtResource("1_hicvx")
+shader_parameter/albedo = Color(0, 0, 0, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_sff2t")
+shader_parameter/fresnel_gradient = ExtResource("3_e0w2v")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h6gsi"]
+metallic_specular = 1.0
+roughness = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_co8ap"]
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_o7hg6"]
+height = 0.5
+radial_segments = 12
+rings = 4
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nkiw2"]
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 1.0
+roughness = 0.0
+
+[node name="Watermelon" type="Node3D"]
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26910174, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.26017073, 3.090363e-08, 0.931513, 0.931513, -4.0717723e-08, -0.26017073, 3.090363e-08, 0.96716344, -4.0717723e-08, 0.020985126, -0.031525254, -0.00053584576)
+material_override = SubResource("ShaderMaterial_2p102")
+mesh = SubResource("CapsuleMesh_jgaut")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(-0.28623992, 3.090363e-08, 0.9238354, 0.9238354, -4.071772e-08, 0.28623992, 4.8039787e-08, 0.96716344, -1.7468437e-08, 0.020985126, -0.031525254, -0.00053584576)
+material_override = SubResource("ShaderMaterial_b8gcp")
+mesh = SubResource("CapsuleMesh_jgaut")
+
+[node name="Eye2" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.2453819, -0.11407343, -2.2548667e-08, 0.08804309, 0.31793016, -1.1025499e-08, 1.132627e-08, 1.6250533e-09, 0.5742185, 0.4284867, 0.12036538, -0.009262085)
+material_override = SubResource("StandardMaterial3D_h6gsi")
+mesh = SubResource("SphereMesh_co8ap")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D/Eye2"]
+transform = Transform3D(1.0648904, -0.2756968, 0, 0.2756968, 1.0648904, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_2p102")
+mesh = SubResource("SphereMesh_o7hg6")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D/Eye2"]
+transform = Transform3D(-1.0635352, -0.28087908, 0, 0.28087908, -1.0635352, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_2p102")
+mesh = SubResource("SphereMesh_o7hg6")
+skeleton = NodePath("../../..")
+
+[node name="pupil" type="MeshInstance3D" parent="Node3D/Eye2"]
+transform = Transform3D(0.104, 0, 0, 0, 0.356526, -0.098940425, 0, 0.098940425, 0.356526, 0.44800252, 0, 0)
+material_override = SubResource("StandardMaterial3D_nkiw2")
+mesh = SubResource("SphereMesh_co8ap")
+skeleton = NodePath("../..")

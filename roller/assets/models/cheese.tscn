@@ -1,0 +1,127 @@
+[gd_scene load_steps=8 format=3 uid="uid://dyjp2ksok6d5r"]
+
+[ext_resource type="Shader" uid="uid://nmwj6xvyty6x" path="res://source/cel_shading.gdshader" id="1_accf1"]
+[ext_resource type="Texture2D" uid="uid://hiliptimqaf3" path="res://color_gradient.tres" id="2_ogcnx"]
+[ext_resource type="Texture2D" uid="uid://cvsy11swl5s6d" path="res://fresnel_gradient.tres" id="3_5184u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2kdl1"]
+render_priority = 0
+shader = ExtResource("1_accf1")
+shader_parameter/albedo = Color(0.76, 0.76, 0.38759997, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_ogcnx")
+shader_parameter/fresnel_gradient = ExtResource("3_5184u")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1bs3g"]
+height = 0.9
+radial_segments = 12
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ogcnx"]
+render_priority = 0
+shader = ExtResource("1_accf1")
+shader_parameter/albedo = Color(1.4920532e-06, 0.60980636, 0.07748421, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_ogcnx")
+shader_parameter/fresnel_gradient = ExtResource("3_5184u")
+
+[sub_resource type="SphereMesh" id="SphereMesh_ogcnx"]
+radial_segments = 12
+rings = 6
+
+[node name="Cheese" type="Node3D"]
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="CSGMesh3D2" type="CSGMesh3D" parent="Node3D"]
+transform = Transform3D(0.011581264, 0, -2.0479846, 0, 0.6164178, 0, 2.0479846, 0, 0.011581264, 0.41675842, 0.26634592, 0.44560975)
+material_override = SubResource("ShaderMaterial_2kdl1")
+mesh = SubResource("CylinderMesh_1bs3g")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.49667752, 0, 0)
+operation = 2
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34907067, 0, -0.5155792)
+operation = 2
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.202635, 0, -1.6298145e-09, 0, 0.67324454, 0, 1.6298145e-09, 0, 0.202635, 0.023953855, 4.172325e-07, 0.035238326)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.202635, 0, -1.5133992e-09, 0, 0.67324454, 0, 1.5133992e-09, 0, 0.202635, -0.040878266, 0.28971988, 0.2992294)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="CSGSphere3D3" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.202635, 0, -5.820766e-10, 0, 0.67324454, 0, 5.820766e-10, 0, 0.202635, -0.23167604, 0.41731405, 0.13760448)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="CSGSphere3D4" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.202635, 0, -4.656613e-10, 0, 0.67324454, 0, 4.656613e-10, 0, 0.202635, -0.25317332, -0.3490237, -0.00446558)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="CSGSphere3D5" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.06923731, 0, 0.11992261, 0, 0.46007493, 0, -0.11992261, 0, 0.06923731, -0.46077073, 0.49718916, 0.0148949325)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="CSGSphere3D6" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.12117674, 0, 0, 0, 0.40260357, 0, 0, 0, 0.12117674, -0.22980899, 0.49718952, 0.4278)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="CSGSphere3D7" type="CSGSphere3D" parent="Node3D/CSGMesh3D2"]
+transform = Transform3D(0.21047708, 0, 2.3283064e-10, 0, 0.69929945, 0, -2.3283064e-10, 0, 0.21047708, -0.40609023, -0.026844233, 0.25796792)
+operation = 2
+radial_segments = 6
+rings = 4
+
+[node name="EyeSimple" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.458335, 0.4165212, -0.3298192)
+visible = false
+material_override = SubResource("ShaderMaterial_ogcnx")
+mesh = SubResource("SphereMesh_ogcnx")
+skeleton = NodePath("../..")
+
+[node name="EyeSimple2" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0.1323925, 0.57054293, 0.35963959)
+visible = false
+material_override = SubResource("ShaderMaterial_ogcnx")
+mesh = SubResource("SphereMesh_ogcnx")
+skeleton = NodePath("../..")
+
+[node name="EyeSimple3" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, -0.51428723, 0.14073771, 0.4227864)
+visible = false
+material_override = SubResource("ShaderMaterial_ogcnx")
+mesh = SubResource("SphereMesh_ogcnx")
+skeleton = NodePath("../..")

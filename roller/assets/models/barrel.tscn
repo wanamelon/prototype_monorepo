@@ -1,0 +1,126 @@
+[gd_scene load_steps=12 format=3 uid="uid://biek8ic11afi0"]
+
+[ext_resource type="Shader" uid="uid://nmwj6xvyty6x" path="res://source/cel_shading.gdshader" id="1_0loux"]
+[ext_resource type="Texture2D" uid="uid://hiliptimqaf3" path="res://color_gradient.tres" id="2_26l8e"]
+[ext_resource type="Texture2D" uid="uid://cvsy11swl5s6d" path="res://fresnel_gradient.tres" id="3_1q8os"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v0h54"]
+render_priority = 0
+shader = ExtResource("1_0loux")
+shader_parameter/albedo = Color(0.5665781, 0.30341017, 0.20629105, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_26l8e")
+shader_parameter/fresnel_gradient = ExtResource("3_1q8os")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gcksa"]
+top_radius = 0.52
+bottom_radius = 0.52
+height = 2.5
+radial_segments = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gcksa"]
+render_priority = 0
+shader = ExtResource("1_0loux")
+shader_parameter/albedo = Color(0.5391692, 0.54883146, 0.5754366, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_26l8e")
+shader_parameter/fresnel_gradient = ExtResource("3_1q8os")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_2p102"]
+top_radius = 0.4
+radial_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h6gsi"]
+metallic_specular = 1.0
+roughness = 0.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_co8ap"]
+radial_segments = 12
+rings = 6
+
+[sub_resource type="SphereMesh" id="SphereMesh_o7hg6"]
+height = 0.5
+radial_segments = 12
+rings = 4
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nkiw2"]
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 1.0
+roughness = 0.0
+clearcoat_roughness = 0.0
+
+[node name="Barrel" type="Node3D"]
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.046696603, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1.1915064, 0, 0, 0, 0.18205203, 0, 0, 0, 1.1915064, 0, 0.3589349, 0)
+material_override = SubResource("ShaderMaterial_v0h54")
+mesh = SubResource("CylinderMesh_gcksa")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1.3018184, 0, 0, 0, 0.053129897, 0, 0, 0, 1.3018184, 0, 0.5292535, 0)
+material_override = SubResource("ShaderMaterial_gcksa")
+mesh = SubResource("CylinderMesh_gcksa")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1.3018184, 0, 0, 0, 0.053129897, 0, 0, 0, 1.3018184, 0, 0.17117962, 0)
+material_override = SubResource("ShaderMaterial_gcksa")
+mesh = SubResource("CylinderMesh_gcksa")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1.1915064, 0, 0, 0, 0.1285057, 0, 0, 0, 1.1915064, 0, 0.666199, 0)
+material_override = SubResource("ShaderMaterial_v0h54")
+mesh = SubResource("CylinderMesh_2p102")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(1.1915064, 0, 0, 0, -0.1285057, 1.041648e-07, 0, -1.1234326e-08, -1.1915064, 0, 0.070108026, 0)
+material_override = SubResource("ShaderMaterial_v0h54")
+mesh = SubResource("CylinderMesh_2p102")
+
+[node name="Node3D" type="Node3D" parent="Node3D"]
+transform = Transform3D(1.1915064, 0, 0, 0, 0.75228643, 0, 0, 0, 1.1915064, 0, 0.8121967, 0)
+
+[node name="Eye2" type="MeshInstance3D" parent="Node3D/Node3D"]
+transform = Transform3D(-2.6226834e-08, -0.6, 0, 0.6, -2.6226834e-08, 0, 0, 0, 0.6, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_h6gsi")
+mesh = SubResource("SphereMesh_co8ap")
+skeleton = NodePath("../../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D/Node3D/Eye2"]
+transform = Transform3D(1.0302657, -0.38542598, 0, 0.38542593, 1.0302656, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_v0h54")
+mesh = SubResource("SphereMesh_o7hg6")
+skeleton = NodePath("../../../..")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D/Node3D/Eye2"]
+transform = Transform3D(-1.0238951, -0.40204382, 0, 0.40204382, -1.023895, 0, 0, 0, 1.1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_v0h54")
+mesh = SubResource("SphereMesh_o7hg6")
+skeleton = NodePath("../../../..")
+
+[node name="pupil" type="MeshInstance3D" parent="Node3D/Node3D/Eye2"]
+transform = Transform3D(0.104, 0, 0, 0, 0.356526, -0.098940425, 0, 0.098940425, 0.356526, 0.44800252, 0, 0)
+material_override = SubResource("StandardMaterial3D_nkiw2")
+mesh = SubResource("SphereMesh_co8ap")
+skeleton = NodePath("../../..")

@@ -1144,7 +1144,7 @@ ah indeed, just a status effect is good. we can make it more generic shortly no?
 [ ] Player stamina bar useless invisible at higher speeds
 [ ] Add an inventory display
 [ ] block out a main UI design
-[ ] Flesh out the shop mechanic
+[ ] Flesh out the shop mechaniccam
 [ ] Items: the lower your stamina, the higher your speed
 [ ] Items: crop level up time is decreased
 [ ] Items: reduce all cooldowns by some amount
@@ -2148,3 +2148,119 @@ Suffice to say, building the bones will enable us to do that
 The theme MUST center around taxation, fish, and being a little "bio punk" whatever that means?
 
 I like having a competitive aspect. The "async multiplayer" is chef's kiss for that.
+
+# Random shader wip
+
+```
+shader_type canvas_item;
+
+uniform sampler2D noise : filter_linear, repeat_enable;
+
+uniform float speed = 3.0;
+uniform float freq = 0.1;
+uniform float amp = 0.01;
+uniform float noise_factor = 4.0;
+uniform bool should_snap = true;
+
+vec2 snap(vec2 uv, vec2 texture_pixel_size) {
+	return floor(((uv - 0.5) / texture_pixel_size) + 0.5) * texture_pixel_size + 0.5;
+}
+
+//vec2 snap(vec2 uv, vec2 texture_pixel_size) {
+	//return floor(((uv) / texture_pixel_size)) * texture_pixel_size;
+//}
+
+uniform vec4 outline_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
+uniform int type : hint_range(0, 2) = 2;
+uniform float thickness = 1.0;
+uniform int width: hint_range(0, 3) = 1; // our filter's x and y ranges are [-width, width]
+uniform int manhattan_max: hint_range(1, 6) = 1; // we'll only check a cell offset V if abs(V.x) + abs(V.y) <= manhattan
+
+const vec2[8] DIRECTIONS = {
+	vec2(1.0, 0.0),
+	vec2(0.0, 1.0),
+	vec2(-1.0, 0.0),
+	vec2(0.0, -1.0),
+	vec2(1.0, 1.0),
+	vec2(-1.0, 1.0),
+	vec2(-1.0, -1.0),
+	vec2(1.0, -1.0)
+};
+
+float gtz(float input) { return max(0, sign(input)); }
+// returns 1 if input > 0, else 0
+
+vec2 compute_displaced_coordinate(vec2 uv, vec2 block_size) {
+	vec2 wave_uv = snap(uv, block_size);
+	float noise_sample = texture(noise, wave_uv).r * noise_factor * PI;
+	vec2 snapped_sample = snap(uv, block_size);
+	vec2 displacement = vec2(
+		amp * sin((snapped_sample.x / freq) + floor(TIME * speed) + noise_sample),
+		amp * cos((snapped_sample.y / freq) + floor(TIME * speed) + noise_sample)
+	);
+	wave_uv += displacement;
+	return snap(wave_uv, block_size);
+}
+
+const vec2[] FILTER = {
+	vec2(1.0, 0.0),
+	vec2(0.0, 1.0),
+	vec2(-1.0, 0.0),
+	vec2(0.0, -1.0),
+	vec2(1.0, 1.0),
+	vec2(-1.0, 1.0),
+	vec2(-1.0, -1.0),
+	vec2(1.0, -1.0),
+	vec2(2.0, 0.0),
+	vec2(0.0, 2.0),
+	vec2(-2.0, 0.0),
+	vec2(0.0, -2.0),
+	vec2(2.0, 1.0),
+	vec2(2.0, -1.0),
+	vec2(1.0, 2.0),
+	vec2(-1.0, 2.0),
+	vec2(-2.0, 1.0),
+	vec2(-2.0, -1.0),
+	vec2(1.0, -2.0),
+	vec2(-1.0, -2.0)
+};
+
+float check(sampler2D tex, vec2 from, vec2 size) {
+	float result = 0.0;
+	for (int i = -width; i <= width; i++) {
+		for (int j = -width; j <= width; j++) {
+			if (abs(i) + abs(j) <= manhattan_max) {
+				vec2 offset_pos = from + vec2(float(i), float(j)) * size;
+				result += texture(tex, compute_displaced_coordinate(offset_pos, size)).a;
+			}
+		}
+	}
+	//for (int i = 0; i < FILTER.length(); i++) {
+		//vec2 offset_pos = from + FILTER[i] * size;
+		//result += texture(tex, compute_displaced_coordinate(offset_pos, size)).a;
+	//}
+	//for (int i = 0; i < 4 * type; i++) {
+		//for (int j = 1; j <= 2; j++) {
+			//vec2 offset_pos = from + DIRECTIONS[i] * size * thickness * float(j);
+			//result += texture(tex, compute_displaced_coordinate(offset_pos, size)).a;
+		//}
+	//}
+	return gtz(result);
+}
+
+void fragment() {
+	vec2 block_size = should_snap? TEXTURE_PIXEL_SIZE * 1.0 : vec2(0.0001);
+	vec2 snapped = compute_displaced_coordinate(UV, block_size);
+	// hmm, issue is our outline needs to sample the "final" displaced texture
+	// but right now, we're doing something subtly different - works for the one pixel we're considering
+	// but the neighbor displacements are wrong. We need to extract our displace algo and reuse it there
+	// YEAH LETS FUCKING GOOO
+	COLOR = texture(TEXTURE, snapped);
+	if (sin(TIME * 4.0) > -10.0) {
+		COLOR = mix(
+			COLOR, outline_color,
+			check(TEXTURE, UV, TEXTURE_PIXEL_SIZE) * (1.0 - gtz(COLOR.a))); // * (1.0 - gtz(COLOR.a))
+	}
+}
+
+```

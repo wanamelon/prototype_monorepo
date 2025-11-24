@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://jdyf0rv28ygt"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_bc8em"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_bc8em"]
+
+[node name="SimpleShapeArtTest" type="Node2D"]
+
+[node name="Peasant" type="Node2D" parent="."]
+position = Vector2(731, 392)
+
+[node name="Body" type="MeshInstance2D" parent="Peasant"]
+modulate = Color(0.66, 0.2904, 0.29655993, 1)
+scale = Vector2(128, 128)
+mesh = SubResource("QuadMesh_bc8em")
+
+[node name="Body6" type="MeshInstance2D" parent="Peasant"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-28.509033, -28.50058)
+scale = Vector2(36.078846, 36.078846)
+mesh = SubResource("SphereMesh_bc8em")
+
+[node name="Body4" type="MeshInstance2D" parent="Peasant"]
+visible = false
+position = Vector2(-29, -25)
+scale = Vector2(30.525486, 30.525488)
+mesh = SubResource("SphereMesh_bc8em")
+
+[node name="Body2" type="MeshInstance2D" parent="Peasant/Body4"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(0.0080420375, -0.02500549)
+scale = Vector2(0.4913555, 0.49135548)
+mesh = SubResource("SphereMesh_bc8em")
+
+[node name="Body3" type="MeshInstance2D" parent="Peasant"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(28.490967, -28.50058)
+scale = Vector2(36.078846, 36.078846)
+mesh = SubResource("SphereMesh_bc8em")
+
+[node name="Body5" type="MeshInstance2D" parent="Peasant"]
+visible = false
+position = Vector2(27.999996, -25)
+scale = Vector2(30.525486, 30.525488)
+mesh = SubResource("SphereMesh_bc8em")
+
+[node name="Body2" type="MeshInstance2D" parent="Peasant/Body5"]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(0.0080420375, -0.02500549)
+scale = Vector2(0.4913555, 0.49135548)
+mesh = SubResource("SphereMesh_bc8em")

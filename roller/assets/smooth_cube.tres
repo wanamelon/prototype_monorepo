@@ -1,0 +1,41 @@
+[gd_resource type="ArrayMesh" load_steps=3 format=4 uid="uid://esf2b41x6ibs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_56l0n"]
+resource_name = "Material"
+cull_mode = 2
+albedo_color = Color(0.9063318, 0.9063318, 0.9063318, 1)
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_130k0"]
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAACAAYABQAGAAIAAAABAAIABQAHAAYABwAAAAYABAABAAAABwAEAAAAAwACAAEAAwAFAAIABAADAAEABwAFAAMABwADAAQA"),
+"lods": [1.9999999, PackedByteArray("AAABAAIAAwACAAEABAABAAAABAADAAEABAAAAAIAAwAFAAIABQAEAAIABAAFAAMA")],
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/////wAAAAD///////8AAAAA/////wAA//8AAP//AAD//wAAAAAAAAAAAAD//wAAAAD//wAAAAAAAAAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[resource]
+resource_name = "TestSmoothShadeCube_Cube"
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"attribute_data": PackedByteArray("/5//f/+f/z//3/8//1//f/+f////X////1//P/8f/z//nwAA/18AAP/f/3//X/+//5//v/8f/38="),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAACAAoAAAABAAIAAwABAAAACwADAAAACwAAAAwABQALAAwABQAMAAQAAwAGAAEABgAIAAEABgAJAAgADQAGAAMADQAHAAYA"),
+"lods": [1.9999999, PackedByteArray("AAABAAIAAwABAAAAAwAAAAQABQADAAQAAwAGAAEAAwAHAAYABgAIAAEABgAJAAgA")],
+"material": SubResource("StandardMaterial3D_56l0n"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 14,
+"vertex_data": PackedByteArray("/////wAA+vT///////8E3QAA/////4f2//8AAAAA6toAAP////9KwAAAAAD//3PR//8AAP//gLYAAAAA//8/qAAA/////0rAAAAAAP//c9EAAP//AADi6AAAAAAAABr7AAD//wAAb9kAAAAAAACT4Tg9eiBmKbIMgmibnuMnMEu5+MXIMNCz+WsRyzicQhmvufjFyDDQs/kYdczS+spQ1/rK5rqxJ5+L")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_130k0")
