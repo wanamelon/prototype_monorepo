@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=4]
+[gd_scene load_steps=6 format=4 uid="uid://yplfsxhxyebh"]
 
-[ext_resource type="Texture2D" path="res://assets/medieval/fence_fence.png" id="1_rytg7"]
+[ext_resource type="Texture2D" uid="uid://ccuhq2ormi4y0" path="res://assets/medieval/fence_fence.png" id="1_rytg7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_36ndt"]
 resource_name = "fence"
@@ -55,3 +55,4 @@ mesh = SubResource("ArrayMesh_x61i1")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="fence_col"]
 shape = SubResource("ConvexPolygonShape3D_8u5jm")
+disabled = true
