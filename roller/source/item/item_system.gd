@@ -299,14 +299,6 @@ class AddStatusEffect extends ItemEvent:
 		self.effect = effect
 		self.target = ItemRef.from(target)
 
-#class ItemDestroyed extends ItemEvent:
-#	var destroyer: Item
-#	var victim: Item
-#	
-#	func _init(destroyer: Item, victim: Item):
-#		self.destroyer = destroyer
-#		self.victim = victim
-
 class BounceEvent extends ItemEvent:
 	var collided_item: ItemRef
 	
