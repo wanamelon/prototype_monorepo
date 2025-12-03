@@ -1,0 +1,1151 @@
+[gd_scene load_steps=9 format=3 uid="uid://crci6r0smj8dy"]
+
+[ext_resource type="Script" uid="uid://brrs54x5m873j" path="res://source/ui/experimental/in_game_layout_1.gd" id="1_cfec4"]
+[ext_resource type="Texture2D" uid="uid://ctbdcgusurmol" path="res://assets/rolling_ball/hole.png" id="1_rw23y"]
+[ext_resource type="Texture2D" uid="uid://d4fypba2jshml" path="res://assets/smiling_coin_0.png" id="2_0nprr"]
+[ext_resource type="Texture2D" uid="uid://dywxvmk1ljdwu" path="res://assets/rolling_ball/star.png" id="4_f13il"]
+[ext_resource type="Texture2D" uid="uid://nsm5i5d15x2v" path="res://assets/pixelRustyGear.png" id="5_ynbju"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_cfec4"]
+radius = 640.0
+height = 1280.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_ynbju"]
+size = Vector3(1280, 1280, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_1vkaj"]
+radius = 32.0
+height = 64.0
+
+[node name="InGameLayout1" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cfec4")
+
+[node name="Control" type="ColorRect" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 512.0
+offset_right = 1408.0
+offset_bottom = 1088.0
+
+[node name="Control3" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.11507135, 0.08276274, 0.032334715, 0.62352943)
+
+[node name="GridContainer" type="GridContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 576.0
+offset_top = 224.0
+offset_right = -556.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 6
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect6" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect7" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect8" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect9" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect10" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect11" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect12" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect13" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect14" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect15" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect16" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect17" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect18" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect19" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect20" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect21" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect22" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect23" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect24" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect25" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect26" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect27" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect28" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect29" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect30" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect31" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect32" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect33" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect34" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect35" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect36" type="ColorRect" parent="GridContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="GridContainer2" type="GridContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 576.0
+offset_top = 32.0
+offset_right = -556.0
+offset_bottom = -920.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 6
+
+[node name="ColorRect" type="ColorRect" parent="GridContainer2"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="GridContainer2"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect3" type="ColorRect" parent="GridContainer2"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="GridContainer2"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect5" type="ColorRect" parent="GridContainer2"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="ColorRect6" type="ColorRect" parent="GridContainer2"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+color = Color(1, 0.41000003, 0.41000003, 1)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_right = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_rw23y")
+
+[node name="MultipleSamples" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ElCircle2" type="MeshInstance2D" parent="MultipleSamples"]
+visible = false
+modulate = Color(0.53999996, 1, 0.89266664, 1)
+position = Vector2(960, 640)
+mesh = SubResource("SphereMesh_cfec4")
+
+[node name="ElCircle3" type="MeshInstance2D" parent="MultipleSamples"]
+visible = false
+modulate = Color(0.53999996, 1, 0.89266664, 1)
+position = Vector2(960, 848.00006)
+scale = Vector2(1, 0.34375)
+mesh = SubResource("BoxMesh_ynbju")
+
+[node name="ElCircle4" type="MeshInstance2D" parent="MultipleSamples"]
+modulate = Color(1, 0.25, 0.25, 1)
+position = Vector2(960, 640)
+mesh = SubResource("SphereMesh_1vkaj")
+
+[node name="Line2D" type="Line2D" parent="MultipleSamples"]
+position = Vector2(504, 104)
+points = PackedVector2Array(48, 48, 120, 136)
+width = 16.0
+default_color = Color(0, 0, 0, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Line2D2" type="Line2D" parent="MultipleSamples"]
+position = Vector2(1160, 112)
+points = PackedVector2Array(216, 48, 144, 136)
+width = 16.0
+default_color = Color(0.0627451, 0.07058824, 0.10980392, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="oppressors" type="Control" parent="MultipleSamples"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 840.0
+offset_right = 448.0
+offset_bottom = 968.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect2"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect2"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect4" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 696.0
+offset_right = 448.0
+offset_bottom = 824.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect4"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect4"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect5" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 560.0
+offset_right = 448.0
+offset_bottom = 688.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect5"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect5"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1472.0
+offset_top = 840.0
+offset_right = 1600.0
+offset_bottom = 968.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect3"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect3"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect8" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1472.0
+offset_top = 704.0
+offset_right = 1600.0
+offset_bottom = 832.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect8"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect8"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect19" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1472.0
+offset_top = 568.0
+offset_right = 1600.0
+offset_bottom = 696.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect19"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect19"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect6" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 336.0
+offset_top = 424.0
+offset_right = 464.0
+offset_bottom = 552.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect6"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect6"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect7" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 296.0
+offset_right = 520.0
+offset_bottom = 424.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect7"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect7"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect9" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 472.0
+offset_top = 184.0
+offset_right = 600.0
+offset_bottom = 312.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect9"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect9"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect10" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 584.0
+offset_top = 88.0
+offset_right = 712.0
+offset_bottom = 216.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect10"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect10"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect11" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 704.0
+offset_top = 32.0
+offset_right = 832.0
+offset_bottom = 160.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect11"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect11"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect12" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 832.0
+offset_top = 8.0
+offset_right = 960.0
+offset_bottom = 136.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect12"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect12"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect13" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 968.0
+offset_top = 8.0
+offset_right = 1096.0
+offset_bottom = 136.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect13"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect13"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect14" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1096.0
+offset_top = 40.0
+offset_right = 1224.0
+offset_bottom = 168.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect14"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect14"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect15" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1216.0
+offset_top = 96.0
+offset_right = 1344.0
+offset_bottom = 224.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect15"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect15"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect16" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1328.0
+offset_top = 192.0
+offset_right = 1456.0
+offset_bottom = 320.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect16"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect16"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect17" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1408.0
+offset_top = 304.0
+offset_right = 1536.0
+offset_bottom = 432.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect17"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect17"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect18" type="TextureRect" parent="MultipleSamples/oppressors"]
+layout_mode = 0
+offset_left = 1456.0
+offset_top = 432.0
+offset_right = 1584.0
+offset_bottom = 560.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect2" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect18"]
+layout_mode = 0
+offset_left = 88.0
+offset_top = 96.0
+offset_right = 120.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/oppressors/TextureRect18"]
+modulate = Color(1, 0, 0.5166669, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 96.0
+offset_right = 40.0
+offset_bottom = 128.0
+texture = ExtResource("4_f13il")
+
+[node name="gear" type="TextureRect" parent="MultipleSamples"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 384.0
+offset_top = 88.0
+offset_right = 1528.0
+offset_bottom = 1232.0
+texture = ExtResource("5_ynbju")
+expand_mode = 1
+
+[node name="TheSINNER" type="TextureRect" parent="MultipleSamples"]
+layout_mode = 0
+offset_left = 832.00006
+offset_top = 528.0
+offset_right = 960.00006
+offset_bottom = 656.0
+scale = Vector2(2.080206, 2.080206)
+texture = ExtResource("2_0nprr")
+
+[node name="ColorRect" type="ColorRect" parent="MultipleSamples"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MultipleSamples"]
+layout_mode = 0
+offset_left = 864.0
+offset_top = 768.0
+offset_right = 1056.0
+offset_bottom = 904.0
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultipleSamples/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/HFlowContainer/VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_f13il")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MultipleSamples/HFlowContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "1024"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MultipleSamples/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/HFlowContainer/VBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("4_f13il")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MultipleSamples/HFlowContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "1024"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="MultipleSamples/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/HFlowContainer/VBoxContainer3"]
+layout_mode = 2
+texture = ExtResource("4_f13il")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MultipleSamples/HFlowContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "1024"
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="MultipleSamples/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/HFlowContainer/VBoxContainer4"]
+layout_mode = 2
+texture = ExtResource("4_f13il")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MultipleSamples/HFlowContainer/VBoxContainer4"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "1024"
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="MultipleSamples/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/HFlowContainer/VBoxContainer5"]
+layout_mode = 2
+texture = ExtResource("4_f13il")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MultipleSamples/HFlowContainer/VBoxContainer5"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "1024"
+
+[node name="VBoxContainer6" type="VBoxContainer" parent="MultipleSamples/HFlowContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TextureRect3" type="TextureRect" parent="MultipleSamples/HFlowContainer/VBoxContainer6"]
+layout_mode = 2
+texture = ExtResource("4_f13il")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MultipleSamples/HFlowContainer/VBoxContainer6"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "1024"
+
+[node name="CircleAndSpinners" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ElCircle" type="MeshInstance2D" parent="CircleAndSpinners"]
+modulate = Color(0.53999996, 1, 0.89266664, 0.48235294)
+position = Vector2(960, 540)
+mesh = SubResource("SphereMesh_cfec4")
+
+[node name="LosExtraGuys" type="Control" parent="CircleAndSpinners"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect2" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -44.0
+offset_top = -512.0
+offset_right = 84.0
+offset_bottom = -384.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect3" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 420.0
+offset_top = -56.0
+offset_right = 548.0
+offset_bottom = 72.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect4" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -60.0
+offset_top = 424.0
+offset_right = 68.0
+offset_bottom = 552.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect5" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -508.0
+offset_top = -56.0
+offset_right = -380.0
+offset_bottom = 72.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect6" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -484.0
+offset_top = -200.0
+offset_right = -356.0
+offset_bottom = -72.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect10" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -492.0
+offset_top = 88.0
+offset_right = -364.0
+offset_bottom = 216.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect11" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -428.0
+offset_top = 216.0
+offset_right = -300.0
+offset_bottom = 344.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect12" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -332.0
+offset_top = 320.0
+offset_right = -204.0
+offset_bottom = 448.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect13" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -204.0
+offset_top = 392.0
+offset_right = -76.0
+offset_bottom = 520.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect7" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -412.0
+offset_top = -328.0
+offset_right = -284.0
+offset_bottom = -200.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect9" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -316.0
+offset_top = -424.0
+offset_right = -188.0
+offset_bottom = -296.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect8" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = -188.0
+offset_top = -488.0
+offset_right = -60.0
+offset_bottom = -360.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect14" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = -488.0
+offset_right = 228.0
+offset_bottom = -360.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect15" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 228.0
+offset_top = -424.0
+offset_right = 356.0
+offset_bottom = -296.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect16" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 324.0
+offset_top = -328.0
+offset_right = 452.0
+offset_bottom = -200.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect17" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 396.0
+offset_top = -200.0
+offset_right = 524.0
+offset_bottom = -72.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect18" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 404.0
+offset_top = 96.0
+offset_right = 532.0
+offset_bottom = 224.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect19" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 232.0
+offset_right = 460.0
+offset_bottom = 360.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect20" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 336.0
+offset_right = 348.0
+offset_bottom = 464.0
+texture = ExtResource("2_0nprr")
+
+[node name="TextureRect21" type="TextureRect" parent="CircleAndSpinners/LosExtraGuys"]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 408.0
+offset_right = 212.0
+offset_bottom = 536.0
+texture = ExtResource("2_0nprr")
+
+[node name="FRICK" type="Control" parent="CircleAndSpinners"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 6.8065076
+
+[node name="TextureRect2" type="TextureRect" parent="CircleAndSpinners/FRICK"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 3.2)
+texture = ExtResource("2_0nprr")
+
+[node name="TheSINNER" type="TextureRect" parent="CircleAndSpinners"]
+layout_mode = 0
+offset_left = 832.0
+offset_top = 384.0
+offset_right = 960.0
+offset_bottom = 512.0
+scale = Vector2(2.080206, 2.080206)
+texture = ExtResource("2_0nprr")
