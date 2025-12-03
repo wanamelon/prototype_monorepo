@@ -1313,13 +1313,41 @@ No the crux of the question is where's the trigger check implementation?
 
 Some systems feel "obvious" not to be in the item because they require outside data
 For example, "When at least 5 bananas in inventory" - an external system reading from item feels right
+But how to do something custom? Like a check which wouldn't be reused. Then we put that in the central system?
+Such things should be isolated. But can we do best of both worlds?
 
+I think I more prefer there's a shared API items can use. And this API expose info about the world.
 
 ```
-AffectingItemsComponent
-    
+Item
+    StaticData - shared, game level
+        Triggers/Actions
+        Base stats # will want to tweak these
+        identifier stuff: Name, enum, base tags
+    DynamicData - anything varying per instance
+        UUID
+        state vars...
+        buffs: +mult
+        tags: base tags + any dynamic??
+        mods: hat / badge / blessing
 ```
 
+Item has position, or position has item, or both?
+For the mechanic where we count an item as also being in XYZ position, it should be the former
+Or we can do both perhaps.
+
+Problem of how to compute damage? Or other stats which can be buffed
+options: a method on item, a separate static method, or a system which outputs to some intermediary state
+There could be more than one step per turn where we'd want to compute this maybe
+Unless we say "apply all buffs before any damage events" which could be reasonable
+But is it possible that a buff will cause another item to do an action which is affected by the buff?
+well actually that's unlikely. Isn't it fine to just have the system using the state var calculate it?
+
+ugh I need to get out of my head and just get hands dirty.
+
+Let's just try and implement the worst version of this game all in one megafile haha
+
+so to start we need some definition of an item
 
 
 # high level todos rethinking
