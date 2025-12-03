@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://bq2182yx4r4m8"]
+[gd_scene load_steps=63 format=3 uid="uid://bq2182yx4r4m8"]
 
 [ext_resource type="Texture2D" uid="uid://dwjlrmmt11gj3" path="res://assets/tile1.png" id="1_h6gsi"]
 [ext_resource type="Script" uid="uid://dtrfvq3re45h6" path="res://source/isometric_tiles_art_test.gd" id="1_n5k2i"]
@@ -126,6 +126,45 @@ albedo_color = Color(1.9614621, 0, 0, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_v0h54"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p8bwy"]
+render_priority = 1
+shader = ExtResource("1_o7hg6")
+shader_parameter/albedo = Color(0.97, 0.16490002, 0.16490002, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_yg5p2")
+shader_parameter/fresnel_gradient = ExtResource("3_abh8n")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tpudk"]
+height = 0.5
+radial_segments = 8
+rings = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tpudk"]
+render_priority = 1
+shader = ExtResource("1_o7hg6")
+shader_parameter/albedo = Color(1.2995303e-06, 0.6250718, 0.52152544, 1)
+shader_parameter/point_size = 0.0
+shader_parameter/roughness = 0.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.0
+shader_parameter/metallic = 0.0
+shader_parameter/normal_scale = 1.000000807500001
+shader_parameter/uv1_scale = Vector3(0, 0, 0)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(0, 0, 0)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/color_gradient = ExtResource("2_yg5p2")
+shader_parameter/fresnel_gradient = ExtResource("3_abh8n")
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_tpudk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o7hg6"]
@@ -192,6 +231,16 @@ shader_parameter/roll_speed = 1.0
 shader_parameter/scan_line_strength = -8.0
 shader_parameter/pixel_strength = -2.0
 
+[sub_resource type="Animation" id="Animation_n5k2i"]
+length = 0.001
+tracks/0/type = "scale_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Placed/Pumpkin")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 1, 1, 1)
+
 [sub_resource type="Animation" id="Animation_ohida"]
 resource_name = "disturb"
 length = 0.2
@@ -210,16 +259,6 @@ tracks/1/path = NodePath("Placed/Pumpkin")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.05, 1, 0.055, 0.007, -0.116, 0.992, 0.12, 1, -0.119, -0.013, -0.116, 0.986, 0.17, 1, 0, 0, 0, 1)
-
-[sub_resource type="Animation" id="Animation_n5k2i"]
-length = 0.001
-tracks/0/type = "scale_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Placed/Pumpkin")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 1, 1, 1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_so743"]
 _data = {
@@ -406,13 +445,83 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
 
 [node name="Pumpkin4" parent="Placed" instance=ExtResource("9_2p102")]
-transform = Transform3D(0.5, 0, -0.8660255, 0, 1, 0, 0.8660255, 0, 0.5, -7, 0, 1)
+transform = Transform3D(0.5, 0, -0.86602557, 0, 1, 0, 0.86602557, 0, 0.5, -7, 0, 1)
 
 [node name="Pumpkin2" parent="Placed" instance=ExtResource("9_2p102")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
 
-[node name="Pumpkin3" parent="Placed" instance=ExtResource("9_2p102")]
+[node name="Node3D2" type="Node3D" parent="Placed"]
 transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -3, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 0.5043001, 0.05700952, -1.7423608)
+material_override = SubResource("ShaderMaterial_p8bwy")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 0.906863, 0.05700952, -1.9747801)
+material_override = SubResource("ShaderMaterial_tpudk")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 1.7592151, 0.05700952, -2.4668858)
+material_override = SubResource("ShaderMaterial_tpudk")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 1.3177221, 0.05700952, -2.2119896)
+material_override = SubResource("ShaderMaterial_p8bwy")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.22350678, 0, 0.30372286, 0, 0.24169688, 0, -0.30372286, 0, 0.22350678, 0.16836286, 0.05700952, 0.80480236)
+visible = false
+material_override = SubResource("ShaderMaterial_p8bwy")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.22350678, 0, 0.30372286, 0, 0.24169688, 0, -0.30372286, 0, 0.22350678, 0.6977837, 0.05700952, 0.4945888)
+visible = false
+material_override = SubResource("ShaderMaterial_tpudk")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.22350678, 0, 0.30372286, 0, 0.24169688, 0, -0.30372286, 0, 0.22350678, 0.61120963, 0.05700952, -0.55856055)
+visible = false
+material_override = SubResource("ShaderMaterial_tpudk")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="Placed/Node3D2"]
+transform = Transform3D(0.22350678, 0, 0.30372286, 0, 0.24169688, 0, -0.30372286, 0, 0.22350678, 0.884166, 0.05700952, -0.08871853)
+visible = false
+material_override = SubResource("ShaderMaterial_p8bwy")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="Node3D3" type="Node3D" parent="Placed"]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -3, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Placed/Node3D3"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, -0.22540116, 0.05700952, 0.9840911)
+material_override = SubResource("ShaderMaterial_p8bwy")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Placed/Node3D3"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 0.17716146, 0.05700952, 0.75167185)
+material_override = SubResource("ShaderMaterial_tpudk")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Placed/Node3D3"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 1.0295138, 0.05700952, 0.25956595)
+material_override = SubResource("ShaderMaterial_tpudk")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Placed/Node3D3"]
+transform = Transform3D(0.37280774, 0, 0.056721322, 0, 0.24169688, 0, -0.056721322, 0, 0.37280774, 0.5880208, 0.05700952, 0.5144623)
+material_override = SubResource("ShaderMaterial_p8bwy")
+mesh = SubResource("CylinderMesh_tpudk")
+
+[node name="Pumpkin3" parent="Placed" instance=ExtResource("9_2p102")]
+transform = Transform3D(0.9534331, 0, 0.3016045, 0, 1, 0, -0.3016045, 0, 0.9534331, -3, 0, -1)
 
 [node name="Barrel" parent="Placed" instance=ExtResource("10_2p102")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.0048990548, -1)
@@ -721,6 +830,30 @@ material = SubResource("ShaderMaterial_1bs3g")
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1088.0
+
+[node name="Label" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 780.0
+offset_top = 458.0
+offset_right = 820.0
+offset_bottom = 503.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+text = "5"
+
+[node name="Label2" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 804.0
+offset_top = 474.0
+offset_right = 844.0
+offset_bottom = 519.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+text = "5"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
