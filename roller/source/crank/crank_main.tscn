@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cd2f1fedwo2rr"]
 
-[ext_resource type="Script" uid="uid://ctlovqr0sahr0" path="res://source/bounce_main.gd" id="1_rgxu6"]
+[ext_resource type="Script" uid="uid://dfggtivg4ubaf" path="res://source/crank/crank_main.gd" id="1_ktlvg"]
 [ext_resource type="Shader" uid="uid://dm7q3tppttf5j" path="res://source/desaturate.gdshader" id="3_8l0bx"]
 [ext_resource type="Texture2D" uid="uid://df8r231n3c6yr" path="res://assets/rolling_ball/background_blue.png" id="4_dabnq"]
 [ext_resource type="AudioStream" uid="uid://dcab5uj33b1kn" path="res://assets/audio/failure-drum-sound-effect-1-46093.mp3" id="6_ascep"]
@@ -10,7 +10,7 @@ shader = ExtResource("3_8l0bx")
 shader_parameter/saturation = 0.30000001425
 
 [node name="CrankMain" type="Node2D"]
-script = ExtResource("1_rgxu6")
+script = ExtResource("1_ktlvg")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 material = SubResource("ShaderMaterial_to078")
