@@ -1130,6 +1130,457 @@ hmm, a bit trickier:
 
 ah indeed, just a status effect is good. we can make it more generic shortly no?
 
+# ~~Skirt~~ THE HAND OF SATAN go spinny
+
+So with the first spin idea, I forsee problems:
+
+- starting with 1 spinner -> too slow at beginning
+- because it's purely a "linear sequence", feels somewhat overly simplistic
+    - any complex multi-item interactions will rely on either tracking spins over time
+    - or will just be positional
+- also I don't like having players place the items, because then our pool is super limited (20)
+- but on the flipside, if I reroll the circle each time, the spins feel kind of meaningless? like why 2 sources of
+  random?
+
+I'm more optimistic about an idea closer to the slot machine
+Boiled down, slot machine = sampling N things from a pool, and the combinations within that N are interesting
+The sample size should be nontrivial, and its order (positioning) matters
+Visually, this is super clear as you see the pieces directly laid out in world space
+rather than being a timeline of selections.
+
+this idea is you have 3 samples, and each time you discard the oldest and replace with a new
+so it's rolling sampling from a pool.
+
+visually, something like a conveyor belt or ferris wheel / water mill makes sense
+think of luggage on an airport conveyor belt.
+Each turn, the belt moves so that the "latest" 6 pieces go back to the pool
+And then 6 new ones are "drawn" from the pool
+This is more logical if it's a literal pool though haha
+
+same repo or new? it's a monorepo dummy dum dum silly lil dummy dum
+there is no physics (F U john physics)
+I am about to construct the torment nexus
+easiest way is copy code and modify it a bit. I hate branches! I hate branches!
+But in all seriousness A) seeing old+new in same is nice, B) we can just git tag? unlikely to "merge" branches
+
+---
+
+the main loop is similar.
+
+- Overall game (15-30 minutes)
+    - N trials: Trial = "making rent"
+        - K turns: Spin the wheel son, do it now
+            - item drop: add, delete, banish
+    - Relic drop between trials
+
+---
+
+sources of the "depth"
+
+- item interactions and mechanics
+  - 
+- relics as a way to define your archetype
+    - clergy deal more damage. Temporary mult boost when any card is force-triggered. Fire lasts 1 turn longer
+- status effects on the sinner
+    - various DoTs (linear, multiplicative, ), PitchForks (attract more attacks?), extra mult
+    - Maybe a limited concept: the sinner cannot do anything... could be more useful for bosses?
+    - also, may not be a traditional status effect, could be something that doesn't stack much
+    - almost like having items attached to the sinner (similar to Ballionaire's carryables)
+- item mods (similar to stickers + modifier in Balatro)
+    - hat: makes easier to trigger based off this item
+        - adding a tag, relaxing adjacency check, card always counts as active/inactive
+    - badge: change the sampling:
+        - magnet and repulsor badges to impact which cards are drawn at same time
+        - more likely to be drawn, or guaranteed to be Nth in a segment,
+    - particle effect: change the card effect / attributes
+        - boost to stats mult/potency/cooldown/crit, etc.
+
+---
+
+no more fun times we are implementing NOW
+what do we learn from the previous system? I think we ended up making a lot of systems that would hypothetically be good
+but I didn't build for what we really needed. Not to insult my work too much haha it was still decent
+
+we still want a "modifier" system - there need to be both temporary and permanent mods
+I like the idea of crits. very easy for those to become unbalanced though, so be careful there!
+
+---
+
+Items
+- Hit -> Give some points
+- More points for more surrounding serfs
+- Apothecary: adds bleed stacks = some proportion of all other bad status effects
+- Stereotypical devil: Pitchfork!
+- Sphere devil (2 big spikes on sides + face is only mouth):
+- Prism devil:
+- Mischievous Imp:
+- Floating eyeball devil:
+- Satan: devils in same segment -> more powerful?
+- Santa:
+- Cherub:
+- Popemobile (medieval):
+- Fire pit: apply flame status effect
+- Hot coals: nearby items also apply flame
+- Priest: Bless random item with temporary higher mult
+- Apostate
+- Saint
+- Angel
+- Consecrated ICBM: it's a friggin nuke. Maybe spawned by other things, it's too powerful!
+- Brother Brutus
+- Brother Beefcake
+- Brother BallBuster
+- Sister Severe
+- Sister SlapHappy
+- Sister
+- Pope
+- Wafer thing
+- abbey fruitcake
+- blood of christ wine
+- The eden apple
+- Thumbscrew
+- Eyeball plucker
+- The rack
+- Draw and quarter
+- Burning at stake
+- IRON MAIDEN
+- Skull crusher
+- The wheel
+- Pillory
+- Heretic's fork
+- Whip
+- cat of 9 tails
+- iron cage
+- masque of ultimate humiliation
+
+Relics
+- Strange bedfellows: Holy/Unholy adjacent -> +potency
+- Love thy neighbor:
+- Crucifix
+- 10 commandments
+- Bible
+- Podium
+- Crown of thorns
+- Wine in a gold cup
+-
+- Upside down crucifix
+- Rosary
+- Church
+- Jesus fish
+- Baptismal thingus
+- Methuselah tree
+- Saint's toe
+- Shard of the true cross
+-
+
+- Bosses
+    - Common mechanics: Resistance, Shield, Recovery (status effect duration?),
+      - 
+    -
+    - Gluttony: Chance to consume up to n items (inactive till end of trial, or some # turns?)
+    - Lust (a butt): Hit -> flat decrease score
+    - Wrath (just a very angry dude):
+    - Sloth: Add sleeper duds to the pool
+    - Greed: Chance to steal rerolls
+    - Envy:
+    - Pride:
+
+# architectural
+
+Implementing age-based trigger like the LBAL coal
+Or activating every 10 turns
+How to make it affected by cooldown?
+perhaps trigger def could reference a state var, via EL
+or else the item itself might define the inputs?
+maybe cooldown IS always the interval? this seems simple!
+How do actions access a state variable (ex: deal turns inactive x 100 damage)
+I think this is very expression var
+```
+ItemDef
+    Turns Trigger
+        amount 10
+        oneShot true
+    Action
+        replace self -> a gem
+
+Item
+    var TurnsSinceAdded
+```
+
+No the crux of the question is where's the trigger check implementation?
+- Inside Item
+- Inside a TurnsComponent
+- Outside Item, separate system
+
+Some systems feel "obvious" not to be in the item because they require outside data
+For example, "When at least 5 bananas in inventory" - an external system reading from item feels right
+
+
+```
+AffectingItemsComponent
+    
+```
+
+
+
+# high level todos rethinking
+
+I think what's really holding me back is lack of a vision, making it hard to know what to prioritize
+why spend time designing a UI flow that I won't use? at the same time I wonder if my anxiety is holding me back too much
+and it's better to just do it. hmm, both may be true. Still, if finding a vision will unblock me, we will do that
+
+The core idea of the game isn't clear yet. Is it more of a nubby? Or a ballionaire or a LBAL?
+I think the closest would be ballionaire - that's the aim minus the peggle aspect
+But why? With Nubby centering around pegs that double/halve, I'm worried about making a clone that is too derivative
+hmm but the top priority is to reduce scope.
+A ballionaire approach requires a bunch of items in order to work well
+whereas with nubby it's a bit simpler
+
+our core mechanic (rolling over things, rather than bouncing off) does not work very well with the
+basic Nubby setup where you have a set number of pegs and they permadie when exhausted.
+there's no gravity, so the ball won't just die when pegs are gone. it will be an empty field!
+
+That's why the original idea is to have items spawn stuff on the board
+In this weird combo of luck be a landlord (randomized symbol layout) and nubby
+
+I don't really foresee issues with that, it's just a risk b/c I don't know of games that do that
+I'm also afraid we won't get enough variety on the board if that happens, but maybe that's fine
+
+Issue with letting user place stuff is it's not quite chaotic enough. It would be really easy to, for example,
+cheese a combo by putting the pieces in a row and rolling straight.
+filling 36 board tiles with diverse items could also require a good # of items to exist, more scope!
+At the same time though, isn't that gonna be a problem regardless unless we go pure nubby route? (only one item type on
+board)
+
+Really I think question is what's simpler? Fewer slots -> likely is simpler
+
+ooohh what if: your items spawn stuff in, in some random positioning.
+But you decide where to place and roll the ball.
+we're gonna need more slots though haha right? 28 slots gotta be enough hnngg
+I do like this 3d rendered as 2d idea.
+
+this way there's a balance between choice (deciding where to place/launch the ball)
+and pure randomness like a slot machine
+
+items are generally "immortal" during one spin but may have cooldown
+that begs the question, what makes this different from LBAL?
+and why would we do the "spawners live on the sides, adjacent to items"
+then it feels like there isn't a clear separation.
+
+without gravity, the physics element feels like aeugh is it good?
+
+maybe it should be more katamari like, with the ball squashing people who run around.
+hmm yeah I guess it's not easy to find the fun...
+
+you know what? we're overthinking things. Making a derivative game is fine
+and new fun mechanics could emerge from testing. Shouldn't take too long trying to come up with those!
+remember that our goal right now is still like 60% fun, 30% learning, 10% wanting to make a good game
+
+what sounds the most fun / close to my vision is something like ballionaire, not like nubby
+Nubby is cool but the core trigger system and item interactions don't have the depth/variety of the others
+ex: there aren't really status effects, and most things are some variation of "thing that pops peg" or "double a peg"
+
+maybe it's better for scope? I dunno. Let's say it's something core, I don't want to cut
+
+ok let's keep going with the chain of thought. The systems we need:
+
+- core items (symbols in LBAL, triggers in, items)
+    - place them on board
+- relics (the boons in ballionaire)
+    - separate from the core
+    - fewer "rolls"
+    - can't be discarded
+- a "shop" (meaning card selection)
+    - mostly UI work
+    - will also need to define item rarities
+    - perhaps reroll limits
+- level structure
+    - trials, rounds, run win
+    - how to scale challenge level in a good way
+- tutorialization
+  - 
+
+Scope down. We need to not kill the project by overscoping.
+I think maybe 10s of items is doable, but full animation and etc. is beyond reach
+36 slots is also way too many on 2nd thought. A) it's probably overwhelming visually/brainwise, B) requires more items
+to fill
+I think half that is fine! like 15-20 (6 6 6 = 18???)
+
+Ok I think for a bit and I am transmuting the idea once again oh no Wana don't do it no pls
+I'm doing it
+
+It's a spin the bottle deckbuilder
+The player places items in a circle
+Each spin, pick an item and activate it
+The sinner is in the center. Items damage it or buff other items
+every N spins -> pick new item
+can rearrange items, but must expend a shop roll to destroy or banish one
+
+this design simplifies mechanics
+it's intuitive - won't surprise players
+there's room for depth:
+
+- positional synergies: nearby, opposite, red vs black squares (or numbered!)
+- order of selection (if pick holy items 2+ times in a row...)
+- more spinners / ways to activate dormant items
+- there's still balls! When hit, eject a suffering coin in the flavor of the damage type
+- consumers: when hit by suffering coin, eat it and do something!
+- status effects
+
+discrete turn-based, or continuous autobattler?
+both are fine, but I prefer turns. I figure it's simpler?
+
+- We don't need to worry about time deltas, speeding/slowing the sim, etc.
+- IMO a spin limit is more intuitive than a timer
+
+everything triggers at the same time
+one challenge might be avoiding triggering cycles etc.
+perhaps a simple evaluation priority system is fine?
+hmm ok actually regular time based might be ok??
+ah wait, that defeats the point of spin the bottle nay?
+yeah that's a stronger argument. We want the spin to be the central mechanic
+
+ok also chaos definitely good
+like we know this. having 10000 explosions on the screen yeah it's hard to see
+but do I need to distinguish every little thing? probably not
+I'd actually be more scared of it not being chaotic enough
+no we aren't gonna have 10 trillion balls flying around probably
+but something like
+
+# Item combined parameters
+
+some problems I feel could be related:
+
+- status effect filtering system feels quite complex
+    - why should we have to both filter down the items/existing params
+
+what if every item has every param, but can choose to ignore it if unused?
+for example, a cooldown multiplier. So if we want to globally reduce cooldowns, just apply that for all items
+like it's a bit dirty but that's dead simple.
+
+we can component-ize this to be more clean
+ex:
+
+```
+SpeedComponent:
+    float compute_speed():
+        # base speed + all speed status effect intensities, etc.
+    json serde()
+        # make this an interface? then easy to serde item state
+        # for saving/loading or for between rounds?
+```
+
+param components
+
+- cooldown. safe assumption: every item has at most one
+- health tracking
+    - things like resistances factor in
+- potency: how strong the "effect" of this is
+- chance: bonus/mult atop probability checks
+- mult: multiplier on points given
+- holder: for piggybank and similar
+    - keeps tracks of which projectiles it ate
+- custom state component (maybe an item does something special?)
+- status effect params: decay rate, effect multiplier (aeugh more layers!!!)
+
+I am so afraid of making a bad system but it's fine really.
+someone out there made something better, but that's ok. We can read it someday to learn
+but it's more memorable if we understand the problem space first
+
+### Another problem:
+
+- passing state/attributes from trigger -> the actions
+    - ex: what is the ball that last hit this peg, we want to light it on fire
+
+# The basic items for an MVP
+
+Right now there's basically no synergies, we still just have test items
+We took an approach of "implement as many diverse mechanics"
+which is fine but we don't need such a generic system, ultimately let's just make the items we truly
+want in the end game, and let the system conform to those requirements
+
+Items
+
+- Items
+    - Serf
+        - Hit -> Give some points
+        - More points for more surrounding serfs
+    - Tax collector
+        - Hit ->
+        -
+    - Apostate
+    - Noble
+        - Hit -> has more suffering
+        -
+    - Apothecary
+        - Hit -> Surrounding sinners with fire/plague/bleed now get MORE bleed
+    - Fire pit
+        - Hit -> Sparks fly, some % chance add one stack of fire to nearby
+    - Rotting pile
+        - Passive: plague status effect
+    - Glutton (tarrare type guy)
+    - Lust enthusiast (gooner)
+    - Wrathful Fella (just a very angry dude)
+    - Sloth
+    - Greed
+    - Envy
+    - Paragon of pride
+
+- Relics
+    - Priest
+        - Every N seconds -> Bless random item with temporary higher mult
+    - Nun
+        - Every N hits ->
+    - Pope
+        - Every N hits -> Speed up cooldowns of other relics
+    - Saint
+      - 
+    - Angel
+      - 
+    - Demon with a pitchfork
+      - 
+    - John Hell (Satan)
+        - Ball damaged -> send down a fireball which hits and lights people on fire
+        - If crit, it's a nuke (need some cooldown to not be overwhelming)
+    - John Christmas (Santa)
+      - 
+    - Crucifix
+    - 10 commandments
+    - Bible
+    - Podium
+    - Crown of thorns
+        - Sinner takes damage -> huh huh huh
+    - Wine in a gold cup
+        - 10 hits -> Ball heals, also cooldown
+        - Limited charges
+    - Cherub
+    - Popemobile (medieval)
+    - Upside down crucifix
+    - Rosary
+    - Wafer thing
+    - Church
+    - Jesus fish
+    - A loaf of bread
+    - Baptismal thingus
+    - Methuselah tree
+    - The apple (you know, the one)
+    - Preserved big toe of saint
+
+Status effects (on items), up to 666 stacks heehee:
+
+- Fire: Bog standard, give points on proc, stacks linearly
+    - synergies with stuff that's like "when I take damage"
+    - we don't need to sync the procs, it's a better synergy that way
+    - also, since proc is a cooldown, synergy with cooldown stuff!
+    - and potency ofc -> more fire damage
+    - we could add fire-specific stuff too! Maybe some items take more fire damage??
+- Plague: Makes other status effects last x% longer (linear stack)
+- Speedup cooldown
+- Improve chance checks?
+- Temp mult boost
+
+When to do a status effect vs. a persistent benefit?
+Persistent ones need to be harder to earn. Status effect is bread and butter
+
 # Crop idea (bankrolled bazillionaire)
 
 [ ] Ball: damage numbers
@@ -1554,6 +2005,33 @@ I like the medieval vibe and retro graphics. I'm definitely very passionate abou
 
 aeugh too much to think about, let's pivot to SWE
 
+---
+
+another thematic idea
+
+reviving from the very early game: punishing condemned souls in hell
+I think gritty roguelikes do well. The rogue crowd strikes me as more mature, kind of 40k dnd audience people
+So, grimdark but also like silly. Look at skull horde! the art/music is gritty but the premise is absurd
+
+---
+
+also 3d modeling while good is I dunno, it adds some challenges to do stuff in 3d.
+
+### Also random unrelated ideas I thought of lately:
+
+- Sewer factory game (software system design, but with plumbing)
+- A wastewater plant tycoon game
+    - I feel like tycoon people are similar to those who would like workers and resources
+- Friend-slop of medieval monks descending to hell
+    - Kaiju game has some strong emotional appeal, but the genre/depth is out of whack
+    - I desperately WANT it to be a game that's like co-op combat or exploration, but it's a low-intensity cooking game?
+- Synthetic evolution, but 2d and simplified
+    - From a scale of abstract (deckbuilder) -> simulated (cell-by-cell animal builder), somewhere in middle is sweet
+    - The trailers for synth evolution signals there's demand, but it's a very ambitious like 7 year project
+    - It also sounds like it's not that accessible to younger people who I think would love that kind of thing (like
+      legos)
+- Fish game idea actually really good - backpack-battles-likes are still doing great
+
 ### Crops ideas
 
 As always we have a grid (my beloved shape!)
@@ -1588,6 +2066,93 @@ More on differentiation
 - Some kind of challenge/curse system randomized per round (similar to Nubby's bosses)
     - Perhaps also a challenge mode, or this is part of our run...
 - A competitive style mode - perhaps genetic algo or async multiplayer
+
+# Solving scope screen round 1
+
+OH GOD
+
+https://blog.tylerglaiel.com/p/make-and-release-lots-of-small-games
+
+yeah we're in a bit of a pickle
+I truly believe in the "10 small bad games" hypothesis
+Like I can feel the rate of motion and it's slow I don't like it
+But what to do yeah?
+
+The core argument is that GOOD, FAST execution is the foundation of succeeding as a game dev
+Specifically as a beginner and an indie. There are real success stories from experienced people who do this
+The "idea" of the game is super duper important but you can't get signal on that if you're bad or slow
+
+The pitch deck strat was interesting
+I don't have friends who are avid gamers in my target demographic
+
+what we have right now is barely a game sadly
+the core UI and game system BONES (to say nothing of content) are not there yet
+The appearance and sound are not presentable
+
+I think "good deckbuilder in 2 weeks" is excessively ambitious though.
+So the point being less time? 2 weeks is an arbitrary scope tho...
+Maybe 2 weeks of true dedicated dev time is a better metric, so like 2 months of real time b/c weekends etc
+STILL, 14 straight days I think it remains a challenge.
+
+Same for ALL of my other ideas, those are not 2 week games!
+
+Something like the chumibletmas was a 2 week game
+
+---
+
+How can we cut this idea down to still be a deckbuilder but fit in a 160 hour dev time window?
+That's 20 8-hour days, about 10 weekends+mornings or 3 months
+
+---
+
+### Visual and audio
+
+3d: art speed isn't the limitation, we proved that.
+But menus, keeping things VISUALLY clear, etc. might be tricky
+I just don't know how to build such a menu in 3d
+
+2d could be the move? Something like a square grid, with items up top and to the side?
+We might still render some stuff as 3d
+
+2d good. Like for sure it's less work, but not in the "less work same result way"
+My vision definitely leans towards 3d
+
+hmm yeah then if it's core to the game, we should learn how to execute, rather than cutting it for scope
+at the extreme end: that's like not adding wheels to a bike because it's easier
+harder question: am I over-valuing aesthetics over gameplay? not in the beauty sense but the fuller def. of aesthetics
+well, my answer there is how do we truly know 3d is much more challenging/scope?
+the only real 3d part is the animations, everything else is just UI or pure logic
+
+what do we need for 3d that isn't needed for 2d?
+known costs:
+
+- mapping coordinates from our 2d game logic -> 3d space
+- not always clear what the ball is hitting
+- for small projectiles, rolling on floor -> will disappear inside objects
+- fitting the isometric view with UI elements
+- procedural 3d animation (ex: falling mortar) is a teensy bit harder
+- modeling takes somewhat longer
+  known benefits:
+- I like the look a bit more
+- easier to animate some things (shading taken care of)
+  unknowns:
+- particle effects?
+
+### Core gameplay systems and UI
+
+Card mechanics
+
+- We need to stop refactoring and start implementing actual mechanics
+- Don't think moddability will be a thing unless we get a bunch a players
+- We might need to cut the "sitting atop wall cards". It's core to the fantasy though haha...
+- Every analytics thing is a bust, we're not doing that
+
+Card selection menu
+
+Main menu
+
+- Make this horribly bare bones. Settings, credits, bla bla that goes later
+- No save/load, runs are short and exiting game -> you die boohoo.
 
 # Auto battle logic system
 
