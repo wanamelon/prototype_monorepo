@@ -14,17 +14,17 @@ func _ready():
 
 func _on_turn():
 	_turns_left -= 1
-	print("Turn start. %d remain" % _turns_left)
+	display_message("Turn start. %d remain" % _turns_left)
 	_activate_items()
 	display_progress(_current_score)
 	if _turns_left <= 0:
-		print("Ended with points: ", _current_score)
+		display_message("Ended with points: %d" % _current_score)
 		if _current_score >= _score_quota:
-			print("Round won. WE'RE DOING IT AGAIN!")
+			display_message("Round won. WE'RE DOING IT AGAIN!")
 			_round += 1
 			round_setup()
 		else:
-			print("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
+			display_message("You lost: BYE BYE SUCKER, BOZO, DINGUS!")
 			$Turn.disabled = true
 			$GameOverAudioPlayer.play()
 			$GameOverAudioPlayer.finished.connect(func (): get_tree().quit())
@@ -34,7 +34,7 @@ func display_turns():
 	$ProgressDisplay/LivesLabel.text = str(_turns_left) + " Turns To Meet Quota"
 
 func round_setup():
-	_turns_left = 5
+	_turns_left = 20
 	_current_score = 0
 	_score_quota = 50 * (2 ** _round)
 	$ProgressDisplay/ProgressBar.value = 0
@@ -49,12 +49,15 @@ func display_progress(new_score: int):
 	_progress_tween.tween_property($ProgressDisplay/ProgressBar, "value", progress_percent, 0.5)
 	$ProgressDisplay/Label.text = "%d / %d" % [new_score , _score_quota]
 
-"""
-for item in [ordered items]:
-	for trigger in item:
-		if all conditions match
-		do the actions
-"""
+var msg_counter: int = 0
+func display_message(text: String):
+	var label := Label.new()
+	msg_counter += 1
+	label.text = "%s: %s" % [msg_counter, text]
+	label.set("theme_override_colors/font_color", Color.BLACK)
+	label.set("theme_override_font_sizes/font_size", 12)
+	$TextureRect2/ScrollContainer/VBoxContainer.add_child(label)
+	$TextureRect2/ScrollContainer/VBoxContainer.move_child(label, 0)
 
 static var DEMON = ItemStaticData.new(ItemType.DEVIL, "Lil Demon", [Trigger.new([], [Action.Damage.new()])], 50, 0.5)
 var items: Array[Item] = [Item.new(DEMON)]
@@ -76,7 +79,7 @@ func do_action(item: Item, action: Action):
 	if action is Action.Damage:
 		if Utils.RNG.randf() < item.def.base_chance:
 			_current_score += item.def.base_damage
-			print("Item %s did %d damage" % [item.def.name, item.def.base_damage])
+			display_message("%s did %d damage" % [item.def.name, item.def.base_damage])
 			display_progress(_current_score)
 
 class Item extends RefCounted:
