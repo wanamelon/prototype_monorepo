@@ -1207,6 +1207,7 @@ I like the idea of crits. very easy for those to become unbalanced though, so be
 ---
 
 Items
+
 - Hit -> Give some points
 - More points for more surrounding serfs
 - Apothecary: adds bleed stacks = some proportion of all other bad status effects
@@ -1253,6 +1254,7 @@ Items
 - masque of ultimate humiliation
 
 Relics
+
 - Strange bedfellows: Holy/Unholy adjacent -> +potency
 - Love thy neighbor:
 - Crucifix
@@ -1294,6 +1296,7 @@ or else the item itself might define the inputs?
 maybe cooldown IS always the interval? this seems simple!
 How do actions access a state variable (ex: deal turns inactive x 100 damage)
 I think this is very expression var
+
 ```
 ItemDef
     Turns Trigger
@@ -1307,6 +1310,7 @@ Item
 ```
 
 No the crux of the question is where's the trigger check implementation?
+
 - Inside Item
 - Inside a TurnsComponent
 - Outside Item, separate system
@@ -1349,6 +1353,156 @@ Let's just try and implement the worst version of this game all in one megafile 
 
 so to start we need some definition of an item
 
+alright hmm what do we really lose by keeping items as basically pure data and doing behavior separately?
+I think for anything bespoke, we can do something like a special condition/action with its own system
+the benefits are
+
+- by keeping config totally separate it becomes dead easy to tweak (and even mod)
+    - crucially, we can tweak BEHAVIOR even at runtime, not just params
+- by design, we share more code, which is an incentive for flexible systems and smaller systems
+
+some conditions might have their own special state - but can't foresee this YET
+which is an argument for each item having Trigger{ConditionEvaluator, ActionDoer} objects
+why do this if we don't need it. A more pure data item has the benefit of a cleaner separation
+ah ok there IS a use case: trigger cooldowns
+we can workaround by assuming each item will have just 1 cooldown (very confident in this)
+if we know 2 more cases, let's do it for sure
+but also, is it that hard? are there other advantages?
+having only one instance could be simpler, but by how much though?
+
+so instead we'll probably define ConditionEvaluators with some interface like:
+`boolean eval(item, condition, events, roundState, etc.)`
+And actions similarly
+We'll then iterate items in a specific order, use switch statements to select the right condition/action obj
+Maybe they won't actually all inherit from an interface?
+Oh a simple thing is to do the type check inside each evaluator, and just run ALL of them for EVERY condition/action
+or interface has a method saying "is this relevant tho". Just because gdscript generics don't exist heehee
+
+actions might depend on more nuanced info than just yes/no
+ex: "All items which buffed this one will shoot a nail doing 200xMult damage"
+one way to solve this: Trigger will find those target items and a system to pass that to the action
+or we could just make an item filtering mechanism, which could be used in action or in trigger
+we can imagine something like "Union(BuffedMe, HasHolyTag)"
+
+saving and loading? we'll want to tackle this somewhat early as it will be needed
+we just have to save item dynamic data yeah
+Partial to using Godot's in-built resources for this. Essentially dataclasses
+Some limitations, probably not too bad tbh?
+
+---
+
+ok we'll wrap up the very basic item and then add one which:
+
+- When adjacent to any *devil*, increases its damage
+
+steps:
+
+- need to define "positioning". for now no sampling, just fixed positions
+- solidify the conditions/actions framework
+- add an adjacency condition
+
+for positional checks, rather than one giant config to handle all cases, maybe we can have different types of conditions
+Such checks are really a filter on "which items are relevant" - aka a targeting config. There are many types:
+
+- opposite of our position
+- "within x slots"
+-
+
+We can have a combined condition that composes these, ex: Next to, OR opposite
+
+---
+
+Also I do like this:
+
+```
+Item
+    theConfig
+    theItemState
+    theConditionEvaluator (injected)
+    theActionEvaluator (injected)
+    theTriggerEvaluator[]
+    
+    getTriggers() -> outside system decides ordering
+    tryTrigger(trigger id)
+        
+```     
+
+One perennial issue is ordering trigger evaluation to cover all triggers
+For example, if item B adds damage to all items which buffed it this turn
+we need to make sure those other items are evaluated first.
+
+A simple-enough solution:
+Each trigger (not item, trigger) has a trigger group
+Each trigger group is evaluated separately. There's an ordering between groups
+Evaluation is basically a while loop which tries triggers until nothing new is activated
+how do we detect this?? aeugh aeugh. maybe we don't have to, just enforce every trigger activates at most once a round?
+at same time, could that be too restrictive?
+we want to avoid possibility of infinite looping, but that can just be done with a loop limit
+I wonder how other deckbuilders do it
+what is the use-case for multi-triggering in one turn? I think what we should do is instead just repeat the action X
+times
+
+---
+
+gonna do a qwen prompt
+
+I'm building a roguelike deck-builder game similar to luck be a landlord.
+I'll present the current code architecture
+
+Acting as a senior games software engineer, please:
+- critically evaluate this design
+- present alternatives (briefly analyzing the main tradeoffs)
+- suggest the best path forward, and argue why
+
+Problem definition:
+- This is a turn based game, where the only player choice is which items to add each round
+- Each turn, a subset of items is selected and triggers some effects. Examples:
+  - Deal damage to the enemy
+  - Buff other items (damage, cooldown, etc.)
+  - Apply status effects
+- Items may only activate under certain conditions, examples
+  - When next to an item with the "holy" tag
+  - Once 10 turns have passed since purchase
+  - A 33% chance check
+  - More than 3 items were deleted last turn
+- It should be easy to tweak stats - we'll need to tune these based on playtests
+  - Burying them throughout in a hardcoded way is undesirable
+- A data-driven design is preferred, i.e. one where the main items can be implemented as just a "mod" to the base game
+- One perennial issue is ordering trigger evaluation to make sure everything that *should* trigger, does 
+  - For example, if item B adds damage to all items which buffed it this turn 
+  - We need to make sure those other items are evaluated first
+
+LMK if I should say more about the requirements
+
+The overall design / principles:
+- Item base stats and behavior are defined in pure data, as an editable toml-like form (Godot custom resource)
+- Item behavior is defined as a set of Triggers
+- Trigger config consists of a set of conditions (AND-ed together) and actions (performed if all conditions pass)
+  - ex: AgeCondition{turnsSinceBegin=10} -> Action(ApplyStatusEffect)
+- At the code level, Item objects are created based on that config
+  - Items have TriggerEvaluator objects, which delegate to injected ConditionEvaluator and ActionDoer objects
+  - ConditionEvaluator is like an abstract class, with an implementation for each condition
+  - We'll have one shared overall evaluator for the whole program (delegates to the specific ones), same for actions
+  - Each ConditionEvaluator has access to the full state of items, including their current position, as well as the turn/round state
+- Actions don't directly modify item state, instead they produce events, which are just plain data objects
+  - An event is something like "DoDamage{amount, type, source, etc...}"
+  - Doing it this way gives us the flexibility to intercept, log, and filter based on events.
+  - Example: if I wanted to trigger based on who damaged enemy last round
+- To solve the trigger order issue, each trigger will belong to a group 
+  - Each trigger group is evaluated separately. There's an ordering between groups 
+  - Evaluating one group: basically a while loop which tries triggering until nothing new is activated
+
+Prototype code is at: @source/crank/crank_main.gd
+
+> 2. Create dependency-aware trigger evaluation:
+
+What do we envision here? My current plan is to give each trigger an explicit "level" (a "group" enum) and manually define the ordering
+Are you suggesting defining a dependency graph and using a solver? How do we weigh the generality of that approach vs. the extra complexity?
+
+> 4. Introduce an event-driven item state model:
+
+In the current model, actions will produce event objects, which can then be manipulated, deleted, etc. before being sent to other systems to be applied.
+Are we suggesting that instead, we use a listener/observer pattern? If so, why? I feel like we *lose* flexibility that way because it's more complex to query based on which events happened in a turn
 
 # high level todos rethinking
 

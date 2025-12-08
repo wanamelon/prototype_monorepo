@@ -59,7 +59,7 @@ func display_message(text: String):
 	$TextureRect2/ScrollContainer/VBoxContainer.add_child(label)
 	$TextureRect2/ScrollContainer/VBoxContainer.move_child(label, 0)
 
-static var DEMON = ItemStaticData.new(ItemType.DEVIL, "Lil Demon", [Trigger.new([], [Action.Damage.new()])], 50, 0.5)
+static var DEMON = ItemStaticData.new(ItemType.DEVIL, "Lil Demon", [Trigger.new([], [DamageAction.new()])], ItemBaseStats.new())
 var items: Array[Item] = [Item.new(DEMON)]
 
 func _activate_items():
@@ -76,37 +76,86 @@ func assess_condition(item: Item, condition: Condition) -> bool:
 	return false
 
 func do_action(item: Item, action: Action):
-	if action is Action.Damage:
-		if Utils.RNG.randf() < item.def.base_chance:
-			_current_score += item.def.base_damage
-			display_message("%s did %d damage" % [item.def.name, item.def.base_damage])
+	if action is DamageAction:
+		if Utils.RNG.randf() < item.def.base_stats.chance:
+			_current_score += item.def.base_stats.damage
+			display_message("%s did %d damage" % [item.def.name, item.def.base_stats.damage])
 			display_progress(_current_score)
 
 class Item extends RefCounted:
 	var def: ItemStaticData
+	var triggers: Array[TriggerEvaluator] = []
+	var mods: Array[ItemModifier]
 	
 	func _init(def):
+		self.def = def
+		for trigger in def.triggers:
+			triggers.append(TriggerEvaluator.new(trigger))
+	
+	func compute_final_stats(base: ItemBaseStats, mods: Array[ItemModifier]) -> ItemBaseStats:
+		var copy := base.duplicate(true)
+		var multiplicative_mods = Utils.filter(mods, func(m): return m.is_multiplicative)
+		for mod: ItemModifier in multiplicative_mods:
+			copy.set(mod.property, copy.get(mod.property) * mod.amount)
+		var additive_mods = Utils.filter(mods, func(m): return not m.is_multiplicative)
+		for mod: ItemModifier in additive_mods:
+			copy.set(mod.property, copy.get(mod.property) + mod.amount)
+		return ItemBaseStats.new(
+			int(copy.damage),
+			clampf(copy.chance, 0.0, 1.0),
+			clampi(int(copy.cooldown), 0, 1000))
+
+class TriggerEvaluator extends RefCounted:
+	var def: Trigger
+	var last_triggered_turn: int = -1
+	
+	func _init(def: Trigger):
 		self.def = def
 
 class ItemStaticData extends RefCounted:
 	var type: ItemType 
 	var name: String 
-	var triggers: Array[Trigger] 
-	var base_damage: int 
-	var base_chance: float
+	var triggers: Array[Trigger]
+	var base_stats: ItemBaseStats
 	
-	func _init(type: ItemType, name: String, triggers: Array[Trigger], base_damage: int, base_chance: float):
+	func _init(type: ItemType, name: String, triggers: Array[Trigger], base_stats: ItemBaseStats):
 		self.type = type 
 		self.name = name 
 		self.triggers = triggers 
-		self.base_damage = base_damage 
-		self.base_chance = base_chance 
-	
+		self.base_stats = base_stats
 
-# Maybe we just have one method outputting the final "compiled" version of this
-#class ItemParams extends RefCounted:
-	#var damage: int
-	#var chance: float
+class ItemBaseStats extends Resource:
+	@export var damage: int = 100
+	@export var chance: float = 0.5
+	@export var cooldown: int = 0
+	
+	func _init(damage: int = 100, chance: float = 0.5, cooldown: int = 0):
+		self.damage = damage
+		self.chance = chance
+		self.cooldown = cooldown
+
+class ItemModifier extends RefCounted:
+	var property: String
+	var amount: float
+	var is_multiplicative: bool # else additive
+	var permanence: ItemModPermanence
+	
+	func _init(property: String, amount: float, is_multiplicative: bool = false, permanence: ItemModPermanence = ItemModPermanence.TURN):
+		self.property = property
+		self.amount = amount
+		self.is_multiplicative = is_multiplicative
+		self.permanence = permanence
+
+enum ItemModPermanence {
+	TURN,
+	ACTIVE,
+	PERMANENT
+}
+
+# We can have mods like "+30 damage until item returned to pool", "+0.5 chance mult"
+# This should track the latest state of things!
+class ItemDynamicParams extends RefCounted:
+	pass
 
 class Trigger extends RefCounted:
 	var conditions: Array[Condition]
@@ -116,14 +165,18 @@ class Trigger extends RefCounted:
 		self.conditions = conditions
 		self.actions = actions
 
+@abstract class ConditionEvaluator extends RefCounted:
+	@abstract func evaluate(item: Item, trigger: TriggerEvaluator) -> bool
+
 @abstract class Condition extends RefCounted:
 	pass
 
 @abstract class Action extends RefCounted:
 	pass
 	
-	class Damage extends Action:
-		pass
+
+class DamageAction extends Action:
+	pass
 
 enum ItemType {
 	EMPTY,
