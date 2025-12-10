@@ -95,8 +95,12 @@ class Item extends RefCounted:
 	func compute_final_stats(base: ItemBaseStats, mods: Array[ItemModifier]) -> ItemBaseStats:
 		var copy := base.duplicate(true)
 		var multiplicative_mods = Utils.filter(mods, func(m): return m.is_multiplicative)
+		var property_to_mult_map := {}
 		for mod: ItemModifier in multiplicative_mods:
-			copy.set(mod.property, copy.get(mod.property) * mod.amount)
+			property_to_mult_map[mod.property] = (
+				Utils.default_if_absent(property_to_mult_map, mod.property, 1.0) + mod.amount)
+		for property in property_to_mult_map:
+			copy.set(property, copy.get(property) * property_to_mult_map[property])
 		var additive_mods = Utils.filter(mods, func(m): return not m.is_multiplicative)
 		for mod: ItemModifier in additive_mods:
 			copy.set(mod.property, copy.get(mod.property) + mod.amount)
