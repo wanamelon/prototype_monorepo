@@ -1389,6 +1389,33 @@ we just have to save item dynamic data yeah
 Partial to using Godot's in-built resources for this. Essentially dataclasses
 Some limitations, probably not too bad tbh?
 
+ah ok resoruces actually aren't the best for save load
+
+- it's easier for users to input pure json
+- there is a security downside to resources (code injection)
+- there's more support for backwards compatibility with pure JSON
+    - we could even use a library like C#'s equivalent to jackson?
+
+https://github.com/Cretezy/godot-object-serializer
+
+I believe a major weakness I have as an engineer - I'm not clear on what I want
+so we try to make everything perfect. I don't personally have a goal I'm deeply invested in
+I can be better if I can commit to wanting something and compromising on other things
+Or is it true that I just have trouble seeing all the relevant factors ahead of time?
+so when a new factor comes up, it upends my understanding of the problem?
+
+it's frustrating because I feel like both are true? but I clearly spend time investigating the problem
+I am actually good at considering a "mystery" or bug from many angles
+is there any fundamental difference with that vs. a problem or ticket to solve?
+
+I'm also not clear what is actionable. When someone asks "what did you TRY in order to improve"
+I need a real answer. "Want harder" isn't a good answer. What will we do concretely, or like change in your mindset
+
+the thing that has worked somewhat is "build the feedback loops" - mostly to not waste time overplanning
+that cuts some stuff, but the fundamental issue is even if I build it, if I build the wrong thing it is wasted effort
+
+
+
 ---
 
 ok we'll wrap up the very basic item and then add one which:
@@ -1450,59 +1477,108 @@ I'm building a roguelike deck-builder game similar to luck be a landlord.
 I'll present the current code architecture
 
 Acting as a senior games software engineer, please:
+
 - critically evaluate this design
 - present alternatives (briefly analyzing the main tradeoffs)
 - suggest the best path forward, and argue why
 
 Problem definition:
+
 - This is a turn based game, where the only player choice is which items to add each round
 - Each turn, a subset of items is selected and triggers some effects. Examples:
-  - Deal damage to the enemy
-  - Buff other items (damage, cooldown, etc.)
-  - Apply status effects
+    - Deal damage to the enemy
+    - Buff other items (damage, cooldown, etc.)
+    - Apply status effects
 - Items may only activate under certain conditions, examples
-  - When next to an item with the "holy" tag
-  - Once 10 turns have passed since purchase
-  - A 33% chance check
-  - More than 3 items were deleted last turn
+    - When next to an item with the "holy" tag
+    - Once 10 turns have passed since purchase
+    - A 33% chance check
+    - More than 3 items were deleted last turn
 - It should be easy to tweak stats - we'll need to tune these based on playtests
-  - Burying them throughout in a hardcoded way is undesirable
+    - Burying them throughout in a hardcoded way is undesirable
 - A data-driven design is preferred, i.e. one where the main items can be implemented as just a "mod" to the base game
-- One perennial issue is ordering trigger evaluation to make sure everything that *should* trigger, does 
-  - For example, if item B adds damage to all items which buffed it this turn 
-  - We need to make sure those other items are evaluated first
+- One perennial issue is ordering trigger evaluation to make sure everything that *should* trigger, does
+    - For example, if item B adds damage to all items which buffed it this turn
+    - We need to make sure those other items are evaluated first
 
 LMK if I should say more about the requirements
 
 The overall design / principles:
+
 - Item base stats and behavior are defined in pure data, as an editable toml-like form (Godot custom resource)
 - Item behavior is defined as a set of Triggers
 - Trigger config consists of a set of conditions (AND-ed together) and actions (performed if all conditions pass)
-  - ex: AgeCondition{turnsSinceBegin=10} -> Action(ApplyStatusEffect)
+    - ex: AgeCondition{turnsSinceBegin=10} -> Action(ApplyStatusEffect)
 - At the code level, Item objects are created based on that config
-  - Items have TriggerEvaluator objects, which delegate to injected ConditionEvaluator and ActionDoer objects
-  - ConditionEvaluator is like an abstract class, with an implementation for each condition
-  - We'll have one shared overall evaluator for the whole program (delegates to the specific ones), same for actions
-  - Each ConditionEvaluator has access to the full state of items, including their current position, as well as the turn/round state
+    - Items have TriggerEvaluator objects, which delegate to injected ConditionEvaluator and ActionDoer objects
+    - ConditionEvaluator is like an abstract class, with an implementation for each condition
+    - We'll have one shared overall evaluator for the whole program (delegates to the specific ones), same for actions
+    - Each ConditionEvaluator has access to the full state of items, including their current position, as well as the
+      turn/round state
 - Actions don't directly modify item state, instead they produce events, which are just plain data objects
-  - An event is something like "DoDamage{amount, type, source, etc...}"
-  - Doing it this way gives us the flexibility to intercept, log, and filter based on events.
-  - Example: if I wanted to trigger based on who damaged enemy last round
-- To solve the trigger order issue, each trigger will belong to a group 
-  - Each trigger group is evaluated separately. There's an ordering between groups 
-  - Evaluating one group: basically a while loop which tries triggering until nothing new is activated
+    - An event is something like "DoDamage{amount, type, source, etc...}"
+    - Doing it this way gives us the flexibility to intercept, log, and filter based on events.
+    - Example: if I wanted to trigger based on who damaged enemy last round
+- To solve the trigger order issue, each trigger will belong to a group
+    - Each trigger group is evaluated separately. There's an ordering between groups
+    - Evaluating one group: basically a while loop which tries triggering until nothing new is activated
 
 Prototype code is at: @source/crank/crank_main.gd
 
 > 2. Create dependency-aware trigger evaluation:
 
-What do we envision here? My current plan is to give each trigger an explicit "level" (a "group" enum) and manually define the ordering
-Are you suggesting defining a dependency graph and using a solver? How do we weigh the generality of that approach vs. the extra complexity?
+What do we envision here? My current plan is to give each trigger an explicit "level" (a "group" enum) and manually
+define the ordering
+Are you suggesting defining a dependency graph and using a solver? How do we weigh the generality of that approach vs.
+the extra complexity?
 
 > 4. Introduce an event-driven item state model:
 
-In the current model, actions will produce event objects, which can then be manipulated, deleted, etc. before being sent to other systems to be applied.
-Are we suggesting that instead, we use a listener/observer pattern? If so, why? I feel like we *lose* flexibility that way because it's more complex to query based on which events happened in a turn
+In the current model, actions will produce event objects, which can then be manipulated, deleted, etc. before being sent
+to other systems to be applied.
+Are we suggesting that instead, we use a listener/observer pattern? If so, why? I feel like we *lose* flexibility that
+way because it's more complex to query based on which events happened in a turn
+
+---
+
+Alright friendo, let's restructure the existing code according to this new design, and clean it up a bit.
+This is in preparation to add an item which:
+
+- If there is an adjacent items with the
+    - We'll need to give our items a @source/item/tags.gd
+- Specifically, a buff which increases damage multiplier by 0.5
+
+---                                                                                                                                                                                                                                                                                      
+
+Rough outline of steps (please refine these, break them down, and order as you see fit):
+
+- We need some idea of which position each item is in
+-
+- Create an ItemFilter config object
+-
+
+Please commit each change separately. Tiny atomic commits are great!
+
+--- 
+
+Let's refactor the code into the new design.
+Rough outline of steps. Please refine these into the final plan
+
+- Add a condition config and evaluator for "chance check"
+    - Evaluate using the item's chance (see compute_final_stats)
+    - Keep the config simple (no parameters for now!)
+- Create a delegator ConditionEvaluator
+    - based on the condition type, we'll delegate it to the correct ConditionEvaluator handler
+- Inject the delegator into the item's TriggerEvaluators
+- Create an event abstract class, and a damage event
+- Create an ActionHandler abstract class, and make a damage actionhandler
+    - The interface should be similar to ConditionEvaluator, but return events
+- Trigger evaluator should check the conditions (wiring in state as needed) and do the actions, returning events
+- The core game loop (_activate_items) should simply do something like item.activate() (and collect returned events)
+    - That in turn will delegate to the trigger evaluators
+- Add systems to apply the events
+
+For each step, let's make a tiny atomic commit so it's easy to see the evolution, revert things, etc.
 
 # high level todos rethinking
 

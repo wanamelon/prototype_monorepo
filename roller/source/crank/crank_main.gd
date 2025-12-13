@@ -8,10 +8,6 @@ var _current_score: int
 var _turns_left: int
 var _progress_tween: Tween
 
-func _ready():
-	round_setup()
-	$Turn.pressed.connect(_on_turn)
-
 func _on_turn():
 	_turns_left -= 1
 	display_message("Turn start. %d remain" % _turns_left)
@@ -59,39 +55,52 @@ func display_message(text: String):
 	$TextureRect2/ScrollContainer/VBoxContainer.add_child(label)
 	$TextureRect2/ScrollContainer/VBoxContainer.move_child(label, 0)
 
-static var DEMON = ItemStaticData.new(ItemType.DEVIL, "Lil Demon", [Trigger.new([], [DamageAction.new()])], ItemBaseStats.new())
-var items: Array[Item] = [Item.new(DEMON)]
+var condition_evaluator_manager: ConditionEvaluatorManager
+var action_handler_manager: ActionHandlerManager
+var items: Array[Item]
+
+static var DEMON = ItemStaticData.new(ItemType.DEVIL, "Lil Demon", [Trigger.new([ChanceCondition.new()], [DamageAction.new()])], ItemBaseStats.new())
+
+func _ready():
+	condition_evaluator_manager = ConditionEvaluatorManager.new()
+	action_handler_manager = ActionHandlerManager.new()
+	items = [Item.new(DEMON, condition_evaluator_manager, action_handler_manager)]
+	round_setup()
+	$Turn.pressed.connect(_on_turn)
 
 func _activate_items():
+	var all_events: Array[GameEvent] = []
 	for item in items:
-		for trigger in item.def.triggers:
-			var should_trigger = true
-			for condition in trigger.conditions:
-				should_trigger = should_trigger and assess_condition(item, condition)
-			if should_trigger:
-				for action in trigger.actions:
-					do_action(item, action)
-					
-func assess_condition(item: Item, condition: Condition) -> bool:
-	return false
+		all_events.append_array(item.evaluate_triggers())
+	for event in all_events:
+		apply_event(event)
 
-func do_action(item: Item, action: Action):
-	if action is DamageAction:
-		if Utils.RNG.randf() < item.def.base_stats.chance:
-			_current_score += item.def.base_stats.damage
-			display_message("%s did %d damage" % [item.def.name, item.def.base_stats.damage])
-			display_progress(_current_score)
+func apply_event(event: GameEvent):
+	if event is DamageEvent:
+		apply_damage_event(event)
+
+func apply_damage_event(event: DamageEvent):
+	_current_score += event.amount
+	display_message("%s did %d damage" % [event.source_item.def.name, event.amount])
+	display_progress(_current_score)
+
 
 class Item extends RefCounted:
 	var def: ItemStaticData
 	var triggers: Array[TriggerEvaluator] = []
 	var mods: Array[ItemModifier]
-	
-	func _init(def):
+
+	func _init(def, condition_evaluator_manager: ConditionEvaluatorManager, action_handler_manager: ActionHandlerManager):
 		self.def = def
 		for trigger in def.triggers:
-			triggers.append(TriggerEvaluator.new(trigger))
+			triggers.append(TriggerEvaluator.new(trigger, condition_evaluator_manager, action_handler_manager))
 	
+	func evaluate_triggers() -> Array[GameEvent]:
+		var all_events: Array[GameEvent] = []
+		for trigger_evaluator in triggers: 
+			all_events.append_array(trigger_evaluator.evaluate(self))
+		return all_events
+
 	func compute_final_stats(base: ItemBaseStats, mods: Array[ItemModifier]) -> ItemBaseStats:
 		var copy := base.duplicate(true)
 		var multiplicative_mods = Utils.filter(mods, func(m): return m.is_multiplicative)
@@ -112,9 +121,25 @@ class Item extends RefCounted:
 class TriggerEvaluator extends RefCounted:
 	var def: Trigger
 	var last_triggered_turn: int = -1
-	
-	func _init(def: Trigger):
+	var condition_evaluator_manager: ConditionEvaluatorManager
+	var action_handler_manager: ActionHandlerManager
+
+	func _init(def: Trigger, condition_evaluator_manager: ConditionEvaluatorManager, action_handler_manager: ActionHandlerManager):
 		self.def = def
+		self.condition_evaluator_manager = condition_evaluator_manager
+		self.action_handler_manager = action_handler_manager
+
+	func evaluate(item: Item) -> Array[GameEvent]:
+		var should_trigger = true
+		for condition in def.conditions:
+			should_trigger = should_trigger and condition_evaluator_manager.evaluate(condition, item)
+		if should_trigger:
+			var all_events: Array[GameEvent] = []
+			for action in def.actions:
+				all_events.append_array(action_handler_manager.handle(action, item))
+			return all_events
+		else:
+			return [] as Array[GameEvent]
 
 class ItemStaticData extends RefCounted:
 	var type: ItemType 
@@ -169,8 +194,28 @@ class Trigger extends RefCounted:
 		self.conditions = conditions
 		self.actions = actions
 
+class ChanceConditionEvaluator extends ConditionEvaluator:
+	func evaluate(condition: Condition, item: Item) -> bool:
+		var final_stats = item.compute_final_stats(item.def.base_stats, item.mods)
+		return Utils.RNG.randf() < final_stats.chance
+
+class ConditionEvaluatorManager extends RefCounted:
+	var chance_evaluator: ChanceConditionEvaluator
+
+	func _init():
+		chance_evaluator = ChanceConditionEvaluator.new()
+
+	func evaluate(condition: Condition, item: Item) -> bool:
+		if condition is ChanceCondition:
+			return chance_evaluator.evaluate(condition, item)
+		else:
+			return false
+
 @abstract class ConditionEvaluator extends RefCounted:
-	@abstract func evaluate(item: Item, trigger: TriggerEvaluator) -> bool
+	@abstract func evaluate(condition: Condition, item: Item) -> bool
+
+class ChanceCondition extends Condition:
+	pass
 
 @abstract class Condition extends RefCounted:
 	pass
@@ -178,6 +223,42 @@ class Trigger extends RefCounted:
 @abstract class Action extends RefCounted:
 	pass
 	
+
+class DamageEvent extends GameEvent:
+	var source_item: Item
+	var amount: int
+	var target_type: String  # e.g. "enemy", "player", etc.
+
+	func _init(source_item: Item, amount: int, target_type: String = "enemy"):
+		self.source_item = source_item
+		self.amount = amount
+		self.target_type = target_type
+
+class ActionHandlerManager extends RefCounted:
+	var damage_handler: DamageActionHandler
+
+	func _init():
+		damage_handler = DamageActionHandler.new()
+
+	func handle(action: Action, item: Item) -> Array[GameEvent]:
+		if action is DamageAction:
+			return damage_handler.handle(action, item)
+		else:
+			# For unregistered actions, return empty array
+			return []
+
+@abstract class ActionHandler extends RefCounted:
+	@abstract func handle(action: Action, item: Item) -> Array[GameEvent]
+
+class DamageActionHandler extends ActionHandler:
+	func handle(action: Action, item: Item) -> Array[GameEvent]:
+		var final_stats = item.compute_final_stats(item.def.base_stats, item.mods)
+		var damage_event = DamageEvent.new(item, final_stats.damage)
+		return [damage_event]
+
+@abstract class GameEvent extends RefCounted:
+	# Abstract base class for all game events
+	pass
 
 class DamageAction extends Action:
 	pass
