@@ -5,7 +5,7 @@ static var DEMON = ItemStaticData.new(
 	"Lil Demon", 
 	[Trigger.new(
 		[Conditions.ChanceConditionConf.new()],
-		[Actions.DamageAction.new()]
+		[DamageAction.Conf.new()]
 	)], 
 	ItemBaseStats.new())
 
@@ -121,9 +121,9 @@ class ItemDynamicParams extends RefCounted:
 
 class Trigger extends RefCounted:
 	var conditions: Array[Conditions.ConditionConf]
-	var actions: Array[Actions.ActionConf]
+	var actions: Array[Actions.Conf]
 
-	func _init(conditions: Array[Conditions.ConditionConf], actions: Array[Actions.ActionConf]):
+	func _init(conditions: Array[Conditions.ConditionConf], actions: Array[Actions.Conf]):
 		self.conditions = conditions
 		self.actions = actions
 
