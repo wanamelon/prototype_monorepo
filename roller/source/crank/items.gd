@@ -4,17 +4,17 @@ static var DEMON = ItemStaticData.new(
 	ItemType.DEVIL, 
 	"Lil Demon", 
 	[Trigger.new(
-		[Conditions.ChanceConditionConf.new()],
-		[DamageAction.Conf.new()]
+		[ChanceCondition.new()],
+		[DamageAction.new()]
 	)], 
 	ItemBaseStats.new())
 
 class ItemFactory extends RefCounted:
-	var conditions_eval: Conditions.EvaluationDelegator
+	var conditions_eval: Conditions.ConditionEvaluatorManager
 	var action_handler: Actions.ActionHandlerManager
 
 	func _init():
-		conditions_eval = Conditions.EvaluationDelegator.new()
+		conditions_eval = Conditions.ConditionEvaluatorManager.new()
 		action_handler = Actions.ActionHandlerManager.new()
 
 	func new_item(conf: ItemStaticData) -> Item:
@@ -25,15 +25,16 @@ class Item extends RefCounted:
 	var triggers: Array[TriggerEvaluator] = []
 	var mods: Array[ItemModifier]
 
-	func _init(def, condition_evaluator_manager: Conditions.EvaluationDelegator, action_handler_manager: Actions.ActionHandlerManager):
+	func _init(def, condition_evaluator_manager: Conditions.ConditionEvaluatorManager, action_handler_manager: Actions.ActionHandlerManager):
 		self.def = def
 		for trigger in def.triggers:
 			triggers.append(TriggerEvaluator.new(trigger, condition_evaluator_manager, action_handler_manager))
 
-	func evaluate_triggers() -> Array[Events.GameEvent]:
-		var all_events: Array[Events.GameEvent] = []
+	func evaluate_triggers() -> Array[Events.Event]:
+		var all_events: Array[Events.Event] = []
 		for trigger_evaluator in triggers:
-			all_events.append_array(trigger_evaluator.evaluate(self))
+			var trigger_events = trigger_evaluator.evaluate(self)
+			all_events.append_array(trigger_events)
 		return all_events
 
 	func compute_final_stats(base: ItemBaseStats, mods: Array[ItemModifier]) -> ItemBaseStats:
@@ -56,29 +57,29 @@ class Item extends RefCounted:
 class TriggerEvaluator extends RefCounted:
 	var def: Trigger
 	var last_triggered_turn: int = -1
-	var condition_evaluator_manager: Conditions.EvaluationDelegator
+	var condition_evaluator_manager: Conditions.ConditionEvaluatorManager
 	var action_handler_manager: Actions.ActionHandlerManager
 
-	func _init(def: Trigger, condition_evaluator_manager: Conditions.EvaluationDelegator, action_handler_manager: Actions.ActionHandlerManager):
+	func _init(def: Trigger, condition_evaluator_manager: Conditions.ConditionEvaluatorManager, action_handler_manager: Actions.ActionHandlerManager):
 		self.def = def
 		self.condition_evaluator_manager = condition_evaluator_manager
 		self.action_handler_manager = action_handler_manager
 
-	func evaluate(item: Item) -> Array[Events.GameEvent]:
+	func evaluate(item: Item) -> Array[Events.Event]:
 		var should_trigger = true
 		for condition in def.conditions:
 			should_trigger = should_trigger and condition_evaluator_manager.evaluate(condition, item)
 		if should_trigger:
-			var all_events: Array[Events.GameEvent] = []
+			var all_events: Array[Events.Event] = []
 			for action in def.actions:
 				all_events.append_array(action_handler_manager.handle(action, item))
 			return all_events
 		else:
-			return [] as Array[Events.GameEvent]
+			return [] as Array[Events.Event]
 
 class ItemStaticData extends RefCounted:
-	var type: ItemType 
-	var name: String 
+	var type: ItemType
+	var name: String
 	var triggers: Array[Trigger]
 	var base_stats: ItemBaseStats
 
@@ -116,14 +117,16 @@ enum ItemModPermanence {
 	PERMANENT
 }
 
+# We can have mods like "+30 damage until item returned to pool", "+0.5 chance mult"
+# This should track the latest state of things!
 class ItemDynamicParams extends RefCounted:
 	pass
 
 class Trigger extends RefCounted:
-	var conditions: Array[Conditions.ConditionConf]
+	var conditions: Array[Conditions.Conf]
 	var actions: Array[Actions.Conf]
 
-	func _init(conditions: Array[Conditions.ConditionConf], actions: Array[Actions.Conf]):
+	func _init(conditions: Array[Conditions.Conf], actions: Array[Actions.Conf]):
 		self.conditions = conditions
 		self.actions = actions
 

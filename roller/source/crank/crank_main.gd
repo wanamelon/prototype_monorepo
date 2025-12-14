@@ -1,5 +1,11 @@
 extends Node2D
 
+# Import the separate modules
+const Items = preload("items.gd")
+const Conditions = preload("conditions/conditions.gd")
+const Actions = preload("actions/actions.gd")
+const Events = preload("events/events.gd")
+
 const GAME_BOARD_SCENE: PackedScene = preload("res://source/game_board.tscn")
 
 var _round: int = 0
@@ -66,7 +72,7 @@ func _ready():
 	$Turn.pressed.connect(_on_turn)
 
 func _activate_items():
-	var all_events: Array[Events.GameEvent] = []
+	var all_events: Array[Events.Event] = []
 	for item in items:
 		all_events.append_array(item.evaluate_triggers())
 	for event in all_events:
