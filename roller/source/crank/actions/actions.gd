@@ -10,4 +10,5 @@ class ActionHandlerManager extends RefCounted:
 		if action is DamageAction:
 			return damage.handle(action, item)
 		else:
+			assert(false, "No handler registered for action")
 			return []

@@ -10,4 +10,5 @@ class ConditionEvaluatorManager extends RefCounted:
 		if condition is ChanceCondition:
 			return chance.evaluate(condition, item)
 		else:
+			assert(false, "No handler registered for condition")
 			return false

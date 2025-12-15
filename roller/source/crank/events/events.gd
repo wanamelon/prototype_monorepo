@@ -13,4 +13,4 @@ class EventHandlerManager extends RefCounted:
 		if event is DamageEvent:
 			damage.handle(event)
 		else:
-			assert(false, "Warning: No handler registered for event type: %s" % event)
+			assert(false, "No handler registered for event type")
