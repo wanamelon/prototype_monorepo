@@ -1288,6 +1288,90 @@ Relics
 
 # architectural
 
+### The store (basic)
+
+### Item tags
+
+### Adjacency check
+
+ofc we need >1 item dumdum!
+I think some idea of item identity might be good, not SUPER relevant now though
+right now, items are just a hardcoded list at game start
+I think an "inventory" or perhaps "deck" is the good?
+hmm let's first get what we need to do...
+
+there is a pool of items
+and a pool of active items with ordered positions
+there is the idea of "segments" - 18 divided into 3
+and the rolling sample
+
+each turn:
+- return the 6 active in the last segment to the pool
+- roll the remaining items 6 spots forward (one segment turn to right)
+- select 6 with some sampling procedure (total random for now) from the pool
+- those become the leftmost segment
+
+For adjacency check, what will it look like? program backwards from the intended usage
+I think it's an item filter not a condition.
+because that can be used both in:
+- conditions (more than N items pass)
+  - when within 2 spots of a flame item, this item has +100 damage buff
+- or as targeting in ACTIONS
+  - items within 1 spot are force-activated one more time
+
+```
+perhaps
+Item implements Positional, Tagged??
+then we can have a taggedfitler and positional
+ok yeah but this is extra complexity for waht ebenefit?
+
+BasicAdjacencyFilter implements ItemFilter:
+    distance: int = 1
+
+# signature: ItemPool -> Set<Item>
+BasicAdjacencyItemFilterEvaluator:
+    eval(pool, item, filter):
+        pos = pool.get_pos(item)
+        relevant_positions = pool.clamp_within_possible(range(pos - filter.dist, pos + filter.dist))
+        return [pool.get_item_at(adjacent_pos) for adjacent_pos in relevant]
+    # perhaps adjacency a first class concept in ItemPool?
+    # seems bad to be constantly asking the pool "tell me this tell me that wahhhh"
+    # eh, but the pool can be basically raw data, so it's oki. It's just a couple maps?
+    # yeah I guess separation of church(behavior) and state
+    
+    there are things like "shuffling" or whatever the fuck which make perfect sense as itemPool methods
+    at the same time, accessing that data may be useful in many places
+    
+    SILENCE NERD - THE TIME OF ACTION IS NIGH
+    
+    You're absolutely right!
+    
+    yeah we can get away with a lil pasta
+    
+    eval(pool, item, filter): # take 2!
+        
+# slot -> item, item -> slot is a false binary
+# reject this chudmerican propaganda 
+ItemPool:
+    slot count
+    segment size
+    List<Tuple<Item, Pos>>
+    
+    void rotate
+
+CompositeItemFilter:
+    intersect: List[ItemFilter]
+    # union, difference - probably not needed, but ya get the point, this is flexible!
+
+CompositeItemFilterEvaluator
+    
+```
+
+we need empty spaces early game, or at least some "representation" of empties
+fake items could be a solution, or some sort of flag (but melike fake item)
+
+### First ideations
+
 Implementing age-based trigger like the LBAL coal
 Or activating every 10 turns
 How to make it affected by cooldown?

@@ -37,6 +37,8 @@ class Item extends RefCounted:
 			all_events.append_array(trigger_events)
 		return all_events
 
+	# more flexible as an ItemState with its own methods?
+	# why couple to ItemBaseStats, which is more narrow than state?
 	func compute_final_stats(base: ItemBaseStats, mods: Array[ItemModifier]) -> ItemBaseStats:
 		var copy := base.duplicate(true)
 		var multiplicative_mods = Utils.filter(mods, func(m): return m.is_multiplicative)
